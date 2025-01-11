@@ -1,5 +1,5 @@
 services:
-    db:
+    database:
         image: mysql:8.0.33
         platform: linux/x86_64
         command: --default-authentication-plugin=mysql_native_password
@@ -28,6 +28,8 @@ services:
             - symfony_app 
         expose:
             - "9000" 
+        env_file:
+            - .env
 
     nginx:
         build:
@@ -44,12 +46,12 @@ services:
     phpmyadmin:
         image: phpmyadmin/phpmyadmin
         environment:
-            PMA_HOST: db
+            PMA_HOST: database
             MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
         ports:
             - 8081:80
         depends_on:
-            - db
+            - database
         networks:
             - symfony_app
             
