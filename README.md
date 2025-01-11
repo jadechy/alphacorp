@@ -37,7 +37,7 @@ docker compose up -d
 ### 4. Accéder au container Symfony
 
 ```bash
-docker exec -it php-1 bash
+docker exec -it symfony-php-1 bash
 ```
 
 ### 5. Installation des dépendences
