@@ -24,6 +24,11 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
+    
+    role_hierarchy:
+        ROLE_ADMIN: ROLE_USER
+        ROLE_SUPERVISOR: ROLE_USER
+        ROLE_ALPHA: ROLE_USER
 
 when@test:
     security:
