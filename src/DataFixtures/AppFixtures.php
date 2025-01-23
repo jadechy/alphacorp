@@ -366,6 +366,7 @@ class AppFixtures extends Fixture
                 $challenge->setStartOn(new \DateTimeImmutable('+1 day'));
                 $challenge->setEndOn(new \DateTimeImmutable('+7 days'));
                 $challenge->setSuccess(random_int(0, 1) === 1);
+                $challenge->setXp(5);
             }
     
             if ($challenge instanceof Quiz) {
@@ -387,6 +388,7 @@ class AppFixtures extends Fixture
             $question = new Question();
             $question->setQuestion("Question n°$k pour le quiz '{$quiz->getTitle()}'");
             $question->setCorrectAnswer(random_int(0, 3));
+            $question->setXp(2);
 
             $question->setQuiz($quiz);
             $quiz->getQuestions()->add($question);
@@ -407,7 +409,6 @@ class AppFixtures extends Fixture
 
     protected function linkUserToAnswerQuestion(ObjectManager $manager, array $users, array $questions): void
     {
-        // dd($questions);
         foreach ($users as $user) {
             if (!in_array('ROLE_ALPHA', $user->getRoles(), true)) {
                 continue; 

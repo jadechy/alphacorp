@@ -38,6 +38,9 @@ class Question
     #[ORM\OneToMany(targetEntity: UserAnswer::class, mappedBy: 'question')]
     private Collection $userAnswers;
 
+    #[ORM\Column(nullable: true, name: 'QST_XP')]
+    private ?int $xp = null;
+
     public function __construct()
     {
         $this->answers = new ArrayCollection();
@@ -140,6 +143,18 @@ class Question
                 $userAnswer->setQuestion(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getXp(): ?int
+    {
+        return $this->xp;
+    }
+
+    public function setXp(?int $xp): static
+    {
+        $this->xp = $xp;
 
         return $this;
     }

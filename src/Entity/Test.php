@@ -19,6 +19,9 @@ class Test extends Challenge
     #[ORM\Column(nullable: true, name: 'TST_SUCCESS')]
     private ?bool $success = null;
 
+    #[ORM\Column(nullable: true, name: 'TST_XP')]
+    private ?int $xp = null;
+
     public function __construct()
     {
         parent::__construct();
@@ -56,6 +59,18 @@ class Test extends Challenge
     public function setSuccess(?bool $success): static
     {
         $this->success = $success;
+
+        return $this;
+    }
+
+    public function getXp(): ?int
+    {
+        return $this->xp;
+    }
+
+    public function setXp(?int $xp): static
+    {
+        $this->xp = $xp;
 
         return $this;
     }
