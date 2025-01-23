@@ -16,7 +16,7 @@ class Test extends Challenge
     #[ORM\Column(type: Types::DATETIME_MUTABLE, name: 'TST_END_DATE')]
     private \DateTimeInterface $endOn;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(nullable: true, name: 'TST_SUCCESS')]
     private ?bool $success = null;
 
     public function __construct()

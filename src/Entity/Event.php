@@ -35,11 +35,15 @@ class Event
      * @var Collection<int, User>
      */
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'events')]
-    private Collection $users;
+    private Collection $participants;
+
+    #[ORM\ManyToOne(inversedBy: 'authorEvents')]
+    #[ORM\JoinColumn(name:'USR_ID',referencedColumnName:'USR_ID')]
+    private ?User $author = null;
 
     public function __construct()
     {
-        $this->users = new ArrayCollection();
+        $this->participants = new ArrayCollection();
     }
 
     public function getId(): int
@@ -110,26 +114,38 @@ class Event
     /**
      * @return Collection<int, User>
      */
-    public function getUsers(): Collection
+    public function getParticipants(): Collection
     {
-        return $this->users;
+        return $this->participants;
     }
 
-    public function addUser(User $user): static
+    public function addParticipant(User $participant): static
     {
-        if (!$this->users->contains($user)) {
-            $this->users->add($user);
-            $user->addEvent($this);
+        if (!$this->participants->contains($participant)) {
+            $this->participants->add($participant);
+            $participant->addEvent($this);
         }
 
         return $this;
     }
 
-    public function removeUser(User $user): static
+    public function removeParticipant(User $participant): static
     {
-        if ($this->users->removeElement($user)) {
-            $user->removeEvent($this);
+        if ($this->participants->removeElement($participant)) {
+            $participant->removeEvent($this);
         }
+
+        return $this;
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): static
+    {
+        $this->author = $author;
 
         return $this;
     }
