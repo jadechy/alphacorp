@@ -12,11 +12,9 @@
         {% block javascripts %}
             {% block importmap %}{{ importmap('app') }}{% endblock %}
         {% endblock %}
-
     </head>
     <body> 
-    {% include('header.html.twig' ) %}
-
+        {% include('parts/layouts/header_layout.html.twig' ) %}
         {% block body %}{% endblock %}
     </body>
 </html>
