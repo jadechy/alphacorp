@@ -73,7 +73,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var Collection<int, Event>
      */
-    #[ORM\ManyToMany(targetEntity: Event::class, inversedBy: 'users')]
+    #[ORM\ManyToMany(targetEntity: Event::class, inversedBy: 'participants')]
     #[ORM\JoinTable(name: 'ALP_USER_EVENT')]
     #[ORM\JoinColumn(name: 'USR_ID', referencedColumnName: 'USR_ID',nullable: false)]
     #[ORM\InverseJoinColumn(name: 'EVT_ID', referencedColumnName: 'EVT_ID')]
@@ -81,6 +81,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(name: 'USR_STATUS', enumType: StatusUserEnum::class)]
     private StatusUserEnum $status;
+
+    #[ORM\Column(name: 'USR_XP', nullable: true)]
+    private ?int $xp = null;
+
+    /**
+     * @var Collection<int, Event>
+     */
+    #[ORM\OneToMany(targetEntity: Event::class, mappedBy: 'author')]
+    private Collection $authorEvents;
+
+    /**
+     * @var Collection<int, Challenge>
+     */
+    #[ORM\OneToMany(targetEntity: Challenge::class, mappedBy: 'author')]
+    private Collection $challenges;
+
+    /**
+     * @var Collection<int, UserAnswer>
+     */
+    #[ORM\OneToMany(targetEntity: UserAnswer::class, mappedBy: 'user')]
+    private Collection $userAnswers;
 
     public function __construct()
     {
@@ -91,6 +112,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->challenges = new ArrayCollection();
         $this->participations = new ArrayCollection();
         $this->events = new ArrayCollection();
+        $this->authorEvents = new ArrayCollection();
+        $this->userAnswers = new ArrayCollection();
     }
 
     public function getId(): int
@@ -411,6 +434,78 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setStatus(StatusUserEnum $status): static
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getXp(): ?int
+    {
+        return $this->xp;
+    }
+
+    public function setXp(int $xp): static
+    {
+        $this->xp = $xp;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Event>
+     */
+    public function getAuthorEvents(): Collection
+    {
+        return $this->authorEvents;
+    }
+
+    public function addAuthorEvent(Event $authorEvent): static
+    {
+        if (!$this->authorEvents->contains($authorEvent)) {
+            $this->authorEvents->add($authorEvent);
+            $authorEvent->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAuthorEvent(Event $authorEvent): static
+    {
+        if ($this->authorEvents->removeElement($authorEvent)) {
+            // set the owning side to null (unless already changed)
+            if ($authorEvent->getAuthor() === $this) {
+                $authorEvent->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserAnswer>
+     */
+    public function getUserAnswers(): Collection
+    {
+        return $this->userAnswers;
+    }
+
+    public function addUserAnswer(UserAnswer $userAnswer): static
+    {
+        if (!$this->userAnswers->contains($userAnswer)) {
+            $this->userAnswers->add($userAnswer);
+            $userAnswer->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserAnswer(UserAnswer $userAnswer): static
+    {
+        if ($this->userAnswers->removeElement($userAnswer)) {
+            // set the owning side to null (unless already changed)
+            if ($userAnswer->getUser() === $this) {
+                $userAnswer->setUser(null);
+            }
+        }
 
         return $this;
     }
