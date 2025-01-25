@@ -9,7 +9,6 @@ use App\Entity\Response;
 use App\Enum\StatusUserEnum;
 use App\Form\UserType;
 use App\Form\UserEditType;
-use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,15 +17,15 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route('/user')]
+#[Route('/admin/user', name: "admin_")]
 #[IsGranted('ROLE_ADMIN')]
 final class UserController extends AbstractController
 {
-    #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
+    #[Route('/new', name: 'user_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): HttpResponse
     {
         $user = new User();
-        $form = $this->createForm(UserType::class, $user,[
+        $form = $this->createForm(UserType::class, $user, [
             'is_admin' => $this->isGranted('ROLE_ADMIN'),
         ]);
         $form->handleRequest($request);
@@ -53,27 +52,27 @@ final class UserController extends AbstractController
             return $this->redirectToRoute('admin_user', [], HttpResponse::HTTP_SEE_OTHER);
         }
 
-        return $this->render('user/admin/new.html.twig', [
+        return $this->render('/admin/user/new.html.twig', [
             'user' => $user,
             'form' => $form,
         ]);
     }
 
-    #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
+    #[Route('/{id}', name: 'user_show', methods: ['GET'])]
     public function show(User $user): HttpResponse
     {
-        return $this->render('user/admin/show.html.twig', [
+        return $this->render('/admin/user/show.html.twig', [
             'user' => $user,
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: 'user_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, User $user, EntityManagerInterface $entityManager): HttpResponse
     {
         $form = $this->createForm(UserEditType::class, $user, [
             'is_admin' => $this->isGranted('ROLE_ADMIN'),
         ]);
-    
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -84,31 +83,31 @@ final class UserController extends AbstractController
                 $user->setRoles(['ROLE_SUPERVISOR']);
             }
 
-            if($this->isGranted('ROLE_ADMIN')){
+            if ($this->isGranted('ROLE_ADMIN')) {
                 if ($form->get('isAdmin')->getData()) {
                     $user->setRoles(['ROLE_ADMIN']);
                 }
             }
-        
+
             $entityManager->flush();
 
-            if($this->isGranted('ROLE_ADMIN')){
+            if ($this->isGranted('ROLE_ADMIN')) {
                 return $this->redirectToRoute('admin_user', [], HttpResponse::HTTP_SEE_OTHER);
-            }else{
+            } else {
                 return $this->redirectToRoute('app_user_profil', [], HttpResponse::HTTP_SEE_OTHER);
             }
         }
 
-        return $this->render('user/admin/edit.html.twig', [
+        return $this->render('/admin/user/edit.html.twig', [
             'user' => $user,
             'form' => $form,
         ]);
     }
 
-    #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
+    #[Route('/{id}', name: 'user_delete', methods: ['POST'])]
     public function delete(Request $request, User $user, EntityManagerInterface $entityManager): HttpResponse
     {
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->getPayload()->getString('_token'))) {
             $topics = $entityManager->getRepository(Topic::class)->findBy(['author' => $user]);
             foreach ($topics as $topic) {
                 $responses = $entityManager->getRepository(Response::class)->findBy(['topic' => $topic]);
@@ -136,7 +135,7 @@ final class UserController extends AbstractController
         return $this->redirectToRoute('admin_user', [], HttpResponse::HTTP_SEE_OTHER);
     }
 
-    #[Route('/ban/{id}', name: 'app_user_ban')]
+    #[Route('/ban/{id}', name: 'user_ban')]
     public function banUser(int $id, EntityManagerInterface $entityManager): HttpResponse
     {
         $user = $entityManager->getRepository(User::class)->find($id);
@@ -160,7 +159,7 @@ final class UserController extends AbstractController
         return $this->redirectToRoute('admin_user', [], HttpResponse::HTTP_SEE_OTHER);
     }
 
-    #[Route('/deban/{id}', name: 'app_user_deban')]
+    #[Route('/deban/{id}', name: 'user_deban')]
     public function debanUser(int $id, EntityManagerInterface $entityManager): HttpResponse
     {
         $user = $entityManager->getRepository(User::class)->find($id);

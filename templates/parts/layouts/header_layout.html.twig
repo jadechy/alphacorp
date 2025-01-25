@@ -15,9 +15,9 @@
             <ul id="menu" class="hidden md:flex gap-6">
                 {% if app.user %}
                     {% if not is_granted('ROLE_BANNED') %}
-                        {% include "parts/components/nav_link.html.twig" with {"pathName": "app_home", "label": "Forum"} %}
+                        {% include "parts/components/nav_link.html.twig" with {"pathName": "app_forum", "label": "Forum"} %}
                         {% include "parts/components/nav_link.html.twig" with {"pathName": "app_logout", "label": "Se déconnecter"} %}
-                        {% include "parts/components/nav_link.html.twig" with {"pathName": "app_user_show", "label": "Mon profil", parameters: {id:0}} %}
+                        {% include "parts/components/nav_link.html.twig" with {"pathName": "app_user_profil", "label": "Profil"} %}
 
                     {% else %}
                         <a href="#"
@@ -31,7 +31,7 @@
                 {% endif %}
 
                 {% if is_granted('ROLE_ADMIN') %}
-                           {% include "parts/components/nav_link.html.twig" with {"pathName": "app_register", "label": "Admin"} %} 
+                           {% include "parts/components/nav_link.html.twig" with {"pathName": "admin_homepage", "label": "Admin"} %} 
 
                 {% endif %}
             </ul>

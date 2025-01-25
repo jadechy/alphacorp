@@ -15,12 +15,12 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-#[Route('/response')]
+#[Route('/admin/response', name: "admin_")]
 #[IsGranted('ROLE_ADMIN')]
 final class ResponseController extends AbstractController
 {
 
-    #[Route('/{id}', name: 'app_response_show', methods: ['GET'])]
+    #[Route('/{id}', name: 'response_show', methods: ['GET'])]
     public function show(Response $response): HttpResponse
     {
         return $this->render('response/show.html.twig', [
@@ -35,7 +35,7 @@ final class ResponseController extends AbstractController
 
         if (!in_array($status, array_map(fn($enum) => $enum->value, ResponseStatusEnum::cases()), true)) {
             throw $this->createNotFoundException('Statut non valide');
-        }        
+        }
 
         $response->setStatus(ResponseStatusEnum::from($status));
 
@@ -44,7 +44,7 @@ final class ResponseController extends AbstractController
         $entityManager->persist($response);
         $entityManager->flush();
 
-        
+
         if ($referer && str_contains($referer, $this->generateUrl('admin_response'))) {
             return $this->redirectToRoute('admin_response', [], HttpResponse::HTTP_SEE_OTHER);
         }

@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Forum - Rechercher par...{% endblock %}
+{% block h1 %}Forum - Rechercher par...{% endblock %}
+
+
+{% block body %}
+         <div class="flex gap-10 w-full justify-between ">
+                <a href="{{ path(  'app_category', {'id': 1}
+) }}" class="w-1/2 py-28 shadow-xl shadow-neutral-900 rounded-lg">
+                <h2 class="text-center align-middle text-4xl ">Catégorie</h2>
+                </a>
+                <a href="{{ path('app_topic_search') }}" class="w-1/2 py-28 shadow-xl shadow-neutral-900 rounded-lg">
+                <h2 class="text-center align-middle text-4xl">Sujet</h2>
+                </a>
+
+        </div>
+ {% endblock %}

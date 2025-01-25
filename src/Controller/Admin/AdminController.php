@@ -14,17 +14,18 @@ use App\Repository\ResponseRepository;
 use App\Repository\TopicRepository;
 use App\Repository\BanRequestRepository;
 
-#[Route('/admin')]
+#[Route('/admin', name: "admin_")]
 #[IsGranted('ROLE_ADMIN')]
 class AdminController extends AbstractController
 {
-    #[Route(path: '/', name: 'app_admin_homepage')]
+    #[Route(path: '/', name: 'homepage')]
     public function admin(): Response
     {
+
         return $this->render('admin/admin.html.twig');
     }
 
-    #[Route('/category', name: 'admin_category')]
+    #[Route('/category', name: 'category')]
     public function adminCatgories(CategoryRepository $categoryRepository): Response
     {
         return $this->render('admin/category.html.twig', [
@@ -32,7 +33,7 @@ class AdminController extends AbstractController
         ]);
     }
 
-    #[Route('/language', name: 'admin_language')]
+    #[Route('/language', name: 'language')]
     public function adminLanguages(LanguageRepository $languageRepository): Response
     {
         return $this->render('admin/language.html.twig', [
@@ -40,7 +41,7 @@ class AdminController extends AbstractController
         ]);
     }
 
-    #[Route('/user', name: 'admin_user')]
+    #[Route('/user', name: 'user')]
     public function adminUsers(UserRepository $userRepository): Response
     {
         return $this->render('admin/user.html.twig', [
@@ -48,16 +49,16 @@ class AdminController extends AbstractController
         ]);
     }
 
-    #[Route('/response', name: 'admin_response')]
+    #[Route('/response', name: 'response')]
     public function adminResponse(ResponseRepository $responseRepository): Response
     {
         $statuses = [];
 
         $responses = $responseRepository->findAll();
 
-        foreach ($responses as $response){
+        foreach ($responses as $response) {
             $status = $response->getStatus();
-            
+
             if ($status && !in_array($status, $statuses, true)) {
                 $statuses[] = $status;
             }
@@ -69,7 +70,7 @@ class AdminController extends AbstractController
         ]);
     }
 
-    #[Route('/topic', name: 'admin_topic')]
+    #[Route('/topic', name: 'topic')]
     public function adminTopic(TopicRepository $topicRepository): Response
     {
         $languages = [];
@@ -80,19 +81,19 @@ class AdminController extends AbstractController
 
         foreach ($topics as $topic) {
             $language = $topic->getLanguage();
-            
+
             if ($language && !in_array($language, $languages, true)) {
                 $languages[] = $language;
             }
 
             $category = $topic->getCategory();
-            
+
             if ($category && !in_array($category, $categories, true)) {
                 $categories[] = $category;
             }
 
             $status = $topic->getStatus();
-            
+
             if ($status && !in_array($status, $statuses, true)) {
                 $statuses[] = $status;
             }
@@ -106,7 +107,7 @@ class AdminController extends AbstractController
         ]);
     }
 
-    #[Route('/banrequest', name: 'admin_banrequest')]
+    #[Route('/banrequest', name: 'banrequest')]
     public function adminBanRequest(BanRequestRepository $banRequestRepository): Response
     {
         return $this->render('admin/ban_request.html.twig', [

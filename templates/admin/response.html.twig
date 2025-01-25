@@ -3,17 +3,12 @@
 {% block title %}Administration des réponses{% endblock %}
 
 {% block body %}
-    <main class=" flex-1 py-10  px-5 sm:px-10 ">
-        <section>
-            <h1 class="text-lg font-medium text-black mb-9">Administration
-                <span class="font-bold text-blue-700">des réponses</span>
-            </h1>
-        </section>
+  
 
         <div class="mt-5 flex gap-4">
-            <div class="relative">
-                <select class="block appearance-none w-full bg-gray-100 text-gray-800 border border-gray-300 rounded-full py-2 px-4 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" id="status">
-                    <option value="all">--Filtrer par status--</option>
+            <div >
+                <select class="dashboard-select" id="status">
+                    <option value="all">Filtrer par status</option>
                     {% for status in statuses %}    
                         <option value="{{status.name}}">
                             {% if status.value == 'validated' %}
@@ -36,27 +31,27 @@
             </div>
         </div>
 
-        <section class="mt-9">
-            <div class="overflow-hidden  border rounded-lg border-gray-300">
-                <table class="table-auto min-w-full rounded-xl">
+        <section class="mt-2">
+ 
+                <table>
                     <thead>
-                        <tr class="bg-gray-50">
-                            <th scope="col" class="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"> ID</th>
-                            <th scope="col" class="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"> Auteur</th>
-                            <th scope="col" class="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"> Contenu</th>
-                            <th scope="col" class="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"> Topic</th>
-                            <th scope="col" class="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"> Status</th>
-                            <th scope="col" class="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"> Actions</th>
+                        <tr >
+                            <th scope="col" > ID</th>
+                            <th scope="col" > Auteur</th>
+                            <th scope="col" > Contenu</th>
+                            <th scope="col" > Topic</th>
+                            <th scope="col" > Status</th>
+                            <th scope="col" > Actions</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-300 ">
+                    <tbody  >
                         {% for response in responses %}
-                            <tr class="bg-white transition-all duration-500 hover:bg-gray-50 response" data-status="{{response.status.name}}">
-                                <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{{ response.id }}</td>
-                                <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{{ response.author.username }}</td>
-                                <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{{ response.content }}</td>
-                                <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{{ response.topic.title }}</td>
-                                <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">
+                            <tr  data-status="{{response.status.name}}">
+                                <td >{{ response.id }}</td>
+                                <td >{{ response.author.username }}</td>
+                                <td >{{ response.content }}</td>
+                                <td >{{ response.topic.title }}</td>
+                                <td >
                                     <form method="POST" action="{{ path('response_change_status', { id: response.id }) }}" class="inline">
                                         <input type="hidden" name="status" value="{{ response.status.value }}">
 
@@ -76,9 +71,9 @@
                                         </div>
                                     </form>
                                 </td>
-                                <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900 flex">
-                                    <a href="{{ path('app_response_show', {'id': response.id}) }}" class="group">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-5 w-5 group-hover:stroke-blue-600">
+                                <td  >
+                                    <a href="{{ path('app_response_show', {'id': response.id}) }}" >
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" >
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                                         </svg>
@@ -92,10 +87,8 @@
                         {% endfor %}
                     </tbody>
                 </table>
-            </div>
-        </section>
-    </main>    
-{% endblock %}
+         </section>
+ {% endblock %}
 {% block javascripts %}
     {{ parent() }}   
     <script src="{{ asset('js/filterResponses.js') }}"></script>

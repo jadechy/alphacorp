@@ -18,19 +18,22 @@ class TopicType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('title', TextType::class, ['attr' => [
-                'class' => 'w-full px-8 py-4 mt-5 rounded-lg font-medium bg-white border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white',
-                'placeholder' => 'Titre'
+            ->add('title', TextType::class, [
+                'attr' => [
+                    'class' => 'input',
+                    'placeholder' => 'Titre'
                 ]
             ])
-            ->add('shortDescription', TextType::class, ['attr' => [
-                'class' => 'w-full px-8 py-4 mt-5 rounded-lg font-medium bg-white border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white',
-                'placeholder' => 'Courte description'
+            ->add('shortDescription', TextType::class, [
+                'attr' => [
+                    'class' => 'input',
+                    'placeholder' => 'Courte description'
                 ]
             ])
-            ->add('longDescription', TextType::class, ['attr' => [
-                'class' => 'w-full px-8 py-4 mt-5 rounded-lg font-medium bg-white border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white',
-                'placeholder' => 'Longue description'
+            ->add('longDescription', TextType::class, [
+                'attr' => [
+                    'class' => 'input',
+                    'placeholder' => 'Longue description'
                 ]
             ])
             ->add('category', EntityType::class, [

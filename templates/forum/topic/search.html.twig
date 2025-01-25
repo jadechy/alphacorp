@@ -1,37 +1,37 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Rechercher un topic{% endblock %}
+{% block h1 %}Rechercher un topic{% endblock %}
+
 
 {% block body %}
-    <main class="flex-1 py-10 px-5 sm:px-10">
-        <section>
-            <h1 class="text-lg font-medium text-black">Rechercher un Topic</h1>
-
-            <form method="get" action="{{ path('app_topic_search') }}" class="flex items-center mb-6 mt-4">
+         <section>
+             <form method="get" action="{{ path('app_forum') }}" class="flex items-center gap-5 mb-6 mt-4">
                 <input
                     type="text"
                     name="q"
                     value="{{ keyword|default('') }}"
                     placeholder="Tapez un mot-clé..."
-                    class="border rounded-md px-4 py-2 w-full"
+                    class="input"
                 >
-                <button type="submit" class="ml-2 bg-blue-500 text-white px-4 py-2 rounded-md">
+                <button type="submit" class="btn">
                     Rechercher
                 </button>
             </form>
 
             {% if keyword %}
-                <h2 class="text-md font-medium text-gray-700">Résultats pour "{{ keyword }}"</h2>
+                <h2 class="text-md font-medium text-neutral-400">Résultats pour "{{ keyword }}"</h2>
                 {% if topics is not empty %}
+                    <div class="flex gap-6 flex-wrap">
                     {% for topic in topics %}
                         {% if topic.status.value == 'open' or topic.status.value == 'close' %}
                             {% include 'macro/topic_card.html.twig' %}
                         {% endif %}
                     {% endfor %}
+                    </div>
                 {% else %}
                     <p class="text-gray-500">Aucun topic trouvé pour "{{ keyword }}".</p>
                 {% endif %}
             {% endif %}
         </section>
-    </main>
-{% endblock %}
+ {% endblock %}

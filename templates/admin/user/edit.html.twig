@@ -7,7 +7,7 @@
         <section>
             <h1 class="text-lg font-medium text-black">Modifier l' <span class="font-bold text-blue-600">utilisateur</span></h1>
 
-            {{ include('user/admin/_form_edit.html.twig', {'button_label': 'Enregistrer'}) }}
+            {{ include('admin/user/_form_edit.html.twig', {'button_label': 'Enregistrer'}) }}
 
             {% if app.user and 'ROLE_ADMIN' in app.user.roles %}
                 <div class="flex items-center justify-center mt-4">
@@ -18,7 +18,7 @@
                     </a>
                 </div>
 
-                {{ include('user/admin/_delete_form.html.twig') }}
+                {{ include('admin/user/_delete_form.html.twig') }}
             {% endif %}
         </section>
     </main>
