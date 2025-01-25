@@ -15,9 +15,7 @@ class UserPasswordSubscriber
 {
     public function __construct(
         protected UserPasswordHasherInterface $passwordHasher,
-    )
-    {
-    }
+    ) {}
 
     public function hashPassword(User $user): void
     {

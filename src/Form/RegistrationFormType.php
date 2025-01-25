@@ -21,15 +21,18 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('username' , TextType::class, ['attr' => [
-                'class' => 'w-full px-8 py-4 mt-5 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white',
-                'placeholder' => 'Nom d\'utilisateur'
+            ->add('username', TextType::class, [
+                'attr' => [
+                    'class' => 'w-full px-8 py-4  rounded-lg font-medium bg-transparent
+ border border-gray-200 placeholder-gray-400 text-sm focus:outline-none focus:border-fuchsia-300  ',
+                    'placeholder' => 'Nom d\'utilisateur'
                 ]
             ])
             ->add('email', EmailType::class, [
                 'label' => 'Adresse email',
                 'attr' => [
-                    'class' => 'w-full px-8 py-4 mt-5 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white',
+                    'class' => 'w-full px-8 py-4 mt-5 rounded-lg font-medium bg-transparent
+ border border-gray-200 placeholder-gray-400 text-sm focus:outline-none focus:border-fuchsia-300 ',
                     'placeholder' => 'Email'
                 ],
             ])
@@ -39,7 +42,8 @@ class RegistrationFormType extends AbstractType
                     'label' => 'Mot de passe',
                     'attr' => [
                         'autocomplete' => 'new-password',
-                        'class' => 'w-full px-8 py-4 mt-5 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white',
+                        'class' => 'w-full px-8 py-4 mt-5 rounded-lg font-medium bg-transparent
+ border border-gray-200 placeholder-gray-400 text-sm focus:outline-none focus:border-fuchsia-300',
                         'placeholder' => 'Entrez votre mot de passe',
                     ],
                 ],
@@ -47,7 +51,8 @@ class RegistrationFormType extends AbstractType
                     'label' => 'Confirmez le mot de passe',
                     'attr' => [
                         'autocomplete' => 'new-password',
-                        'class' => 'w-full px-8 py-4 mt-5 rounded-lg font-medium bg-blue-100 border border-blue-200 placeholder-blue-500 text-sm focus:outline-none focus:border-blue-400 focus:bg-white',
+                        'class' => 'w-full px-8 py-4 mt-5 rounded-lg font-medium bg-transparent
+ border border-gray-200 placeholder-gray-400 text-sm focus:outline-none focus:border-fuchsia-300 ',
                         'placeholder' => 'Confirmez votre mot de passe',
                     ],
                 ],
@@ -61,12 +66,9 @@ class RegistrationFormType extends AbstractType
                 ],
                 'expanded' => true,
                 'multiple' => false,
-                'mapped' => false, 
-                'attr' => [
-                    'class' => 'mt-5',
-                ],
-            ]);
-        ;
+                'mapped' => false,
+
+            ]);;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

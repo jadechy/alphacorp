@@ -1,0 +1,41 @@
+<header class="mb-12">
+    <nav 
+    class="bg-neutral-950"
+    {# class="{{ isDark ? 'bg-neutral-950' : 'bg-gray-50' }}" #}
+    >
+        <div class="container mx-auto flex justify-between items-center p-4">
+            <a href="{{ path('app_home') }}" class="text-lg font-bold text-gray-700">
+                Alphacorp
+            </a>
+
+            <button id="menu-button" class="block md:hidden text-gray-700">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <ul id="menu" class="hidden md:flex gap-6">
+                {% if app.user %}
+                    {% if not is_granted('ROLE_BANNED') %}
+                        {% include "parts/components/nav_link.html.twig" with {"pathName": "app_home", "label": "S'incrire"} %}
+                    {% else %}
+                        <a href="#"
+                           class="text-gray-600 hover:text-blue-600 {% if app.request.attributes.get('_route') == 'app_logout' %}font-bold text-blue-600{% endif %}">
+                            Déconnexion
+                        </a>
+                    {% endif %}
+                {% else %}
+                    {% include "parts/components/nav_link.html.twig" with {"pathName": "app_register", "label": "S'incrire"} %} 
+                    {% include "parts/components/nav_link.html.twig" with {"pathName": "app_login", "label": "Se connecter"} %}
+                {% endif %}
+
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li>
+                        <a href="#"
+                           class="text-gray-600 hover:text-blue-600 {% if app.request.attributes.get('_route') == 'app_register' %}font-bold text-blue-600{% endif %}">
+                            ADMIN
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+</header>

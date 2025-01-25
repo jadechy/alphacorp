@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion{% endblock %}
+{% block h1 %}Connexion{% endblock %}
+
+{% block body %}
+    <form method="post" class="max-w-2xl mx-auto" >
+        {% if error %}
+            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
+
+        {% if app.user %}
+            <div class="mb-3">
+                You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+            </div>
+        {% endif %}
+
+        <input type="email" value="{{ last_username }}" name="_username" id="username" class="form-control w-full px-8 py-4   rounded-lg font-medium bg-transparent
+ border border-gray-200 placeholder-gray-400 text-sm focus:outline-none focus:border-fuchsia-300" autocomplete="email" required autofocus placeholder="Email"> 
+        <input type="password" name="_password" id="password" class="form-control w-full px-8 py-4 mt-5 rounded-lg font-medium bg-transparent
+ border border-gray-200 placeholder-gray-400 text-sm focus:outline-none focus:border-fuchsia-300" autocomplete="current-password" required placeholder="Mot de passe">
+<a href="{{ path("app_forgot") }}" class=" hover:underline hover:decoration-solid text-end text-sm text-gray-400 w-full mt-3 " >Mot de passe oublié</a>
+        <input type="hidden" name="_csrf_token"
+               value="{{ csrf_token('authenticate') }}"
+        >
+
+        {#
+            Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
+            See https://symfony.com/doc/current/security/remember_me.html
+
+            <div class="checkbox mb-3">
+                <input type="checkbox" name="_remember_me" id="_remember_me">
+                <label for="_remember_me">Remember me</label>
+            </div>
+        #}
+ <div class="flex justify-end mt-8">
+
+        <button class=" text-fuchsia-300 rounded-full border border-fuchsia-300 px-4 py-2   hover:bg-fuchsia-400 hover:text-white transition" type="submit">
+            Se connecter
+        </button>
+        </div>
+    </form>
+{% endblock %}
