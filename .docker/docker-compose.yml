@@ -54,6 +54,14 @@ services:
             - database
         networks:
             - symfony_app
+
+    mailhoge:
+        image: mailhog/mailhog 
+        ports:
+            - "1025:1025"  # SMTP Server
+            - "8025:8025"  # Web UI
+        networks:
+            - symfony_app
             
 volumes:
     symfony_app_var:

@@ -14,7 +14,6 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Doctrine\ORM\EntityManagerInterface;
@@ -26,7 +25,7 @@ use App\Enum\StatusUserEnum;
 class AuthController extends AbstractController
 {
     #[Route('/register', name: 'app_register')]
-    public function register( Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): Response
+    public function register(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -37,7 +36,7 @@ class AuthController extends AbstractController
 
             $password = $form->get('plainPassword')->getData();
             $user->setPlainPassword($password);
-            
+
             $gender = $form->get('gender')->getData();
             if ($gender === 'male') {
                 $user->setRoles(['ROLE_ALPHA']);
@@ -79,24 +78,24 @@ class AuthController extends AbstractController
             $entityManager->flush();
 
             $resetLink = $this->generateUrl(
-                'app_reset', 
+                'app_reset',
                 ['token' => $resetToken],
                 UrlGeneratorInterface::ABSOLUTE_URL
             );
 
             $email = (new Email())
-                ->from('noreply@example.com')
+                ->from('contact@alphacorp.fr')
                 ->to($user->getEmail())
                 ->subject('Réinitialisation de votre mot de passe')
-                ->text('Voici le lien pour réinitialiser votre mot de passe : ' . $resetLink);
-  
+                ->html($this->render('emails/forgot.html.twig', ['user' => $user]));
+
             $mailer->send($email);
 
             $this->addFlash('success', 'Un email de réinitialisation de mot de passe a été envoyé.');
 
             return $this->redirectToRoute('app_login');
         }
-        
+
         return $this->render('auth/forgot.html.twig');
     }
 
@@ -112,22 +111,22 @@ class AuthController extends AbstractController
             /** @var string $password */
             $password = $request->get('password');
             $repeatPassword = $request->get('repeat_password');
-    
+
             if ($password !== $repeatPassword) {
                 $this->addFlash('error', 'Les mots de passe ne correspondent pas.');
                 return $this->redirectToRoute('reset', ['token' => $token]);
             }
-    
+
             $user->setPlainPassword($password);
             $user->setResetToken(null);
-    
+
             $entityManager = $doctrine->getManager();
             $entityManager->flush();
-    
+
             $this->addFlash('success', 'Votre mot de passe a été réinitialisé avec succès.');
             return $this->redirectToRoute('app_login');
         }
-    
+
         return $this->render('auth/reset.html.twig', [
             'token' => $token,
             'email' => $user->getEmail(),

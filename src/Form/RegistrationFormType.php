@@ -23,7 +23,7 @@ class RegistrationFormType extends AbstractType
         $builder
             ->add('username', TextType::class, [
                 'attr' => [
-                    'class' => 'w-full px-8 py-4 mt-5 rounded-lg font-medium bg-transparent
+                    'class' => 'w-full px-8 py-4  rounded-lg font-medium bg-transparent
  border border-gray-200 placeholder-gray-400 text-sm focus:outline-none focus:border-fuchsia-300  ',
                     'placeholder' => 'Nom d\'utilisateur'
                 ]
