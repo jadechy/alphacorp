@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Catégorie{% endblock %}
+
+{% block body %}
+    <main class=" flex-1 py-10  px-5 sm:px-10 ">
+        <section>
+            <h1 class="text-lg font-medium text-black">Catégorie <span class="font-bold text-blue-600">{{ category.label }}</span></h1>
+
+            <div class="overflow-hidden  border rounded-lg border-gray-300 mt-9">
+                <table class="table-auto min-w-full rounded-xl">
+                    <thead>
+                        <tr class="bg-gray-50">
+                            <th scope="col" class="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"> ID</th>
+                            <th scope="col" class="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"> Nom</th>
+                            <th scope="col" class="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"> Label</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-300 ">
+                        <tr class="bg-white transition-all duration-500 hover:bg-gray-50">
+                            <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{{ category.id }}</td>
+                            <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{{ category.name }}</td>
+                            <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{{ category.label }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="flex items-center justify-center mt-4">
+                <a href="{{ path('admin_category') }}">
+                    <button class="relative flex bg-blue-600 flex-row p-2 items-center justify-center rounded-md text-sm overflow-hidden border cursor-pointer transition text-white hover:opacity-90 hover:scale-105">
+                        Retour à la liste
+                    </button>
+                </a>
+            </div>
+
+            <div class="flex items-center justify-center mt-4">
+                <a href="{{ path('app_category_edit', {'id': category.id}) }}">
+                    <button class="relative flex bg-blue-600 flex-row p-2 items-center justify-center rounded-md text-sm overflow-hidden border cursor-pointer transition text-white hover:opacity-90 hover:scale-105">
+                        Modifier
+                    </button>
+                </a>
+            </div>
+
+            {{ include('category/admin/_delete_form.html.twig') }}
+        </section>
+    </main>
+{% endblock %}

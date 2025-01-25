@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer une nouvelle catégorie{% endblock %}
+
+{% block body %}
+    <main class=" flex-1 py-10  px-5 sm:px-10 ">
+        <section>
+            <h1 class="text-lg font-medium text-black">Créer une nouvelle <span class="font-bold text-blue-600">catégorie</span></h1>
+            <p class="text-gray-500 font-bold mt-2">La catégorie doit avoir un nom et un label d'au moins 3 caractères.</p>
+            {{ include('category/admin/_form.html.twig') }}
+
+            <div class="flex items-center justify-center mt-4">
+                <a href="{{ path('admin_category') }}">
+                    <button class="relative flex bg-blue-600 flex-row p-2 items-center justify-center rounded-md text-sm overflow-hidden border cursor-pointer transition text-white hover:opacity-90 hover:scale-105">
+                        Retour à la liste
+                    </button>
+                </a>
+            </div>
+        </section>
+    </main>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Administration des langues{% endblock %}
+
+{% block body %}
+    <main class=" flex-1 py-10  px-5 sm:px-10 ">
+        <section>
+            <h1 class="text-lg font-medium text-black mb-9">Administration
+                <span class="font-bold text-blue-700">des langues</span></h1>
+            <a href="{{ path('app_language_new') }}">
+                <button class="flex flex-col items-center mt-9 w-full">
+                    <div class="relative flex w-full bg-blue-600 flex-row p-3 items-center justify-center rounded-lg overflow-hidden border cursor-pointer transition hover:bg-blue-700 text-white">
+                        <span class="font-bold mr-2">
+                            <svg class="h-6 w-6" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>plus-circle</title><path d="M17,13H13V17H11V13H7V11H11V7H13V11H17M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"/></svg>
+                        </span> <span class="capitalize font-medium text-md">Créer une nouvelle langue</span>
+                    </div>
+                </button>
+            </a>
+        </section>
+
+        <section class="mt-9">
+            <div class="overflow-hidden  border rounded-lg border-gray-300">
+                <table class="table-auto min-w-full rounded-xl">
+                    <thead>
+                        <tr class="bg-gray-50">
+                            <th scope="col" class="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"> ID</th>
+                            <th scope="col" class="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"> Nom</th>
+                            <th scope="col" class="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"> Label</th>
+                            <th scope="col" class="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"> Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-300 ">
+                        {% for language in languages %}
+                            <tr class="bg-white transition-all duration-500 hover:bg-gray-50">
+                                <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{{ language.id }}</td>
+                                <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{{ language.name }}</td>
+                                <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{{ language.code }}</td>
+                                <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900 flex">
+                                    <a href="{{ path('app_language_show', {'id': language.id}) }}" class="group">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-5 w-5 group-hover:stroke-blue-600">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                        </svg>
+                                    </a>
+                                    <a href="{{ path('app_language_edit', {'id': language.id}) }}" class="group">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-5 w-5 group-hover:stroke-blue-600">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+                                        </svg>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="4">Aucune langue trouvé.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>    
+{% endblock %}

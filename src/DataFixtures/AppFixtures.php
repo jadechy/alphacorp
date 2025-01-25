@@ -19,6 +19,7 @@ use App\Entity\UserAnswer;
 use App\Enum\StatusUserEnum;
 use App\Enum\BromanceStatusEnum;
 use App\Enum\TopicStatusEnum;
+use App\Enum\ResponseStatusEnum;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -57,7 +58,7 @@ class AppFixtures extends Fixture
 
         $this->createActiveUsers($manager, $users);
         $this->createAdminUsers($manager, $users);
-        $this->createBlockedUsers($manager, $users);
+        $this->createBannedUsers($manager, $users);
         $this->createDeleteUsers($manager, $users);
 
         $this->createCategories($manager, $categories);
@@ -125,7 +126,7 @@ class AppFixtures extends Fixture
     /**
      * @return User[] 
      */
-    protected function createBlockedUsers(ObjectManager $manager, array &$users): void
+    protected function createBannedUsers(ObjectManager $manager, array &$users): void
     {
         $roles = ['ROLE_SUPERVISOR', 'ROLE_ALPHA'];
 
@@ -134,12 +135,12 @@ class AppFixtures extends Fixture
             $user->setEmail(email: "user_$i@example.com");
             $user->setUsername(username: "user_$i");
             
-            $user->setPlainPassword('blocked');
+            $user->setPlainPassword('banned');
             
             $randomRole = $roles[array_rand($roles)];
             $user->setRoles([$randomRole]);
 
-            $user->setStatus(StatusUserEnum::BLOCKED);
+            $user->setStatus(StatusUserEnum::BANNED);
 
             $users[] = $user;
 
@@ -235,6 +236,7 @@ class AppFixtures extends Fixture
                 $response->setAuthor($users[array_rand($users)]);
                 $response->setContent("Réponse $i");
                 $response->setCreatedAt(createdAt: new \DateTimeImmutable());
+                $response->setStatus(random_int(0, 1) === 1 ? ResponseStatusEnum::VALIDATED : ResponseStatusEnum::WAITING);
                 $response->setTopic($topic);
 
                 $manager->persist($response);
