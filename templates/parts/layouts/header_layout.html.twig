@@ -23,9 +23,8 @@
                         </a>
                     {% endif %}
                 {% else %}
-                    {% include "parts/components/nav_link.html.twig" with {"pathName": "app_register", "label": "S'incrire"} %}
-                    {% include "parts/components/nav_link.html.twig" with {"pathName": "app_home", "label": "S'incrire"} %}
-                    {% include "parts/components/nav_link.html.twig" with {"pathName": "app_home", "label": "Se connecter"} %}
+                    {% include "parts/components/nav_link.html.twig" with {"pathName": "app_register", "label": "S'incrire"} %} 
+                    {% include "parts/components/nav_link.html.twig" with {"pathName": "app_login", "label": "Se connecter"} %}
                 {% endif %}
 
                 {% if is_granted('ROLE_ADMIN') %}

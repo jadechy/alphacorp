@@ -5,7 +5,8 @@
 {% block body %}
     <main>
         <section>
-            <h1 class="font-bold">Créer un compte</h1>
+            <h1 class="font-bold text-fuchsia-300 text-center text-2xl">Créer un compte</h1>
+            <div class="max-w-2xl mx-auto mt-8">
 
             {{ form_start(registrationForm) }}
 
@@ -23,12 +24,27 @@
                     {{ form_errors(registrationForm.plainPassword.second) }}
                 </div>
 
-                {{ form_widget(registrationForm.gender) }}
+                <div class="mt-5">
 
-                <button type="submit">
+                 {{ form_label(registrationForm.gender) }}
+                 <div class="flex gap-6">
+                 {% for gender in registrationForm.gender %}
+                 <div class="flex items-center">
+                {{ form_widget(gender, { 'attr': { 'class': 'form-radio h-5    focus:ring-2 focus:ring-fuchsia-500 border-gray-300 rounded-full' } })}}
+                    {{ form_errors(registrationForm.gender, { 'attr': { 'class': 'text-red-500 text-sm mt-1' } }) }}
+                    <span class="ml-2"> {{gender.vars.label}}</span>
+                    </div>
+                    {% endfor %}
+                    </div>
+
+</div>
+ <div class="flex justify-end mt-8">
+                <button type="submit" class=" text-fuchsia-300 rounded-full border border-fuchsia-300 px-4 py-2   hover:bg-fuchsia-400 hover:text-white transition">
                     {{ button_label|default('Créer le compte') }}
                 </button>
+                </div>
             {{ form_end(registrationForm) }}
+            </div>
         </section>
     </main> 
 {% endblock %}
