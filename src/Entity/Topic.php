@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\TopicStatusEnum;
 use App\Repository\TopicRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -24,6 +25,9 @@ class Topic
 
     #[ORM\Column(length: 255, name: 'TPC_LONG_DESCRIPTION')]
     private string $longDescription;
+
+    #[ORM\Column(enumType: TopicStatusEnum::class, name: 'TPC_STATUS')]
+    private TopicStatusEnum $status;
 
     #[ORM\Column(name: 'TPC_CREATED_AT')]
     private \DateTimeImmutable $createdAt;
@@ -88,6 +92,18 @@ class Topic
     public function setLongDescription(string $longDescription): static
     {
         $this->longDescription = $longDescription;
+
+        return $this;
+    }
+
+    public function getStatus(): TopicStatusEnum
+    {
+        return $this->status;
+    }
+
+    public function setStatus(TopicStatusEnum $status): static
+    {
+        $this->status = $status;
 
         return $this;
     }
