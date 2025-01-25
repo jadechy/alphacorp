@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Compte suspendu{% endblock %}
+
+{% block body %}
+    <main class="flex-1 py-10 px-5 sm:px-10">
+        <section>
+            <h1 class="text-lg font-medium text-black">Compte suspendu</h1>
+            <p>{{ message }}</p>
+
+            {% if app.session.flashbag.has('success') %}
+                <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 mt-4">
+                    <p class="font-semibold">{{ app.session.flashbag.get('success')[0] }}</p>
+                </div>
+            {% endif %}
+
+            {% if not app.session.flashbag.has('success') %}
+                {{ form_start(form) }}
+                    <div class="mt-4 mb-4">
+                        {{ form_label(form.message) }}
+                        {{ form_widget(form.message) }}
+                    </div>
+
+                    <button type="submit" class="relative mt-5 bg-blue-600 flex-row p-2 items-center justify-center rounded-md text-sm overflow-hidden border cursor-pointer transition text-white hover:opacity-90 hover:scale-105 w-fit">
+                        {{ button_label|default('Envoyer la demande') }}
+                    </button>
+                {{ form_end(form) }}
+            {% endif %}
+        </section>
+    </main>
+{% endblock %}

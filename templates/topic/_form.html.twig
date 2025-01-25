@@ -1,0 +1,15 @@
+{{ form_start(form) }}
+    {{ form_widget(form.title) }}
+
+    {{ form_widget(form.shortDescription) }}
+
+    {{ form_widget(form.longDescription) }}
+
+    {{ form_widget(form.category) }}
+
+    {{ form_widget(form.language) }}
+
+    <button type="submit" class="relative mt-5 bg-blue-600 flex-row p-2 items-center justify-center rounded-md text-sm overflow-hidden border cursor-pointer transition text-white hover:opacity-90 hover:scale-105 w-fit">
+        {{ button_label|default('Enregistrer') }}
+    </button>
+{{ form_end(form) }}

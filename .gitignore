@@ -7,8 +7,7 @@
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
-/node_modules/
-###> symfony/webpack-encore-bundle ###
+ ###> symfony/webpack-encore-bundle ###
 /node_modules/
 /public/build/
 npm-debug.log

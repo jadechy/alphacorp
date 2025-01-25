@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Votre profile{% endblock %}
+
+{% block body %}
+    <main class="flex-1 py-10 px-5 sm:px-10">
+        <section>
+            <h1 class="text-lg font-medium text-black">Bonjour <span class="font-bold text-blue-600">{{user.username}}</span></h1>
+
+            <h2 class="text-md font-medium text-gray-700 mt-4">Vos informations</h2>
+
+            <div class="overflow-hidden  border rounded-lg border-gray-300 mt-4">
+                <table class="table-auto min-w-full rounded-xl">
+                    <thead>
+                        <tr class="bg-gray-50">
+                            <th scope="col" class="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"> Username</th>
+                            <th scope="col" class="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"> Email</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-300 ">
+                        <tr class="bg-white transition-all duration-500 hover:bg-gray-50">
+                            <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{{ user.username }}</td>
+                            <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{{ user.email }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="flex items-center justify-center mt-4">
+                <a href="{{ path('app_user_edit', {'id': user.id}) }}">
+                    <button class="relative flex bg-blue-600 flex-row p-2 items-center justify-center rounded-md text-sm overflow-hidden border cursor-pointer transition text-white hover:opacity-90 hover:scale-105">
+                        Modifier vos informations
+                    </button>
+                </a>
+            </div>
+
+        </section>
+    </main>
+{% endblock %}
+

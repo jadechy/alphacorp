@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Vos topics{% endblock %}
+
+{% block body %}
+    <main class="flex-1 py-10 px-5 sm:px-10">
+        <section>
+            <h1 class="text-lg font-medium text-black">Vos <span class="font-bold text-blue-600">topic</span></h1>
+            <a class="flex flex-col items-center mt-9 w-full" href="{{ path('app_topic_new')}}">
+                <div class="relative flex w-full bg-blue-600 flex-row p-3 items-center justify-center rounded-lg overflow-hidden border cursor-pointer transition hover:bg-blue-700 text-white">
+                    <span class="font-bold mr-2">
+                        <svg class="h-6 w-6" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>plus-circle</title><path d="M17,13H13V17H11V13H7V11H11V7H13V11H17M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"/></svg>
+                    </span>
+                    <span class="capitalize font-medium text-md">Créer un nouveau topic</span>
+                </div>
+            </a>
+        </section>
+        <section class="mt-4">
+            {% if topics is empty %}
+                <h2>Vous n'avez aucun topic d'ouvert.</h2>
+            {% else %}
+                {% for topic in topics %}
+                    <article class="mt-9 bg-gray-100 p-4 rounded-lg">
+                        {% if topic.status.value == 'open' %}
+                            <span class="py-1.5 px-2.5 bg-green-500/30 rounded-full flex w-20 justify-center items-center gap-1">
+                                <p class="font-medium text-xs text-green-600">Ouvert</p>
+                            </span>
+                        {% elseif topic.status.value == 'close' %}
+                            <span class="py-1.5 px-2.5 bg-red-500/30 rounded-full flex w-20 justify-center items-center gap-1">
+                                <p class="font-medium text-xs text-red-600">Fermé</p>
+                            </span>
+                        {% elseif topic.status.value == 'waiting' %}
+                            <span class="py-1.5 px-2.5 bg-orange-500/30 rounded-full flex w-20 justify-center items-center gap-1">
+                                <p class="font-medium text-xs text-orange-600">En attente</p>
+                            </span>
+                        {% endif %}
+
+                        <h3 class="text-center text-md font-bold my-4">{{topic.title}}</h3>
+                        <p class="text-center">{{topic.shortDescription}}</p>
+                        <ul class="w-full p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900 flex gap-4 justify-center items-center">
+                            <li class="py-1.5 px-2.5 bg-orange-500/30 rounded-full flex w-20 justify-center items-center gap-1"><p class="font-medium text-xs text-orange-600">{{topic.category.name}}</p></li>
+                            <li class="py-1.5 px-2.5 bg-orange-500/30 rounded-full flex w-20 justify-center items-center gap-1"><p class="font-medium text-xs text-orange-600">{{topic.language.name}}</p></li>
+                        </ul>
+                        <p class="text-center">Il y a : <span class="font-semibold">{{ topic.responses|length }}</span> réponses</p>
+                        <div class="flex items-center justify-center gap-4">
+                            <div class="flex items-center justify-center">
+                                <a href="{{ path('app_topic', { id : topic.id }) }}">
+                                    <button type="submit" class="relative mt-5 bg-blue-700 flex-row p-2 items-center justify-center rounded-md text-sm overflow-hidden border cursor-pointer transition text-white hover:opacity-90 hover:scale-105 w-fit">
+                                        {{ button_label|default('Voir mon topic') }}
+                                    </button>
+                                </a>
+                            </div>
+                            <div class="flex items-center justify-center">
+                                <a href="{{ path('app_topic_edit', { id : topic.id }) }}">
+                                    <button type="submit" class="relative mt-5 bg-blue-700 flex-row p-2 items-center justify-center rounded-md text-sm overflow-hidden border cursor-pointer transition text-white hover:opacity-90 hover:scale-105 w-fit">
+                                        {{ button_label|default('Modifier mon topic') }}
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+                        
+                        {{ include('topic/_delete_form.html.twig') }}
+                    </article>
+                {% endfor %}
+            {% endif %}
+        </section>
+    </main>
+{% endblock %}
