@@ -1,5 +1,8 @@
 <header class="mb-12">
-    <nav class="{{ isDark ? 'bg-neutral-950' : 'bg-gray-50' }}">
+    <nav 
+    class="bg-neutral-950"
+    {# class="{{ isDark ? 'bg-neutral-950' : 'bg-gray-50' }}" #}
+    >
         <div class="container mx-auto flex justify-between items-center p-4">
             <a href="{{ path('app_home') }}" class="text-lg font-bold text-gray-700">
                 Alphacorp
@@ -20,7 +23,7 @@
                         </a>
                     {% endif %}
                 {% else %}
-                    {% include "parts/components/nav_link.html.twig" with {"pathName": "app_home", "label": "S'incrire"} %}
+                    {% include "parts/components/nav_link.html.twig" with {"pathName": "app_register", "label": "S'incrire"} %}
                     {% include "parts/components/nav_link.html.twig" with {"pathName": "app_home", "label": "S'incrire"} %}
                     {% include "parts/components/nav_link.html.twig" with {"pathName": "app_home", "label": "Se connecter"} %}
                 {% endif %}
