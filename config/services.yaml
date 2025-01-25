@@ -25,3 +25,10 @@ services:
     App\EventSubscriber\UserPasswordSubscriber:
         tags:
             - { name: 'doctrine.event_subscriber' }
+    
+    App\EventSubscriber\BannedUserSubscriber:
+        arguments:
+            $tokenStorage: '@security.token_storage'
+            $router: '@router'
+        tags:
+            - { name: 'kernel.event_subscriber' }

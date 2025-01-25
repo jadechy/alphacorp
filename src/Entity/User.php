@@ -103,6 +103,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: UserAnswer::class, mappedBy: 'user')]
     private Collection $userAnswers;
 
+    /**
+     * @var Collection<int, BanRequest>
+     */
+    #[ORM\OneToMany(targetEntity: BanRequest::class, mappedBy: 'user')]
+    private Collection $banRequests;
+
     public function __construct()
     {
         $this->responses = new ArrayCollection();
@@ -114,6 +120,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->events = new ArrayCollection();
         $this->authorEvents = new ArrayCollection();
         $this->userAnswers = new ArrayCollection();
+        $this->banRequests = new ArrayCollection();
     }
 
     public function getId(): int
@@ -504,6 +511,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($userAnswer->getUser() === $this) {
                 $userAnswer->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, BanRequest>
+     */
+    public function getBanRequests(): Collection
+    {
+        return $this->banRequests;
+    }
+
+    public function addBanRequest(BanRequest $banRequest): static
+    {
+        if (!$this->banRequests->contains($banRequest)) {
+            $this->banRequests->add($banRequest);
+            $banRequest->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBanRequest(BanRequest $banRequest): static
+    {
+        if ($this->banRequests->removeElement($banRequest)) {
+            // set the owning side to null (unless already changed)
+            if ($banRequest->getUser() === $this) {
+                $banRequest->setUser(null);
             }
         }
 

@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un nouveau topic{% endblock %}
+
+{% block body %}
+    <main class=" flex-1 py-10  px-5 sm:px-10 ">
+        <section>
+            <h1 class="text-lg font-medium text-black">Créer un nouveau <span class="font-bold text-blue-600">topic</span></h1>
+            {{ include('topic/_form.html.twig') }}
+
+            <div class="flex items-center justify-center mt-4">
+                <a href="{{ path('app_topic_user') }}">
+                    <button class="relative flex bg-blue-600 flex-row p-2 items-center justify-center rounded-md text-sm overflow-hidden border cursor-pointer transition text-white hover:opacity-90 hover:scale-105">
+                        Retour à la liste des topics
+                    </button>
+                </a>
+            </div>
+        </section>
+    </main>
+{% endblock %}

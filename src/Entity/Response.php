@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\ResponseStatusEnum;
 use App\Repository\ResponseRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -20,6 +21,9 @@ class Response
 
     #[ORM\Column(name: 'RSP_CREATED_AT')]
     private \DateTimeImmutable $createdAt;
+
+    #[ORM\Column(enumType: ResponseStatusEnum::class, name: 'RSP_STATUS')]
+    private ResponseStatusEnum $status;
 
     #[ORM\ManyToOne(inversedBy: 'responses')]
     #[ORM\JoinColumn(name:'TPC_ID',referencedColumnName:'TPC_ID')]
@@ -54,6 +58,18 @@ class Response
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getStatus(): ResponseStatusEnum
+    {
+        return $this->status;
+    }
+
+    public function setStatus(ResponseStatusEnum $status): static
+    {
+        $this->status = $status;
 
         return $this;
     }
