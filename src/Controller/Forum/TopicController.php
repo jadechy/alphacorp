@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 use App\Repository\TopicRepository;
 use App\Entity\Topic;
@@ -116,6 +117,7 @@ class TopicController extends AbstractController
         return $this->redirectToRoute('app_topic_user', [], HttpResponse::HTTP_SEE_OTHER);
     }
 
+    #[IsGranted('ROLE_ALPHA')]
     #[Route('/topics', name: 'app_topic_user')]
     public function userTopic(TopicRepository $topicRepository): HttpResponse
     {

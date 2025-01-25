@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/user')]
 #[IsGranted('ROLE_ADMIN')]
