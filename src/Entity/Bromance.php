@@ -18,11 +18,11 @@ class Bromance
     #[ORM\Column(name: 'BRO_STATUS', enumType: BromanceStatusEnum::class)]
     private BromanceStatusEnum $status;
 
-    #[ORM\ManyToOne(inversedBy: 'alpha')]
+    #[ORM\ManyToOne(inversedBy: 'bromancesAlpha')]
     #[ORM\JoinColumn(name:'USR_ID',referencedColumnName:'USR_ID')]
     private ?User $alpha = null;
 
-    #[ORM\ManyToOne(inversedBy: 'follower')]
+    #[ORM\ManyToOne(inversedBy: 'bromancesFollower')]
     #[ORM\JoinColumn(name:'USR_ID',referencedColumnName:'USR_ID')]
     private ?User $follower = null;
 

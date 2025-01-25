@@ -1,0 +1,136 @@
+<?php
+
+namespace App\Controller\Auth;
+
+namespace App\Controller\Auth;
+
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\Request;
+use Doctrine\Persistence\ManagerRegistry;
+
+use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Doctrine\ORM\EntityManagerInterface;
+
+use App\Entity\User;
+use App\Form\RegistrationFormType;
+use App\Enum\StatusUserEnum;
+
+class AuthController extends AbstractController
+{
+    #[Route('/register', name: 'app_register')]
+    public function register( Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): Response
+    {
+        $user = new User();
+        $form = $this->createForm(RegistrationFormType::class, $user);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $password = $form->get('plainPassword')->getData();
+            $user->setPlainPassword($password);
+            
+            $gender = $form->get('gender')->getData();
+            if ($gender === 'male') {
+                $user->setRoles(['ROLE_ALPHA']);
+            } elseif ($gender === 'female') {
+                $user->setRoles(['ROLE_SUPERVISOR']);
+            }
+
+            $user->setStatus(StatusUserEnum::ACTIVE);
+
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Votre compte a été créé avec succès.');
+            return $this->redirectToRoute('app_login');
+        }
+
+        return $this->render('auth/register.html.twig', [
+            'registrationForm' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/forgot', name: 'app_forgot')]
+    public function forgot(Request $request, ManagerRegistry $doctrine, MailerInterface $mailer): Response
+    {
+        $email = $request->request->get('_email');
+
+        if ($email) {
+            $user = $doctrine->getRepository(User::class)->findOneBy(['email' => $email]);
+            if (!$user) {
+                $this->addFlash('error', 'Aucun utilisateur trouvé avec cette adresse email.');
+                return $this->redirectToRoute('forgot');
+            }
+
+            $resetToken = Uuid::v4();
+            $user->setResetToken($resetToken);
+
+            $entityManager = $doctrine->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            $resetLink = $this->generateUrl(
+                'app_reset', 
+                ['token' => $resetToken],
+                UrlGeneratorInterface::ABSOLUTE_URL
+            );
+
+            $email = (new Email())
+                ->from('noreply@example.com')
+                ->to($user->getEmail())
+                ->subject('Réinitialisation de votre mot de passe')
+                ->text('Voici le lien pour réinitialiser votre mot de passe : ' . $resetLink);
+  
+            $mailer->send($email);
+
+            $this->addFlash('success', 'Un email de réinitialisation de mot de passe a été envoyé.');
+
+            return $this->redirectToRoute('app_login');
+        }
+        
+        return $this->render('auth/forgot.html.twig');
+    }
+
+    #[Route('/reset/{token}', name: 'app_reset')]
+    public function reset(Request $request, string $token, ManagerRegistry $doctrine, UserPasswordHasherInterface $passwordHasher): Response
+    {
+        $user = $doctrine->getRepository(User::class)->findOneBy(['resetToken' => $token]);
+
+        if (!$user) {
+            throw $this->createNotFoundException('Jeton de réinitialisation invalide.');
+        }
+        if ($request->isMethod('POST')) {
+            /** @var string $password */
+            $password = $request->get('password');
+            $repeatPassword = $request->get('repeat_password');
+    
+            if ($password !== $repeatPassword) {
+                $this->addFlash('error', 'Les mots de passe ne correspondent pas.');
+                return $this->redirectToRoute('reset', ['token' => $token]);
+            }
+    
+            $user->setPlainPassword($password);
+            $user->setResetToken(null);
+    
+            $entityManager = $doctrine->getManager();
+            $entityManager->flush();
+    
+            $this->addFlash('success', 'Votre mot de passe a été réinitialisé avec succès.');
+            return $this->redirectToRoute('app_login');
+        }
+    
+        return $this->render('auth/reset.html.twig', [
+            'token' => $token,
+            'email' => $user->getEmail(),
+        ]);
+    }
+}

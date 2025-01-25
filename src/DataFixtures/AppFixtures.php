@@ -21,6 +21,7 @@ use App\Enum\BromanceStatusEnum;
 use App\Enum\TopicStatusEnum;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
@@ -37,6 +38,10 @@ class AppFixtures extends Fixture
     public const MAX_EVENTS = 5;
 
     public const MAX_CHALLENGES = 15;
+
+    public function __construct(protected UserPasswordHasherInterface $passwordHasher)
+    {
+    }
 
     public function load(ObjectManager $manager): void
     {
@@ -83,7 +88,7 @@ class AppFixtures extends Fixture
             $user->setEmail(email: "user_$i@example.com");
             $user->setUsername(username: "user_$i");
             
-            $user->setPassword('coucou');
+            $user->setPlainPassword('coucou');
             
             $randomRole = $roles[array_rand($roles)];
             $user->setRoles([$randomRole]);
@@ -104,7 +109,9 @@ class AppFixtures extends Fixture
             $user = new User();
             $user->setEmail(email: "admin_$i@example.com");
             $user->setUsername(username: "admin_$i");
-            $user->setPassword('admin');
+            
+            $user->setPlainPassword('admin');
+
             $user->setRoles(['ROLE_ADMIN']);
 
             $user->setStatus(StatusUserEnum::ACTIVE);
@@ -126,7 +133,8 @@ class AppFixtures extends Fixture
             $user = new User();
             $user->setEmail(email: "user_$i@example.com");
             $user->setUsername(username: "user_$i");
-            $user->setPassword('blocked');
+            
+            $user->setPlainPassword('blocked');
             
             $randomRole = $roles[array_rand($roles)];
             $user->setRoles([$randomRole]);
@@ -150,7 +158,8 @@ class AppFixtures extends Fixture
             $user = new User();
             $user->setEmail(email: "user_$i@example.com");
             $user->setUsername(username: "user_$i");
-            $user->setPassword('blocked');
+            
+            $user->setPlainPassword('delete');
             
             $randomRole = $roles[array_rand($roles)];
             $user->setRoles([$randomRole]);
