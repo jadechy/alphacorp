@@ -1,17 +1,20 @@
 {% extends "base.html.twig" %}
-{% block title %}Mot de passe oublié{% endblock %}
-{% block h1 %}Mot de passe perdu{% endblock %}
+{% block title %}Mot de passe perdu{% endblock %}
+{% block h1 %}Mot de passe perdu ?{% endblock %}
 {% block body %}
          <section>
             {% for message in app.flashes('error') %}
-                <div class="bg-red-500 text-white p-4 rounded">{{ message }}</div>
+            <div class="flex justify-center">
+                <div class="border border-red-500 text-red-500 p-4 rounded w-fit mb-8">{{message}}</div>
+                  </div>
+            <div>
             {% endfor %}
 
             {% for message in app.flashes('success') %}
                 <div class="bg-red-500 text-white p-4 rounded">{{ message }}</div>
             {% endfor %}
 
-            <div>
+
                  <div   class="w-xl mx-auto">
                     <p class="mb-4">Vous recevez un email pour réinitialiser votre mot de passe</p>
                     <form method="POST"   action="{{ path('app_forgot') }}">

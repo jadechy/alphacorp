@@ -1,6 +1,4 @@
-{% extends 'emails/base.html.twig' %}
-
-{% set url = url('reset', {uid: user.resetPasswordToken}) %}
+{% extends 'emails/base.html.twig' %} 
 
 {% block body %}
 
@@ -11,7 +9,7 @@
     <br>
         Vous avez demandé la réinitialisation de votre mot de passe sur Alphacorp. 
     <br>
-    Pour réinitialiser votre mot de passe, veuillez cliquer sur le lien suivant : <a href="{{ url }}" style="font-weight: bold">Réinitialiser mon mot de passe</a>
+    Pour réinitialiser votre mot de passe, veuillez cliquer sur le lien suivant : <a href="{{ resetLink }}" style="font-weight: bold">Réinitialiser mon mot de passe</a>
     <br>
 
     <br>
@@ -19,6 +17,6 @@
     <br>
     <br>
     <div style="font-size: 0.8rem; color: #999;">
-        Si vous n'arrivez pas à cliquer sur le lien, copiez-collez l'URL suivante dans votre navigateur : <a href="{{ url }}">{{ url }}</a>
+        Si vous n'arrivez pas à cliquer sur le lien, copiez-collez l'URL suivante dans votre navigateur : <a href="{{ resetLink }}">{{ resetLink }}</a>
     </div>
 {% endblock %}

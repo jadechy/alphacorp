@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profile{% endblock %}
+{% block h1 %}Mon profile{% endblock %}
+
+{% block body %}
+<div>
+    <!-- Section Profil -->
+    <section class="flex gap-6">
+        <img src="{{ asset('img/1.png') }}" class="w-80 object-cover rounded-sm" alt="Profile Picture" />
+        <div class="flex justify-between w-full">
+            <div class="flex flex-col justify-between">
+                <div>
+                    <p class="font-bold">Cecoule</p>
+                    <p class="text-neutral-400">cece.lecerf@gmail.com</p>
+                    <p class="text-neutral-400">21/09/2003</p>
+                </div>
+                {% include "parts/components/button_link.html.twig" with {"label": "Modifier", "pathName": "app_user_edit", parameters: {id:0}} %} 
+            </div>
+            <div class="rounded-full bg-fuchsia-500 h-fit px-3 py-1">
+                <p>800 XP</p>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- Section Bromances -->
+    <section class="mt-20 ">
+        <h2 class="text-xl font-semibold">Mes bromances <span class="text-sm text-neutral-400">- 118</span></h2>
+        <div class="flex gap-5 mt-4">
+            <!-- Card 1 -->
+            <div class="w-35">
+                {% include "parts/components/card_col.html.twig" with {"title": "app_register", "height": 25} %} 
+            </div>
+            <div class="w-35">
+                {% include "parts/components/card_col.html.twig" with {"title": "app_register", "height": 25} %} 
+            </div>             
+  
+       
+        </div>
+    </section>
+
+        <!-- Section Events -->
+    <section class="mt-20 ">
+        <h2 class="text-xl font-semibold">Mes Events <span class="text-sm text-neutral-400">- 118</span></h2>
+        <div class="flex gap-8 pt-8">
+            <div class="w-60">
+                {% include "parts/components/card_col.html.twig" with {"title": "app_register", "height": 50} %} 
+            </div>
+            <div class="w-60">
+                {% include "parts/components/card_col.html.twig" with {"title": "app_register", "height": 50} %} 
+            </div>  
+        </div>
+    </section>
+</div>
+{% endblock %}

@@ -46,18 +46,17 @@ docker exec -it symfony-php-1 bash
 compose require install
 ```
 
-<!-- ### 6. Exécuter les migrations de la base de données
+### 6. Exécuter les migrations de la base de données
 
 ```bash
 php bin/console doctrine:migrations:migrate
-``` -->
+ 
 
-<!-- ### 7. Charger les fixtures de la base de données
+ ### 7. Charger les fixtures de la base de données
 
 ```bash
 php bin/console doctrine:fixtures:load
-``` -->
-
+ 
 ---
 
 ## Lancer l'application

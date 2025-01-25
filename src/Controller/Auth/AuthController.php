@@ -34,7 +34,7 @@ class AuthController extends AbstractController
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        return $this->render('security/login.html.twig', [
+        return $this->render('auth/login.html.twig', [
             'last_username' => $lastUsername,
             'error' => $error,
         ]);
@@ -89,7 +89,7 @@ class AuthController extends AbstractController
             $user = $doctrine->getRepository(User::class)->findOneBy(['email' => $email]);
             if (!$user) {
                 $this->addFlash('error', 'Aucun utilisateur trouvé avec cette adresse email.');
-                return $this->redirectToRoute('forgot');
+                return $this->redirectToRoute('app_forgot');
             }
 
             $resetToken = Uuid::v4();
@@ -109,8 +109,10 @@ class AuthController extends AbstractController
                 ->from('contact@alphacorp.fr')
                 ->to($user->getEmail())
                 ->subject('Réinitialisation de votre mot de passe')
-                ->html($this->render('emails/forgot.html.twig', ['user' => $user]));
-
+                ->html($this->renderView('emails/forgot.html.twig', [
+                    'user' => $user,
+                    'resetLink' => $resetLink, // Pass the reset link explicitly
+                ]));
             $mailer->send($email);
 
             $this->addFlash('success', 'Un email de réinitialisation de mot de passe a été envoyé.');
@@ -136,7 +138,7 @@ class AuthController extends AbstractController
 
             if ($password !== $repeatPassword) {
                 $this->addFlash('error', 'Les mots de passe ne correspondent pas.');
-                return $this->redirectToRoute('reset', ['token' => $token]);
+                return $this->redirectToRoute('app_reset', ['token' => $token]);
             }
 
             $user->setPlainPassword($password);
