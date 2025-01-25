@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block body %}
+    <main>
+        <section>
+            <h1>Créer un compte</h1>
+
+            {{ form_start(registrationForm) }}
+
+                {{ form_widget(registrationForm.username) }}
+
+                {{ form_widget(registrationForm.email) }}
+
+                <div>
+                    {{ form_widget(registrationForm.plainPassword.first) }}
+                    {{ form_errors(registrationForm.plainPassword.first) }}
+                </div>
+
+                <div>
+                    {{ form_widget(registrationForm.plainPassword.second) }}
+                    {{ form_errors(registrationForm.plainPassword.second) }}
+                </div>
+
+                {{ form_widget(registrationForm.gender) }}
+
+                <button type="submit">
+                    {{ button_label|default('Créer le compte') }}
+                </button>
+            {{ form_end(registrationForm) }}
+        </section>
+    </main> 
+{% endblock %}
