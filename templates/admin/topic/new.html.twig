@@ -1,0 +1,10 @@
+{% extends 'admin/base_admin.html.twig' %}
+
+{% block admin_title %}Créer un nouveau topic{% endblock %} 
+ {% set return_path = 'admin_topic_home' %} 
+
+{% block admin_content %}
+         <section>
+             {{ include('forum/topic/_form.html.twig') }}
+         </section>
+ {% endblock %}

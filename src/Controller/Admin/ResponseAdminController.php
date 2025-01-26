@@ -4,8 +4,6 @@ namespace App\Controller\Admin;
 
 use App\Entity\Response;
 use App\Enum\ResponseStatusEnum;
-use App\Enum\ReportStatusEnum;
-use App\Repository\ResponseRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,11 +11,10 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 #[Route('/admin/response', name: "admin_")]
 #[IsGranted('ROLE_ADMIN')]
-final class ResponseController extends AbstractController
+final class ResponseAdminController extends AbstractController
 {
 
     #[Route('/{id}', name: 'response_show', methods: ['GET'])]

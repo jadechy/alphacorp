@@ -1,0 +1,14 @@
+{% extends 'admin/base_admin.html.twig' %}
+
+{% block admin_title %}Modifier {{topic.title}}{% endblock %}
+ {% set return_path = 'admin_topic_single' %} 
+ {% set return_params = { id: topic.id } %}
+
+
+{% block admin_content %} 
+         <section class="mt-8">
+            {{ include('forum/topic/_form.html.twig', {'button_label': 'Enregistrer'}) }}
+            {{ include('forum/topic/_delete_form.html.twig') }}
+            </div>
+        </section>
+ {% endblock %}

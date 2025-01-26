@@ -14,7 +14,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/admin/category', name: "admin_")]
 #[IsGranted('ROLE_ADMIN')]
-final class CategoryController extends AbstractController
+final class CategoryAdminController extends AbstractController
 {
 
     #[Route('/new', name: 'category_new', methods: ['GET', 'POST'])]

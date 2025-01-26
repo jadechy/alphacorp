@@ -6,12 +6,7 @@
 
 {% block admin_content %} 
  <section>
-            {% if app.user and 'ROLE_ADMIN' in app.user.roles %}
-
             {{ include('admin/user/_form_edit.html.twig', {'button_label': 'Enregistrer'}) }}
-
-         
-              
                 {{ include('admin/user/_delete_form.html.twig') }}
                 </div>
             {% endif %}

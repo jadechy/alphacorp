@@ -14,7 +14,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/admin/language', name: "admin_")]
 #[IsGranted('ROLE_ADMIN')]
-final class LanguageController extends AbstractController
+final class LanguageAdminController extends AbstractController
 {
     #[Route('/new', name: 'language_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response

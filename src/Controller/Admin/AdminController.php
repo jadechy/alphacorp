@@ -70,42 +70,7 @@ class AdminController extends AbstractController
         ]);
     }
 
-    #[Route('/topic', name: 'topic')]
-    public function adminTopic(TopicRepository $topicRepository): Response
-    {
-        $languages = [];
-        $categories = [];
-        $statuses = [];
 
-        $topics = $topicRepository->findAll();
-
-        foreach ($topics as $topic) {
-            $language = $topic->getLanguage();
-
-            if ($language && !in_array($language, $languages, true)) {
-                $languages[] = $language;
-            }
-
-            $category = $topic->getCategory();
-
-            if ($category && !in_array($category, $categories, true)) {
-                $categories[] = $category;
-            }
-
-            $status = $topic->getStatus();
-
-            if ($status && !in_array($status, $statuses, true)) {
-                $statuses[] = $status;
-            }
-        }
-
-        return $this->render('admin/topic.html.twig', [
-            'topics' => $topics,
-            'languages' => $languages,
-            'categories' => $categories,
-            'statuses' => $statuses
-        ]);
-    }
 
     #[Route('/banrequest', name: 'banrequest')]
     public function adminBanRequest(BanRequestRepository $banRequestRepository): Response

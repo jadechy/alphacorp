@@ -19,7 +19,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/admin/user', name: "admin_user_")]
 #[IsGranted('ROLE_ADMIN')]
-final class UserController extends AbstractController
+final class UserAdminController extends AbstractController
 {
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): HttpResponse
