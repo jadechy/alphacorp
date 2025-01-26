@@ -6,6 +6,7 @@ use App\Entity\Language;
 use App\Form\LanguageType;
 use App\Repository\LanguageRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,10 +18,16 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class LanguageAdminController extends AbstractController
 {
     #[Route('/', name: 'homepage')]
-    public function adminLanguages(LanguageRepository $languageRepository): Response
+    public function adminLanguages(PaginatorInterface $paginator, Request $request, LanguageRepository $languageRepository): Response
     {
+        $query = $languageRepository->findAll();
+        $pagination = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            10
+        );
         return $this->render('admin/language/index.html.twig', [
-            'languages' => $languageRepository->findAll(),
+            'pagination' => $pagination,
         ]);
     }
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]

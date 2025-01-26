@@ -54,7 +54,7 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-300 ">
-                        {% for topic in topics %}
+                        {% for topic in pagination.items %}
                             <tr  data-langue="{{topic.language.code}}" data-category="{{topic.category.name}}" data-status="{{topic.status.name}}">
                                 <td >{{ topic.id }}</td>
                                 <td >{{ topic.title}}</td> 
@@ -95,6 +95,8 @@
                         {% endfor %}
                     </tbody>
                 </table>
+                                     {{ knp_pagination_render(pagination) }}
+
 <div class="flex">
             <a href="{{ path('admin_topic_new') }}" class="btn w-full">
             Ajouter un topic

@@ -11,22 +11,30 @@ use App\Form\UserType;
 use App\Form\UserEditType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+
 
 #[Route('/admin/user', name: "admin_user_")]
 #[IsGranted('ROLE_ADMIN')]
 final class UserAdminController extends AbstractController
 {
     #[Route('/', name: 'homepage')]
-    public function adminUsers(UserRepository $userRepository): HttpResponse
+    public function adminUsers(UserRepository $userRepository, PaginatorInterface $paginator, Request $request): HttpResponse
     {
+        $query = $userRepository->findAll();
+
+        $pagination = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            10
+        );
         return $this->render('admin/user/index.html.twig', [
-            'users' => $userRepository->findAll(),
+            'pagination' => $pagination,
         ]);
     }
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]

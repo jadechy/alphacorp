@@ -7,6 +7,8 @@ use App\Enum\ResponseStatusEnum;
 use App\Form\ResponseType;
 use App\Repository\ResponseRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\Paginator;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,13 +22,17 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class ResponseAdminController extends AbstractController
 {
     #[Route('/', name: 'homepage')]
-    public function adminResponse(ResponseRepository $responseRepository): HttpResponse
+    public function adminResponse(ResponseRepository $responseRepository, PaginatorInterface $paginator, Request $request): HttpResponse
     {
         $statuses = [];
 
-        $responses = $responseRepository->findAll();
-
-        foreach ($responses as $response) {
+        $query = $responseRepository->findAll();
+        $pagination = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            10
+        );
+        foreach ($query as $response) {
             $status = $response->getStatus();
 
             if ($status && !in_array($status, $statuses, true)) {
@@ -35,7 +41,7 @@ final class ResponseAdminController extends AbstractController
         }
 
         return $this->render('admin/response/index.html.twig', [
-            'responses' => $responses,
+            'pagination' => $pagination,
             'statuses' => $statuses
         ]);
     }

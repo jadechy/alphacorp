@@ -16,22 +16,28 @@ use App\Form\ResponseType;
 use App\Enum\ResponseStatusEnum;
 use App\Enum\TopicStatusEnum;
 use App\Form\TopicType;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 
 #[IsGranted('ROLE_ADMIN')]
 #[Route('/admin/topic', name: "admin_topic_")]
 class TopicAdminController extends AbstractController
 {
-    #[Route('/', name: 'home')]
-    public function adminTopic(TopicRepository $topicRepository): HttpResponse
+    #[Route('/', name: 'homepage')]
+    public function adminTopic(TopicRepository $topicRepository, PaginatorInterface $paginator, Request $request): HttpResponse
     {
         $languages = [];
         $categories = [];
         $statuses = [];
 
-        $topics = $topicRepository->findAll();
+        $query = $topicRepository->findAll();
 
-        foreach ($topics as $topic) {
+        $pagination = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            10
+        );
+        foreach ($query as $topic) {
             $language = $topic->getLanguage();
 
             if ($language && !in_array($language, $languages, true)) {
@@ -52,7 +58,7 @@ class TopicAdminController extends AbstractController
         }
 
         return $this->render('admin/topic/index.html.twig', [
-            'topics' => $topics,
+            'pagination' => $pagination,
             'languages' => $languages,
             'categories' => $categories,
             'statuses' => $statuses

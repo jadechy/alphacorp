@@ -40,7 +40,7 @@
                         </tr>
                     </thead>
                     <tbody  >
-                        {% for response in responses %}
+                        {% for response in pagination.items %}
                             <tr  data-status="{{response.status.name}}">
                                 <td >{{ response.id }}</td>
                                 <td >{{ response.author.username }}</td> 
@@ -75,6 +75,7 @@
                         {% endfor %}
                     </tbody>
                 </table>
+            {{ knp_pagination_render(pagination) }}
             <a href="{{ path('admin_response_new') }}" class="btn">
                 Créer un nouvel utilisateur 
             </a>

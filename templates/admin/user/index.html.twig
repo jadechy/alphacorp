@@ -16,7 +16,7 @@
                         </tr>
                     </thead>
                     <tbody >
-                        {% for user in users %}
+                        {% for user in pagination.items %}
                             <tr  >
                                 <td >{{ user.id }}</td>
                                 <td >{{ user.username }}</td>
@@ -69,7 +69,8 @@
                         {% endfor %}
                     </tbody>
                 </table>
-            <a href="{{ path('admin_user_new') }}" class="btn">
+                     {{ knp_pagination_render(pagination) }}
+             <a href="{{ path('admin_user_new') }}" class="btn">
             >Créer un nouvel utilisateur 
             </a>
 {% endblock %}
