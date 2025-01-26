@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profil Alpha{% endblock %}
+
+{% block body %}
+    <main class="flex-1 py-10 px-5 sm:px-10">
+        <section>
+            <h1 class="text-lg font-medium text-black">Profil de <span class="font-bold text-blue-600">{{user.username}}</span></h1>
+
+            {% if app.user and 'ROLE_ALPHA' in app.user.roles %} 
+                {% if bromance_exists %}
+                    <div class="flex items-center justify-center mt-4">
+                        <form action="{{ path('bromance_delete', {'id': user.id}) }}" method="POST">
+                            <button type="submit" class="relative flex bg-red-600 flex-row p-2 items-center justify-center rounded-md text-sm overflow-hidden border cursor-pointer transition text-white hover:opacity-90 hover:scale-105">
+                                Supprimer la bromance
+                            </button>
+                        </form>
+                    </div>
+                {% else %}
+                    <div class="flex items-center justify-center mt-4">
+                        <form action="{{ path('bromance_request', {'id': user.id}) }}" method="POST">
+                            <button type="submit" class="relative flex bg-blue-600 flex-row p-2 items-center justify-center rounded-md text-sm overflow-hidden border cursor-pointer transition text-white hover:opacity-90 hover:scale-105">Demande de bromance</button>
+                        </form>
+                    </div>
+                {% endif %}
+            {% endif %}
+        </section>
+    </main>
+{% endblock %}
+

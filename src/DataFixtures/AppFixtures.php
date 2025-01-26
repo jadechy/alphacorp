@@ -18,6 +18,7 @@ use App\Entity\Topic;
 use App\Entity\UserAnswer;
 use App\Enum\StatusUserEnum;
 use App\Enum\BromanceStatusEnum;
+use App\Enum\BromanceRequestStatusEnum;
 use App\Enum\TopicStatusEnum;
 use App\Enum\ResponseStatusEnum;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -34,7 +35,7 @@ class AppFixtures extends Fixture
     public const MAX_TOPICS = 20;
     public const MAX_RESPONSES_PER_TOPICS = 5;
 
-    public const MAX_BROMANCE = 3;
+    public const MAX_BROMANCE = 7;
 
     public const MAX_EVENTS = 12;
 
@@ -264,19 +265,41 @@ class AppFixtures extends Fixture
 
     protected function createBromance(ObjectManager $manager, array $users): void
     {
+        $alphaUsers = array_filter($users, function ($user) {
+            return in_array('ROLE_ALPHA', $user->getRoles());
+        });
+    
+        if (empty($alphaUsers)) {
+            return;
+        }
+
         for ($i = 0; $i < self::MAX_BROMANCE; $i++) {
-            $alpha = $users[array_rand($users)];
+            $alpha = $alphaUsers[array_rand($alphaUsers)];
             do {
-                $follower = $users[array_rand($users)];
+                $follower = $alphaUsers[array_rand($alphaUsers)];
             } while ($follower === $alpha); 
+
+            if ($alpha === $follower) {
+                continue;
+            }
 
             $bromance = new Bromance();
             $bromance->setAlpha($alpha);
             $bromance->setFollower($follower);
 
-            $statuses = BromanceStatusEnum::cases();
-            $randomStatus = $statuses[array_rand($statuses)];
-            $bromance->setStatus($randomStatus);
+            $demandeStatuses = BromanceRequestStatusEnum::cases();
+            $randomDemandeStatus = $demandeStatuses[array_rand($demandeStatuses)];
+            $bromance->setRequest($randomDemandeStatus);
+
+            if ($randomDemandeStatus === BromanceRequestStatusEnum::ACCEPTED) {
+                $statuses = BromanceStatusEnum::cases();
+                $randomStatus = $statuses[array_rand($statuses)];
+                $bromance->setStatus($randomStatus);
+                $bromance->setLinkedAt(linkedAt: new \DateTimeImmutable());
+            } else {
+                $bromance->setStatus(null);
+                $bromance->setLinkedAt(null);
+            }
 
             $manager->persist($bromance);
         }

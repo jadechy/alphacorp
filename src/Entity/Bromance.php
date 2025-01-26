@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\BromanceRepository;
 use App\Enum\BromanceStatusEnum;
+use App\Enum\BromanceRequestStatusEnum;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: BromanceRepository::class)]
@@ -15,28 +16,46 @@ class Bromance
     #[ORM\Column(name: 'BRO_ID')]
     private int $id;
 
-    #[ORM\Column(name: 'BRO_STATUS', enumType: BromanceStatusEnum::class)]
-    private BromanceStatusEnum $status;
+    #[ORM\Column(name: 'BRO_STATUS_REQUEST', enumType: BromanceRequestStatusEnum::class)]
+    private BromanceRequestStatusEnum $request;
+
+    #[ORM\Column(name: 'BRO_STATUS', enumType: BromanceStatusEnum::class, nullable:true)]
+    private ?BromanceStatusEnum $status = null;
 
     #[ORM\ManyToOne(inversedBy: 'bromancesAlpha')]
-    #[ORM\JoinColumn(name:'USR_ID',referencedColumnName:'USR_ID')]
+    #[ORM\JoinColumn(name:'USR_ID_ALPHA',referencedColumnName:'USR_ID')]
     private ?User $alpha = null;
 
     #[ORM\ManyToOne(inversedBy: 'bromancesFollower')]
-    #[ORM\JoinColumn(name:'USR_ID',referencedColumnName:'USR_ID')]
+    #[ORM\JoinColumn(name:'USR_ID_FOLLOWER',referencedColumnName:'USR_ID')]
     private ?User $follower = null;
+
+    #[ORM\Column(nullable: true, name: 'BRO_LINK_DATE')]
+    private ?\DateTimeImmutable $linkedAt = null;
 
     public function getId(): int
     {
         return $this->id;
     }
 
-    public function getStatus(): BromanceStatusEnum
+    public function getRequest(): BromanceRequestStatusEnum
+    {
+        return $this->request;
+    }
+
+    public function setRequest(BromanceRequestStatusEnum $request): static
+    {
+        $this->request = $request;
+
+        return $this;
+    }
+
+    public function getStatus(): ?BromanceStatusEnum
     {
         return $this->status;
     }
 
-    public function setStatus(BromanceStatusEnum $status): static
+    public function setStatus(?BromanceStatusEnum $status): static
     {
         $this->status = $status;
 
@@ -63,6 +82,18 @@ class Bromance
     public function setFollower(?User $follower): static
     {
         $this->follower = $follower;
+
+        return $this;
+    }
+
+    public function getLinkedAt(): ?\DateTimeImmutable
+    {
+        return $this->linkedAt;
+    }
+
+    public function setLinkedAt(?\DateTimeImmutable $linkedAt): static
+    {
+        $this->linkedAt = $linkedAt;
 
         return $this;
     }

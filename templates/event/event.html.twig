@@ -49,7 +49,7 @@
                 <p>{{event.location}}</p>
 
                 {% if event.author.id != app.user.id %}
-                    <p>Par {{event.author.username}}</p>
+                    <a href="{{ path('user_profil', {'id': event.author.id}) }}">Par {{event.author.username}}</a>
                 {% endif %}
 
                 <p class="text-center">Il y a : <span class="font-semibold">{{ event.participants|length }}</span> participants</p>

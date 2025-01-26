@@ -13,6 +13,8 @@ use App\Entity\BanRequest;
 use App\Form\BanRequestType;
 use App\Enum\StatusUserEnum;
 
+use App\Repository\UserRepository;
+use App\Repository\BromanceRepository;
 use App\Repository\EventRepository;
 use App\Entity\Event;
 
@@ -25,6 +27,66 @@ class UserController extends AbstractController
 
         return $this->render('user/profil.html.twig', [
             'user' => $user,
+        ]);
+    }
+
+    #[Route('/profil/{id}/single', name: 'user_profil')]
+    public function userProfil(int $id, UserRepository $userRepository, BromanceRepository $bromanceRepository): Response
+    {
+        $user = $userRepository->findOneBy(['id' => $id]);
+
+        $bromance_exists = false;
+    
+        if ($this->getUser()) {
+            $bromance_exists = $bromanceRepository->findOneBy([
+                'alpha' => $this->getUser(),
+                'follower' => $user
+            ]) !== null;
+            
+            if (!$bromance_exists) {
+                $bromance_exists = $bromanceRepository->findOneBy([
+                    'alpha' => $user,
+                    'follower' => $this->getUser()
+                ]) !== null;
+            }
+        }
+
+        return $this->render('user/user_profil.html.twig', [
+            'user' => $user,
+            'bromance_exists' => $bromance_exists
+        ]);
+    }
+
+    #[Route('/profil/all', name: 'user_profil_all')]
+    public function allAlphaUserProfil(UserRepository $userRepository): Response
+    {
+        $users = $userRepository->findAll();
+
+        $alphas = [];
+        foreach ($users as $user){
+            if (in_array('ROLE_ALPHA', $user->getRoles()) && $user->getStatus() == StatusUserEnum::ACTIVE){
+                array_push($alphas, $user);
+            }
+        }
+
+        return $this->render('user/all.html.twig', [
+            'alphas' => $alphas,
+        ]);
+    }
+
+    #[Route('/profil/search', name: 'user_search', methods: ['GET'])]
+    public function searchAlphaUser(Request $request, UserRepository $userRepository): Response
+    {
+        $keyword = $request->query->get('q', '');
+        $users = [];
+
+        if ($keyword) {
+            $users = $userRepository->searchByKeyword($keyword);
+        }
+
+        return $this->render('user/search/search.html.twig', [
+            'users' => $users,
+            'keyword' => $keyword,
         ]);
     }
 

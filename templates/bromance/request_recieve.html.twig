@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Demandes reçues de bromance{% endblock %}
+
+{% block body %}
+    <h1>Demandes reçues de bromance</h1>
+
+    {% if requestRecieve is empty %}
+        <p>Aucune demande de bromance reçue.</p>
+    {% else %}
+        <ul>
+            {% for bromance in requestRecieve %}
+                {% if bromance.request.value == 'Demande en attente' %}
+                    <li>
+                        Demande reçue de {{ bromance.alpha.username }} - Statut : {{ bromance.request.value }}
+                        <form action="{{ path('bromance_reponse', {'id': bromance.id}) }}" method="POST">
+                            <button type="submit" name="reponse" value="accept">Accepter</button>
+                            <button type="submit" name="reponse" value="reject">Rejeter</button>
+                        </form>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}
