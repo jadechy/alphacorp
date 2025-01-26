@@ -41,6 +41,9 @@ class Event
     #[ORM\JoinColumn(name:'USR_ID',referencedColumnName:'USR_ID')]
     private ?User $author = null;
 
+    #[ORM\Column(length: 255,name: 'EVT_LOCATION')]
+    private string $location;
+
     public function __construct()
     {
         $this->participants = new ArrayCollection();
@@ -171,6 +174,18 @@ class Event
     public function setAuthor(?User $author): static
     {
         $this->author = $author;
+
+        return $this;
+    }
+
+    public function getLocation(): string
+    {
+        return $this->location;
+    }
+
+    public function setLocation(string $location): static
+    {
+        $this->location = $location;
 
         return $this;
     }

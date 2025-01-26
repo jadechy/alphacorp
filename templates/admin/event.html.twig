@@ -20,6 +20,7 @@
                             <th scope="col" class="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"> Image </th>
                             <th scope="col" class="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"> Début </th>
                             <th scope="col" class="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"> Fin </th>
+                            <th scope="col" class="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"> Lieu </th>
                             <th scope="col" class="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"> Auteur </th>
                             <th scope="col" class="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"> Actions</th>
                         </tr>
@@ -33,6 +34,7 @@
                                 <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{{ event.image }}</td>
                                 <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{{ event.startAt ? event.startAt|date('Y-m-d H:i:s') : '' }}</td>
                                 <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{{ event.endAt ? event.endAt|date('Y-m-d H:i:s') : '' }}</td>
+                                <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{{ event.location }}</td>
                                 <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{{ event.author.username }}</td>
                                 <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900 flex">
                                     <a href="{{ path('single_event', {'id': event.id}) }}" class="group">

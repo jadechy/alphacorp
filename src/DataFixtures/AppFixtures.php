@@ -36,7 +36,7 @@ class AppFixtures extends Fixture
 
     public const MAX_BROMANCE = 3;
 
-    public const MAX_EVENTS = 5;
+    public const MAX_EVENTS = 12;
 
     public const MAX_CHALLENGES = 15;
 
@@ -315,6 +315,8 @@ class AppFixtures extends Fixture
             $event->setDescription(description: "Description n°$i");
             
             $event->setImage(image: "image n°$i");
+
+            $event->setLocation(location: "Location n°$i");
 
             $event->setStartAt(startAt: new \DateTimeImmutable());
             $event->setEndAt(new \DateTimeImmutable('+1 day'));

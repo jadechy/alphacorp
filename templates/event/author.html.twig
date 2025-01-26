@@ -21,23 +21,24 @@
             {% else %}
                 {% for event in events %}
                     <article class="mt-9 bg-gray-100 p-4 rounded-lg">
-                        {# {% if topic.status.value == 'open' %}
+                        {% if event.isInFuture() %}
                             <span class="py-1.5 px-2.5 bg-green-500/30 rounded-full flex w-20 justify-center items-center gap-1">
                                 <p class="font-medium text-xs text-green-600">Ouvert</p>
                             </span>
-                        {% elseif topic.status.value == 'close' %}
+                        {% elseif event.isFinished() %}
                             <span class="py-1.5 px-2.5 bg-red-500/30 rounded-full flex w-20 justify-center items-center gap-1">
                                 <p class="font-medium text-xs text-red-600">Fermé</p>
                             </span>
-                        {% elseif topic.status.value == 'waiting' %}
+                        {% elseif event.isOngoing() %}
                             <span class="py-1.5 px-2.5 bg-orange-500/30 rounded-full flex w-20 justify-center items-center gap-1">
-                                <p class="font-medium text-xs text-orange-600">En attente</p>
+                                <p class="font-medium text-xs text-orange-600">En cours</p>
                             </span>
-                        {% endif %} #}
+                        {% endif %}
 
                         <h3 class="text-center text-md font-bold my-4">{{event.title}}</h3>
                         <p class="text-center">{{event.description}}</p>
-                        <p>Du {{ event.startAt|format_datetime('short', 'none', locale: 'fr') }} au {{ event.endAt|format_datetime('short', 'none', locale: 'fr') }}</p>
+                        <p class="text-center">Du {{ event.startAt|format_datetime('short', 'none', locale: 'fr') }} au {{ event.endAt|format_datetime('short', 'none', locale: 'fr') }}</p>
+                        <p class="text-center">{{event.location}}</p>
 
                         <p class="text-center">Il y a : <span class="font-semibold">{{ event.participants|length }}</span> participants</p>
 

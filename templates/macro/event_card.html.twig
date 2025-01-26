@@ -23,6 +23,9 @@
         <h4>Date</h4>
         <p>Du {{ event.startAt|format_datetime('short', 'none', locale: 'fr') }} au {{ event.endAt|format_datetime('short', 'none', locale: 'fr') }}</p>
 
+        <h4>Lieu</h4>
+        <p>{{event.location}}</p>
+
         {% if event.author.id != app.user.id %}
             <p>Par {{event.author.username}}</p>
         {% endif %}
