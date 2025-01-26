@@ -13,6 +13,7 @@ use App\Repository\UserRepository;
 use App\Repository\ResponseRepository;
 use App\Repository\TopicRepository;
 use App\Repository\BanRequestRepository;
+use App\Repository\EventRepository;
 
 #[Route('/admin')]
 #[IsGranted('ROLE_ADMIN')]
@@ -111,6 +112,14 @@ class AdminController extends AbstractController
     {
         return $this->render('admin/ban_request.html.twig', [
             'banRequests' => $banRequestRepository->findAll(),
+        ]);
+    }
+
+    #[Route('/event', name: 'admin_event')]
+    public function adminEvents(EventRepository $eventRepository): Response
+    {
+        return $this->render('admin/event.html.twig', [
+            'events' => $eventRepository->findAll(),
         ]);
     }
 }

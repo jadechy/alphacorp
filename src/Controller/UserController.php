@@ -13,6 +13,9 @@ use App\Entity\BanRequest;
 use App\Form\BanRequestType;
 use App\Enum\StatusUserEnum;
 
+use App\Repository\EventRepository;
+use App\Entity\Event;
+
 class UserController extends AbstractController
 {
     #[Route('/profil', name: 'app_user_profil')]
@@ -20,7 +23,7 @@ class UserController extends AbstractController
     {
         $user = $this->getUser();
 
-        return $this->render('user/index.html.twig', [
+        return $this->render('user/profil.html.twig', [
             'user' => $user,
         ]);
     }

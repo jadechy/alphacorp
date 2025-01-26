@@ -1,0 +1,32 @@
+{% macro AfficheEventCard(event) %}
+    <a class="relative flex flex-col items-center justify-center gap-4 rounded-xl overflow-hidden aspect-square border hover:scale-105 cursor-pointer transition hover:bg-gray-100" href="{{ path('single_event', { id : event.id }) }}">
+        {% if event.isInFuture() %}
+            <span class="py-1.5 px-2.5 bg-green-500/30 rounded-full flex w-20 justify-center items-center gap-1">
+                <p class="font-medium text-xs text-green-600">Ouvert</p>
+            </span>
+        {% elseif event.isFinished() %}
+            <span class="py-1.5 px-2.5 bg-red-500/30 rounded-full flex w-20 justify-center items-center gap-1">
+                <p class="font-medium text-xs text-red-600">Fermé</p>
+            </span>
+        {% elseif event.isOngoing() %}
+            <span class="py-1.5 px-2.5 bg-orange-500/30 rounded-full flex w-20 justify-center items-center gap-1">
+                <p class="font-medium text-xs text-orange-600">En cours</p>
+            </span>
+        {% endif %}
+
+        <img src="{{ asset(event.image) }}">
+        <div class="flex flex-row items-center space-x-6">
+            <h1 class="text-lg font-medium text-black">Évènements <span class="font-bold text-blue-600">{{event.title}}</span></h1>
+        </div>
+        <p>{{event.description}}</p>
+
+        <h4>Date</h4>
+        <p>Du {{ event.startAt|format_datetime('short', 'none', locale: 'fr') }} au {{ event.endAt|format_datetime('short', 'none', locale: 'fr') }}</p>
+
+        {% if event.author.id != app.user.id %}
+            <p>Par {{event.author.username}}</p>
+        {% endif %}
+
+        <p class="text-center">Il y a : <span class="font-semibold">{{ event.participants|length }}</span> participants</p>
+    </a>
+{% endmacro %}

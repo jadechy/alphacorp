@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier un évènement{% endblock %}
+
+{% block body %}
+    <main class=" flex-1 py-10  px-5 sm:px-10 ">
+        <section>
+            <h1 class="text-lg font-medium text-black">Modifier l' <span class="font-bold text-blue-600">évènement</span></h1>
+
+           {{ include('event/_form.html.twig', {'button_label': 'Modifier'}) }}
+
+            <div class="flex items-center justify-center mt-4">
+                <a href="{{ path('author_event') }}">
+                    <button class="relative flex bg-blue-600 flex-row p-2 items-center justify-center rounded-md text-sm overflow-hidden border cursor-pointer transition text-white hover:opacity-90 hover:scale-105">
+                        Retour à mes évènements
+                    </button>
+                </a>
+            </div>
+
+            {{ include('event/_delete_form.html.twig') }}
+        </section>
+    </main>
+{% endblock %}

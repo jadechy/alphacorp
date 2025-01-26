@@ -112,6 +112,31 @@ class Event
     }
 
     /**
+     * Vérifie si l'événement est dans le futur.
+     */
+    public function isInFuture(): bool
+    {
+        return $this->startAt > new \DateTimeImmutable();
+    }
+
+    /**
+     * Vérifie si l'événement est en cours.
+     */
+    public function isOngoing(): bool
+    {
+        $now = new \DateTimeImmutable();
+        return $this->startAt <= $now && $this->endAt >= $now;
+    }
+
+    /**
+     * Vérifie si l'événement est terminé.
+     */
+    public function isFinished(): bool
+    {
+        return $this->endAt < new \DateTimeImmutable();
+    }
+
+    /**
      * @return Collection<int, User>
      */
     public function getParticipants(): Collection
