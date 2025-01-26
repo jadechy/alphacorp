@@ -6,8 +6,11 @@ use App\Entity\Category;
 use App\Entity\Language;
 use App\Entity\Topic;
 use App\Entity\User;
+use App\Enum\TopicStatusEnum;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -40,17 +43,23 @@ class TopicType extends AbstractType
                 'class' => Category::class,
                 'choice_label' => 'name',
                 'attr' => [
-                    'class' => 'mt-2 p-2 bg-gray-100 border border-gray-200 rounded-md w-full text-sm focus:outline-none focus:ring-2 focus:border-gray-400 focus:bg-white'
+                    'class' => 'dashboard-select',
                 ]
             ])
             ->add('language', EntityType::class, [
                 'class' => Language::class,
                 'choice_label' => 'name',
                 'attr' => [
-                    'class' => 'mt-2 p-2 bg-gray-100 border border-gray-200 rounded-md w-full text-sm focus:outline-none focus:ring-2 focus:border-gray-400 focus:bg-white'
+                    'class' => 'dashboard-select',
                 ]
             ])
-        ;
+            ->add('status', EnumType::class, [
+                "class" => TopicStatusEnum::class,
+                'label' => 'Status',
+                'attr' => [
+                    'class' => 'dashboard-select',
+                ]
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

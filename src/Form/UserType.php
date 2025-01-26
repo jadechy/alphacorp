@@ -19,14 +19,16 @@ class UserType extends AbstractType
     {
 
         $builder
-            ->add('username', TextType::class, ['attr' => [
-                'class' => 'w-full px-8 py-4 mt-5 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white',
-                'placeholder' => 'Nom d\'utilisateur'
+            ->add('username', TextType::class, [
+                'attr' => [
+                    'class' => 'w-full px-8 py-4 mt-5 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white',
+                    'placeholder' => 'Nom d\'utilisateur'
                 ]
             ])
-            ->add('email', TextType::class, ['attr' => [
-                'class' => 'w-full px-8 py-4 mt-5 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white',
-                'placeholder' => 'Email'
+            ->add('email', TextType::class, [
+                'attr' => [
+                    'class' => 'w-full px-8 py-4 mt-5 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white',
+                    'placeholder' => 'Email'
                 ]
             ])
             ->add('plainPassword', RepeatedType::class, [
@@ -55,26 +57,20 @@ class UserType extends AbstractType
                     'Homme' => 'male',
                     'Femme' => 'female',
                 ],
-                'expanded' => true,
+                'expanded' => false,
                 'multiple' => false,
-                'mapped' => false, 
-                'attr' => [
-                    'class' => 'mt-5',
-                ],
+                'mapped' => false,
             ]);
-            
-            if ($options['is_admin']) {
-                $builder->add('isAdmin', CheckboxType::class, [
-                    'label' => 'Administrateur',
-                    'required' => false,
-                    'mapped' => false,
-                    'data' => in_array('ROLE_ADMIN', $options['data']->getRoles()),
-                    'attr' => [
-                        'class' => 'w-full px-8 py-4 mt-5'
-                    ],
-                ]);
-            }
-        ;
+
+        if ($options['is_admin']) {
+            $builder->add('isAdmin', CheckboxType::class, [
+                'label' => 'Administrateur',
+                'required' => false,
+                'mapped' => false,
+                'data' => in_array('ROLE_ADMIN', $options['data']->getRoles()),
+
+            ]);
+        };
     }
 
     public function configureOptions(OptionsResolver $resolver): void

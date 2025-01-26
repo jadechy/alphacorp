@@ -1,10 +1,10 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/base_admin.html.twig' %}
 
-{% block title %}Dashboard - Utilisateur {{ user.username }}{% endblock %}
-{% block h1 %}Dashboard - Utilisateur {{ user.username }}{% endblock %}
+{% block admin_title %}Utilisateur {{ user.username }}{% endblock %} 
+  {% set return_path = 'admin_user' %} 
 
-{% block body %} 
-    <div class="container">
+{% block admin_content %} 
+    <div class="container flex flex-col gap-10">
         <!-- Pseudonyme -->
         <div class="shadow-md shadow-neutral-900 p-3">
             <h3 class="text-fuchsia-500">Pseudonyme</h3>
@@ -45,7 +45,12 @@
             <h3 class="text-fuchsia-500">Bromances Alpha</h3>
             <ul>
                 {% for bromance in user.bromancesAlpha %}
-                    <li>{{ bromance.name }}</li>
+                    {# <li>{{ bromance.name }}</li>
+                     #}
+                     <pre>
+                        {{ dump(bromance
+                        ) }}
+                     </pre>
                 {% else %}
                     <li>Aucun bromance alpha trouvé</li>
                 {% endfor %}
@@ -57,7 +62,7 @@
             <h3 class="text-fuchsia-500">Bromances Follower</h3>
             <ul>
                 {% for bromance in user.bromancesFollower %}
-                    <li>{{ bromance.name }}</li>
+                    {# <li>{{ bromance.name }}</li> #}
                 {% else %}
                     <li>Aucun bromance follower trouvé</li>
                 {% endfor %}
@@ -137,16 +142,12 @@
         </div>
 
         <!-- Retour et modification -->
-        <div class="flex items-center flex-col gap-6 mt-8">
-            <div class="flex gap-5">
-                <a href="{{ path('admin_user') }}" class="btn">
-                    Retour à la liste
-                </a>
+        <div class="flex items-center  justify-center gap-6 mt-8">
+  
                 <a href="{{ path('admin_user_edit', {'id': user.id}) }}" class="btn">
                     Modifier
                 </a>
-            </div>
-            {{ include('admin/user/_delete_form.html.twig') }} 
+             {{ include('admin/user/_delete_form.html.twig') }} 
         </div>
     </div> 
 {% endblock %}

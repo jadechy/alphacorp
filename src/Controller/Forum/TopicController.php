@@ -16,6 +16,7 @@ use App\Form\ResponseType;
 use App\Enum\ResponseStatusEnum;
 use App\Enum\TopicStatusEnum;
 use App\Form\TopicType;
+use Symfony\Bundle\SecurityBundle\Security;
 
 #[Route('/forum')]
 class TopicController extends AbstractController
@@ -43,8 +44,8 @@ class TopicController extends AbstractController
         $form = $this->createForm(ResponseType::class, $response);
         $form->handleRequest($request);
 
+        $user = $this->getUser();
         if ($form->isSubmitted() && $form->isValid()) {
-            $user = $this->getUser();
             if (!$user) {
                 throw $this->createAccessDeniedException('Vous devez être connecté pour répondre.');
             }
@@ -68,14 +69,18 @@ class TopicController extends AbstractController
 
         return $this->render('forum/topic/index.html.twig', [
             'topic' => $topic,
-            'form' => $form
+            'form' => $form,
+            "user" => $user
         ]);
     }
 
-    #[IsGranted('ROLE_ALPHA')]
+    // #[IsGranted('ROLE_ALPHA')]
     #[Route('/new/topic', name: 'app_topic_new', methods: ['GET', 'POST'])]
-    public function newTopic(Request $request, EntityManagerInterface $entityManager): HttpResponse
+    public function newTopic(Request $request, EntityManagerInterface $entityManager, Security $security): HttpResponse
     {
+        if (!$security->isGranted('ROLE_ALPHA') && !$security->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException('Vous n’avez pas les autorisations nécessaires.');
+        }
         $topic = new Topic();
         $form = $this->createForm(TopicType::class, $topic);
         $form->handleRequest($request);
@@ -103,17 +108,20 @@ class TopicController extends AbstractController
         ]);
     }
 
-    #[IsGranted('ROLE_ALPHA')]
+    // #[IsGranted('ROLE_ALPHA, ROLE_ADMIN')]
     #[Route('/edit/topic/{id}', name: 'app_topic_edit', methods: ['GET', 'POST'])]
-    public function editTopic(Request $request, Topic $topic, EntityManagerInterface $entityManager): HttpResponse
+    public function editTopic(Request $request, Topic $topic, EntityManagerInterface $entityManager, Security $security): HttpResponse
     {
+        if (!$security->isGranted('ROLE_ALPHA') && !$security->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException('Vous n’avez pas les autorisations nécessaires.');
+        }
         $form = $this->createForm(TopicType::class, $topic);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_topic_user', [], HttpResponse::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_topic_search', [], HttpResponse::HTTP_SEE_OTHER);
         }
 
         return $this->render('forum/topic/edit.html.twig', [

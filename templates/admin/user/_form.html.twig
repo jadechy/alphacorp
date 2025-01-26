@@ -1,30 +1,30 @@
 {{ form_start(form) }}
-    {{ form_widget(form.username) }}
+    {{ form_widget(form.username, {'attr': {'class': 'input my-4'}}) }}
 
-    {{ form_widget(form.email) }}
+    {{ form_widget(form.email, {'attr': {'class': 'input my-4'}}) }}
 
     <div>
-        {{ form_widget(form.plainPassword.first) }}
+        {{ form_widget(form.plainPassword.first, {'attr': {'class': 'input my-4'}}) }}
         {{ form_errors(form.plainPassword.first) }}
     </div>
 
     <div>
-        {{ form_widget(form.plainPassword.second) }}
+        {{ form_widget(form.plainPassword.second, {'attr': {'class': 'input my-4'}}) }}
         {{ form_errors(form.plainPassword.second) }}
     </div>
 
-    <div>
-        {{ form_widget(form.gender) }}
+    <div class="w-40">
+        {{ form_label(form.gender, ) }}
+        {{ form_widget(form.gender, {'attr': {  class: "dashboard-select" }}) }}
     </div>
 
     {% if is_granted('ROLE_ADMIN') %}
-        <div class="mt-4">
+        <div class="flex justify-start items-center gap-4 mt-4">
+            {{ form_widget(form.isAdmin ) }}
             {{ form_label(form.isAdmin) }}
-            {{ form_widget(form.isAdmin) }}
-        </div>
+         </div>
     {% endif %}
-
-    <button type="submit" class="relative mt-5 bg-blue-600 flex-row p-2 items-center justify-center rounded-md text-sm overflow-hidden border cursor-pointer transition text-white hover:opacity-90 hover:scale-105 w-fit">
+     <button type="submit" class="btn">
         {{ button_label|default('Enregistrer') }}
     </button>
 {{ form_end(form) }}

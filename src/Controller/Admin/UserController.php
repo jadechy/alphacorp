@@ -17,11 +17,11 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route('/admin/user', name: "admin_")]
+#[Route('/admin/user', name: "admin_user_")]
 #[IsGranted('ROLE_ADMIN')]
 final class UserController extends AbstractController
 {
-    #[Route('/new', name: 'user_new', methods: ['GET', 'POST'])]
+    #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): HttpResponse
     {
         $user = new User();
@@ -58,7 +58,7 @@ final class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'user_show', methods: ['GET'])]
+    #[Route('/{id}', name: 'show', methods: ['GET'])]
     public function show(User $user): HttpResponse
     {
         return $this->render('/admin/user/show.html.twig', [
@@ -66,7 +66,7 @@ final class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'user_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, User $user, EntityManagerInterface $entityManager): HttpResponse
     {
         $form = $this->createForm(UserEditType::class, $user, [
@@ -104,7 +104,7 @@ final class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'user_delete', methods: ['POST'])]
+    #[Route('/{id}', name: 'delete', methods: ['POST'])]
     public function delete(Request $request, User $user, EntityManagerInterface $entityManager): HttpResponse
     {
         if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->getPayload()->getString('_token'))) {
@@ -135,7 +135,7 @@ final class UserController extends AbstractController
         return $this->redirectToRoute('admin_user', [], HttpResponse::HTTP_SEE_OTHER);
     }
 
-    #[Route('/ban/{id}', name: 'user_ban')]
+    #[Route('/ban/{id}', name: 'ban')]
     public function banUser(int $id, EntityManagerInterface $entityManager): HttpResponse
     {
         $user = $entityManager->getRepository(User::class)->find($id);
@@ -159,7 +159,7 @@ final class UserController extends AbstractController
         return $this->redirectToRoute('admin_user', [], HttpResponse::HTTP_SEE_OTHER);
     }
 
-    #[Route('/deban/{id}', name: 'user_deban')]
+    #[Route('/deban/{id}', name: 'deban')]
     public function debanUser(int $id, EntityManagerInterface $entityManager): HttpResponse
     {
         $user = $entityManager->getRepository(User::class)->find($id);

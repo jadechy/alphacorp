@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+    {% set admin_title = block('admin_title') %}
+{% block admin_title %}
+ {% endblock %}
+
+{% block title %}
+    Dashboard - {{admin_title}}
+{% endblock %}
+
+{% block h1 %}
+    Dashboard - {{admin_title}}
+{% endblock %}
+
+
+{% block body %}
+    {% if return_path is defined and return_params is defined %}
+        <a href="{{ path(return_path, return_params) }}" class="btn-secondary">
+            Retour à la liste
+        </a>
+    {% elseif return_path is defined %}
+        <a href="{{ path(return_path) }}" class="btn-secondary">
+            Retour à la liste
+        </a>
+    {% endif %}
+
+    <!-- Contenu principal -->
+    <section class="mt-8">
+        {% block admin_content %}
+        {% endblock %}
+    </section>
+{% endblock %}

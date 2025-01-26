@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route('/language', name: "admin_")]
+#[Route('/admin/language', name: "admin_")]
 #[IsGranted('ROLE_ADMIN')]
 final class LanguageController extends AbstractController
 {
@@ -30,7 +30,7 @@ final class LanguageController extends AbstractController
             return $this->redirectToRoute('admin_language', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('language/new.html.twig', [
+        return $this->render('admin/language/new.html.twig', [
             'language' => $language,
             'form' => $form,
         ]);
@@ -39,7 +39,7 @@ final class LanguageController extends AbstractController
     #[Route('/{id}', name: 'language_show', methods: ['GET'])]
     public function show(Language $language): Response
     {
-        return $this->render('language/show.html.twig', [
+        return $this->render('admin/language/show.html.twig', [
             'language' => $language,
         ]);
     }
@@ -56,7 +56,7 @@ final class LanguageController extends AbstractController
             return $this->redirectToRoute('admin_language', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('language/edit.html.twig', [
+        return $this->render('admin/language/edit.html.twig', [
             'language' => $language,
             'form' => $form,
         ]);

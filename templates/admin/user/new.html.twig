@@ -1,21 +1,13 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/base_admin.html.twig' %}
 
 {% block title %}Créer un nouvel utilisateur{% endblock %}
+{% block h1 %}Créer un nouvel utilisateur{% endblock %}
 
-{% block body %}
-    <main class="flex-1 py-10 px-5 sm:px-10">
-        <section>
-            <h1 class="text-lg font-medium text-black">Créer un nouvel <span class="font-bold text-blue-600">utilisateur</span></h1>
 
-            {{ include('user/admin/_form.html.twig') }}
+{% block admin_content %}
+         <section>
+         
 
-            <div class="flex items-center justify-center mt-4">
-                <a href="{{ path('admin_user') }}">
-                    <button class="relative flex bg-blue-600 flex-row p-2 items-center justify-center rounded-md text-sm overflow-hidden border cursor-pointer transition text-white hover:opacity-90 hover:scale-105">
-                        Retour à la liste
-                    </button>
-                </a>
-            </div>
-        </section>
-    </main>
-{% endblock %}
+            {{ include('admin/user/_form.html.twig') }} 
+         </section>
+ {% endblock %}

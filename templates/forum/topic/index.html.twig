@@ -35,6 +35,14 @@
                 <p class="  text-neutral-500">Écrit par : {{topic.author.username}}</p>
             </div>
  
+            {% if  "ROLE_ADMIN" in user.roles %}
+
+                        <div class=" mt-8 pt-4 ">
+                      <a href="{{ path("app_topic_edit", {id:topic.id}) }}" class="btn-secondary">
+            Modifier
+            </a>
+                        </div>
+            {% endif %}
             <div class="mt-8 pt-4 border-t border-t-neutral-300">
             <h2>Réponses :</h2>
                 {% for response in topic.responses %}

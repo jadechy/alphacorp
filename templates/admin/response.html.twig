@@ -1,8 +1,9 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/base_admin.html.twig' %}
 
-{% block title %}Administration des réponses{% endblock %}
+{% block admin_title %}Commentaire topic{% endblock %}
+ {% set return_path = 'admin_homepage' %} 
 
-{% block body %}
+{% block admin_content %}
   
 
         <div class="mt-5 flex gap-4">

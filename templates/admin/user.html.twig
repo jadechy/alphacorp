@@ -1,9 +1,8 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/base_admin.html.twig' %}
 
-{% block title %}Dashboard - utilisateurs{% endblock %}
-{% block h1 %}Dashboard utilisateurs{% endblock %}
-
-{% block body %}
+{% block admin_title %}Utilisateurs{% endblock %} 
+ {% set return_path = 'admin_homepage' %} 
+{% block admin_content %}
  
                 <table >
                     <thead>
