@@ -59,7 +59,7 @@ class TopicAdminController extends AbstractController
         ]);
     }
 
-    #[Route('/topic/{id}', name: 'single')]
+    #[Route('/{id}', name: 'show')]
     public function topic(string $id, Request $request, Topic $topic, EntityManagerInterface $entityManager): HttpResponse
     {
         $response = new Response();

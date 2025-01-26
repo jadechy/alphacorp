@@ -1,153 +1,146 @@
 {% extends 'admin/base_admin.html.twig' %}
 
 {% block admin_title %}Utilisateur {{ user.username }}{% endblock %} 
-  {% set return_path = 'admin_user' %} 
+  {% set return_path = 'admin_user_homepage' %} 
 
 {% block admin_content %} 
-    <div class="container flex flex-col gap-10">
-        <!-- Pseudonyme -->
-        <div class="shadow-md shadow-neutral-900 p-3">
-            <h3 class="text-fuchsia-500">Pseudonyme</h3>
-            <p>{{ user.username }}</p>
-        </div> 
-
-        <!-- Email -->
-        <div class="shadow-md shadow-neutral-900 p-3">
-            <h3 class="text-fuchsia-500">Email</h3>
-            <p>{{ user.email }}</p>
-        </div> 
-
-        <!-- Rôle(s) -->
-        <div class="shadow-md shadow-neutral-900 p-3">
-            <h3 class="text-fuchsia-500">Rôle</h3>
-            <p>
-                {% for value in user.roles %}
-                    {{ value }} 
-                    {% if not loop.last %} - {% endif %}
-                {% endfor %}
-            </p>
-        </div> 
-
-        <!-- Topics -->
-        <div class="shadow-md shadow-neutral-900 p-3">
-            <h3 class="text-fuchsia-500">Topics</h3>
-            <div class="flex">
-                {% for topic in user.topics %}
-                    {% include 'macro/topic_card.html.twig' %}
-                {% else %}
-                  <p> Aucun topics trouvé</p>
-                 {% endfor %}
-            </div>
-        </div> 
-
-        <!-- Bromances Alpha -->
-        <div class="shadow-md shadow-neutral-900 p-3">
-            <h3 class="text-fuchsia-500">Bromances Alpha</h3>
-            <ul>
-                {% for bromance in user.bromancesAlpha %}
-                    {# <li>{{ bromance.name }}</li>
-                     #}
-                     <pre>
-                        {{ dump(bromance
-                        ) }}
-                     </pre>
-                {% else %}
-                    <li>Aucun bromance alpha trouvé</li>
-                {% endfor %}
-            </ul>
-        </div> 
-
-        <!-- Bromances Follower -->
-        <div class="shadow-md shadow-neutral-900 p-3">
-            <h3 class="text-fuchsia-500">Bromances Follower</h3>
-            <ul>
-                {% for bromance in user.bromancesFollower %}
-                    {# <li>{{ bromance.name }}</li> #}
-                {% else %}
-                    <li>Aucun bromance follower trouvé</li>
-                {% endfor %}
-            </ul>
-        </div>
-
-        <!-- Participations -->
-        <div class="shadow-md shadow-neutral-900 p-3">
-            <h3 class="text-fuchsia-500">Participations</h3>
-            <ul>
-                {% for participation in user.participations %}
-                    <li>{{ participation.eventName }}</li>
-                {% else %}
-                    <li>Aucune participation trouvée</li>
-                {% endfor %}
-            </ul>
-        </div>
-
-        <!-- Events -->
-        <div class="shadow-md shadow-neutral-900 p-3">
-            <h3 class="text-fuchsia-500">Événements</h3>
-            <ul>
-                {% for event in user.events %}
-                    <li>{{ event.title }}</li>
-                {% else %}
-                    <li>Aucun événement trouvé</li>
-                {% endfor %}
-            </ul>
-        </div>
-
-        <!-- Status -->
-        <div class="shadow-md shadow-neutral-900 p-3">
-            <h3 class="text-fuchsia-500">Status</h3>
-            <p>{{ user.status.value }}</p>
-        </div>
-
-        <!-- XP -->
-        <div class="shadow-md shadow-neutral-900 p-3">
-            <h3 class="text-fuchsia-500">XP</h3>
-            <p>{{ user.xp is not null ? user.xp : 'Aucun XP' }}</p>
-        </div>
-
-        <!-- Challenges -->
-        <div class="shadow-md shadow-neutral-900 p-3">
-            <h3 class="text-fuchsia-500">Challenges</h3>
-            <ul>
-                {% for challenge in user.challenges %}
-                    <li>{{ challenge.title }}</li>
-                {% else %}
-                    <li>Aucun challenge trouvé</li>
-                {% endfor %}
-            </ul>
-        </div>
-
-        <!-- User Answers -->
-        <div class="shadow-md shadow-neutral-900 p-3">
-            <h3 class="text-fuchsia-500">Réponses</h3>
-            <ul>
-                {% for answer in user.userAnswers %}
-                    <li>{{ answer.answerText }}</li>
-                {% else %}
-                    <li>Aucune réponse trouvée</li>
-                {% endfor %}
-            </ul>
-        </div>
-
-        <!-- Ban Requests -->
-        <div class="shadow-md shadow-neutral-900 p-3">
-            <h3 class="text-fuchsia-500">Demandes de bannissement</h3>
-            <ul>
-                {% for request in user.banRequests %}
-                    <li>{{ request.reason }}</li>
-                {% else %}
-                    <li>Aucune demande de bannissement</li>
-                {% endfor %}
-            </ul>
-        </div>
-
-        <!-- Retour et modification -->
-        <div class="flex items-center  justify-center gap-6 mt-8">
-  
-                <a href="{{ path('admin_user_edit', {'id': user.id}) }}" class="btn">
-                    Modifier
-                </a>
-             {{ include('admin/user/_delete_form.html.twig') }} 
-        </div>
-    </div> 
+    <section>
+        <table> 
+        <thead>
+            <tr>
+                <th>Catégorie</th>
+                <th>Valeur</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Id</td>
+                <td>{{user.id}}</td>
+            </tr>
+            {# <tr>
+                <td>Created</td>
+                <td>{{user.createdAt|format_datetime('short', 'none', locale: 'fr')}}</td>
+            </tr> #}
+            <tr>
+                <td>Username</td>
+                <td>{{user.username}}</td>
+            </tr>
+            <tr>
+                <td>email</td>
+                <td>{{user.email}}</td>
+            </tr>   
+            <tr>
+                <td>Roles</td>
+                <td>
+                
+                    {% for role in user.roles %}
+                        <div>
+                            {{role}} 
+                        </div>
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td>Status</td>
+                <td> {{user.status.value}}
+                </td>
+            </tr>
+            <tr>
+                <td>XP</td>
+                <td>{{user.xp}}</td>
+            </tr>
+            <tr>
+                <td>Reset token</td>
+                <td>{{user.resetToken}}</td>
+            </tr>
+            <tr>
+                <td>Bromances Alpha</td>
+                <td>
+                    {% for bromance in user.bromancesAlpha %}
+                        <div> 
+                            {{bromance.id}} 
+                        </div>
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td>Bromances Follower</td>
+                <td>
+                    {% for bromance in user.bromancesFollower %}
+                        <div> 
+                            {{bromance.id}} 
+                        </div>
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td>Topic author</td>
+                <td>
+                    {% for topic in user.topics %}
+                        <div> 
+                            {{topic.id}}
+                        </div>
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td>Response topic author</td>
+                <td>
+                    {% for response in user.responses %}
+                        <div> 
+                            {{response.id}}
+                        </div>
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td>Events</td>
+                <td>
+                    {% for event in user.events %}
+                        <div> 
+                            {{event.id}}
+                        </div>
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td>Challenges</td>
+                <td>
+                    {% for challenge in user.challenges %}
+                        <div> 
+                            {{challenge.id}}
+                        </div>
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td>Participations</td>
+                <td>
+                    {% for participation in user.participations %}
+                        <div> 
+                            {{participation.id}}
+                        </div>
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td>Ban request</td>
+                <td>
+                    {% for banRequest in user.banRequests %}
+                        <div> 
+                            {{banRequest.id}}
+                        </div>
+                    {% endfor %}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="flex justify-center items-center gap-8">
+        <a href="{{ path('admin_user_edit', {'id': user.id}) }}" class="btn">
+            Modifier
+        </a>
+        {{ include('admin/user/_delete_form.html.twig') }} 
+    </div>
+    </section>
+   
 {% endblock %}

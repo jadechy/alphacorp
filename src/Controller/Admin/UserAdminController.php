@@ -9,6 +9,7 @@ use App\Entity\Response;
 use App\Enum\StatusUserEnum;
 use App\Form\UserType;
 use App\Form\UserEditType;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,8 +22,15 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_ADMIN')]
 final class UserAdminController extends AbstractController
 {
+    #[Route('/', name: 'homepage')]
+    public function adminUsers(UserRepository $userRepository): HttpResponse
+    {
+        return $this->render('admin/user/index.html.twig', [
+            'users' => $userRepository->findAll(),
+        ]);
+    }
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): HttpResponse
+    public function new(Request $request, EntityManagerInterface $entityManager): HttpResponse
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user, [
