@@ -1,6 +1,6 @@
 {% extends 'admin/base_admin.html.twig' %}
 
-{% block admin_title %}Modifier l'{{language.name}}{% endblock %}
+{% block admin_title %}Modifier : {{language.name}}{% endblock %}
    {% set return_path = 'admin_language_show' %} 
    {% set return_params = { id: language.id } %}
 

@@ -25,24 +25,6 @@ class AdminController extends AbstractController
         return $this->render('admin/admin.html.twig');
     }
 
-    #[Route('/category', name: 'category')]
-    public function adminCatgories(CategoryRepository $categoryRepository): Response
-    {
-        return $this->render('admin/category.html.twig', [
-            'categories' => $categoryRepository->findAll(),
-        ]);
-    }
-
-    #[Route('/language', name: 'language')]
-    public function adminLanguages(LanguageRepository $languageRepository): Response
-    {
-        return $this->render('admin/language.html.twig', [
-            'languages' => $languageRepository->findAll(),
-        ]);
-    }
-
-
-
     #[Route('/response', name: 'response')]
     public function adminResponse(ResponseRepository $responseRepository): Response
     {

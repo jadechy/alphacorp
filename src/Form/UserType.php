@@ -27,7 +27,7 @@ class UserType extends AbstractType
             ])
             ->add('email', TextType::class, [
                 'attr' => [
-                    'class' => 'w-full px-8 py-4 mt-5 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white',
+                    'class' => 'input',
                     'placeholder' => 'Email'
                 ]
             ])
@@ -37,7 +37,7 @@ class UserType extends AbstractType
                     'label' => 'Mot de passe',
                     'attr' => [
                         'autocomplete' => 'new-password',
-                        'class' => 'w-full px-8 py-4 mt-5 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white',
+                        'class' => 'input',
                         'placeholder' => 'Entrez votre mot de passe',
                     ],
                 ],
@@ -45,7 +45,7 @@ class UserType extends AbstractType
                     'label' => 'Confirmez le mot de passe',
                     'attr' => [
                         'autocomplete' => 'new-password',
-                        'class' => 'w-full px-8 py-4 mt-5 rounded-lg font-medium bg-blue-100 border border-blue-200 placeholder-blue-500 text-sm focus:outline-none focus:border-blue-400 focus:bg-white',
+                        'class' => 'input',
                         'placeholder' => 'Confirmez votre mot de passe',
                     ],
                 ],

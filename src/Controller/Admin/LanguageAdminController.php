@@ -12,11 +12,18 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route('/admin/language', name: "admin_")]
+#[Route('/admin/language', name: "admin_language_")]
 #[IsGranted('ROLE_ADMIN')]
 final class LanguageAdminController extends AbstractController
 {
-    #[Route('/new', name: 'language_new', methods: ['GET', 'POST'])]
+    #[Route('/', name: 'homepage')]
+    public function adminLanguages(LanguageRepository $languageRepository): Response
+    {
+        return $this->render('admin/language/index.html.twig', [
+            'languages' => $languageRepository->findAll(),
+        ]);
+    }
+    #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $language = new Language();
@@ -27,7 +34,7 @@ final class LanguageAdminController extends AbstractController
             $entityManager->persist($language);
             $entityManager->flush();
 
-            return $this->redirectToRoute('admin_language', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('admin_language_homepage', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('admin/language/new.html.twig', [
@@ -36,7 +43,7 @@ final class LanguageAdminController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'language_show', methods: ['GET'])]
+    #[Route('/{id}', name: 'show', methods: ['GET'])]
     public function show(Language $language): Response
     {
         return $this->render('admin/language/show.html.twig', [
@@ -44,7 +51,7 @@ final class LanguageAdminController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'language_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Language $language, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(LanguageType::class, $language);
@@ -53,7 +60,7 @@ final class LanguageAdminController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('admin_language', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('admin_language_homepage', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('admin/language/edit.html.twig', [
@@ -62,7 +69,7 @@ final class LanguageAdminController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'language_delete', methods: ['POST'])]
+    #[Route('/{id}', name: 'delete', methods: ['POST'])]
     public function delete(Request $request, Language $language, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete' . $language->getId(), $request->getPayload()->getString('_token'))) {
@@ -70,6 +77,6 @@ final class LanguageAdminController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('admin_language', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('admin_language_homepage', [], Response::HTTP_SEE_OTHER);
     }
 }

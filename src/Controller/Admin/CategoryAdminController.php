@@ -12,12 +12,20 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route('/admin/category', name: "admin_")]
+#[Route('/admin/category', name: "admin_category_")]
 #[IsGranted('ROLE_ADMIN')]
 final class CategoryAdminController extends AbstractController
 {
 
-    #[Route('/new', name: 'category_new', methods: ['GET', 'POST'])]
+    #[Route('/', name: 'homepage')]
+    public function adminCatgories(CategoryRepository $categoryRepository): Response
+    {
+        return $this->render('admin/category/index.html.twig', [
+            'categories' => $categoryRepository->findAll(),
+        ]);
+    }
+
+    #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $category = new Category();
@@ -28,24 +36,24 @@ final class CategoryAdminController extends AbstractController
             $entityManager->persist($category);
             $entityManager->flush();
 
-            return $this->redirectToRoute('admin_category', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('admin_category_homepage', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('category/admin/new.html.twig', [
+        return $this->render('admin/category/new.html.twig', [
             'category' => $category,
             'form' => $form,
         ]);
     }
 
-    #[Route('/{id}', name: 'category_show', methods: ['GET'])]
+    #[Route('/{id}', name: 'show', methods: ['GET'])]
     public function show(Category $category): Response
     {
-        return $this->render('category/admin/show.html.twig', [
+        return $this->render('admin/category/show.html.twig', [
             'category' => $category,
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'category_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Category $category, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(CategoryType::class, $category);
@@ -54,16 +62,16 @@ final class CategoryAdminController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('admin_category', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('admin_category_homepage', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('category/admin/edit.html.twig', [
+        return $this->render('admin/category/edit.html.twig', [
             'category' => $category,
             'form' => $form,
         ]);
     }
 
-    #[Route('/{id}', name: 'category_delete', methods: ['POST'])]
+    #[Route('/{id}', name: 'delete', methods: ['POST'])]
     public function delete(Request $request, Category $category, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete' . $category->getId(), $request->getPayload()->getString('_token'))) {
@@ -71,6 +79,6 @@ final class CategoryAdminController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('admin_category', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('admin_category_homepage', [], Response::HTTP_SEE_OTHER);
     }
 }
