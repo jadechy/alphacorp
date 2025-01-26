@@ -19,8 +19,11 @@ class Event
     #[ORM\Column(length: 50, name: 'EVT_TITLE')]
     private string $title;
 
-    #[ORM\Column(length: 255, name: 'EVT_DESCRIPTION')]
-    private string $description;
+    #[ORM\Column(length: 50, name: 'EVT_SHORT_DESCRIPTION')]
+    private ?string $shortDescription = null;
+
+    #[ORM\Column(length: 255, name: 'EVT_LONG_DESCRIPTION')]
+    private ?string $longDescription = null;
 
     #[ORM\Column(length: 100, name: 'EVT_IMAGE')]
     private string $image;
@@ -66,14 +69,26 @@ class Event
         return $this;
     }
 
-    public function getDescription(): string
+    public function getShortDescription(): ?string
     {
-        return $this->description;
+        return $this->shortDescription;
     }
 
-    public function setDescription(string $description): static
+    public function setShortDescription(string $shortDescription): static
     {
-        $this->description = $description;
+        $this->shortDescription = $shortDescription;
+
+        return $this;
+    }
+
+    public function getLongDescription(): ?string
+    {
+        return $this->longDescription;
+    }
+
+    public function setLongDescription(string $longDescription): static
+    {
+        $this->longDescription = $longDescription;
 
         return $this;
     }

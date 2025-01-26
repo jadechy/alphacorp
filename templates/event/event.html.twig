@@ -39,7 +39,7 @@
             </div>
 
             <div>
-                <p>{{event.description}}</p>
+                <p>{{event.longDescription}}</p>
 
                 <h4>Date</h4>
                 <p>Du {{ event.startAt|format_datetime('short', 'none', locale: 'fr') }} au {{ event.endAt|format_datetime('short', 'none', locale: 'fr') }}</p>

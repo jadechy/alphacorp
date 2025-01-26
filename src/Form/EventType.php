@@ -21,9 +21,14 @@ class EventType extends AbstractType
                 'placeholder' => 'Titre de l\'évènement'
                 ]
             ])
-            ->add('description', TextType::class, ['attr' => [
+            ->add('shortDescription', TextType::class, ['attr' => [
                 'class' => 'w-full px-8 py-4 mt-5 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white',
-                'placeholder' => 'Description de l\'évènement'
+                'placeholder' => 'Courte description de l\'évènement'
+                ]
+            ])
+            ->add('longDescription', TextType::class, ['attr' => [
+                'class' => 'w-full px-8 py-4 mt-5 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white',
+                'placeholder' => 'Longue description de l\'évènement'
                 ]
             ])
             ->add('image', TextType::class, ['attr' => [
