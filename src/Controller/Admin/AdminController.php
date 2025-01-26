@@ -22,11 +22,8 @@ class AdminController extends AbstractController
     public function admin(): Response
     {
 
-        return $this->render('admin/admin.html.twig');
+        return $this->render('admin/index.html.twig');
     }
-
-
-
 
     #[Route('/banrequest', name: 'banrequest')]
     public function adminBanRequest(BanRequestRepository $banRequestRepository): Response

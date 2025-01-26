@@ -1,5 +1,4 @@
 @import "tailwindcss";
-
 @theme {
     --shadow-2xs: 0 1px rgb(F F F / 0.05);
   --shadow-xs: 0 1px 2px 0 rgb(F F F / 0.05);
