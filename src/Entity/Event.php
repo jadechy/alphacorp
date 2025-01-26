@@ -26,7 +26,7 @@ class Event
     private ?string $longDescription = null;
 
     #[ORM\Column(length: 100, name: 'EVT_IMAGE')]
-    private string $image;
+    private ?string $image = null;
 
     #[ORM\Column(name: 'EVT_START_DATE')]
     private \DateTimeImmutable $startAt;
@@ -93,7 +93,7 @@ class Event
         return $this;
     }
 
-    public function getImage(): string
+    public function getImage(): ?string
     {
         return $this->image;
     }

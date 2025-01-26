@@ -6,6 +6,7 @@
 <main class="flex-1 py-10 px-5 sm:px-10">    
         <section>
             <div class="flex flex-row items-center space-x-6">
+                <img src="{{ asset(event.image) }}" alt="Event Image">
                 <h1 class="text-lg font-medium text-black">Évènements <span class="font-bold text-blue-600">{{event.title}}</span></h1>
                 {% if event.author.id != app.user.id %}
                     {% if event.isInFuture() %}

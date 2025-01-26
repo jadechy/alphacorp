@@ -14,3 +14,6 @@
 /assets/vendor/
 ###< symfony/asset-mapper ###
 /node_modules/
+
+###< dossier d'upload ###
+/assets/uploads

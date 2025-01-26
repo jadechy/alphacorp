@@ -35,6 +35,7 @@
                             </span>
                         {% endif %}
 
+                        <img src="{{ asset(event.image) }}" alt="Event Image">
                         <h3 class="text-center text-md font-bold my-4">{{event.title}}</h3>
                         <p class="text-center">{{event.shortDescription}}</p>
                         <p class="text-center">Du {{ event.startAt|format_datetime('short', 'none', locale: 'fr') }} au {{ event.endAt|format_datetime('short', 'none', locale: 'fr') }}</p>

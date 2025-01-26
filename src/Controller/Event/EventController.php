@@ -11,6 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\EventRepository;
 use App\Entity\Event;
 use App\Form\EventType;
+use App\Service\FileUploader;
 
 #[Route('/event')]
 class EventController extends AbstractController
@@ -51,7 +52,7 @@ class EventController extends AbstractController
     }
 
     #[Route('/new', name: 'app_event_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, FileUploader $fileUploader): Response
     {
         $event = new Event();
         $form = $this->createForm(EventType::class, $event);
@@ -64,6 +65,10 @@ class EventController extends AbstractController
             }
 
             $event->setAuthor($user);
+
+            $imageFile = $form->get('imageFile')->getData();
+            $fileName = $fileUploader->upload($imageFile);
+            $event->setImage($fileName);
 
             $entityManager->persist($event);
             $entityManager->flush();
@@ -78,12 +83,24 @@ class EventController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_event_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Event $event, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Event $event, EntityManagerInterface $entityManager, FileUploader $fileUploader): Response
     {
         $form = $this->createForm(EventType::class, $event);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $imageFile = $form->get('imageFile')->getData();
+
+            if ($imageFile) {
+                $oldImagePath = $event->getImage();
+                if ($oldImagePath && file_exists($fileUploader->getTargetDirectory() . $oldImagePath)) {
+                    unlink($fileUploader->getTargetDirectory() . $oldImagePath);
+                }
+
+                $fileName = $fileUploader->upload($imageFile);
+                $event->setImage($fileName);
+            }
+
             $entityManager->flush();
 
             return $this->redirectToRoute('author_event', [], Response::HTTP_SEE_OTHER);
@@ -96,9 +113,15 @@ class EventController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_event_delete', methods: ['POST'])]
-    public function delete(Request $request, Event $event, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, Event $event, EntityManagerInterface $entityManager, FileUploader $fileUploader): Response
     {
         if ($this->isCsrfTokenValid('delete'.$event->getId(), $request->getPayload()->getString('_token'))) {
+            if ($event->getImage()) {
+                $imagePath = $fileUploader->getTargetDirectory() . $event->getImage();
+                if (file_exists($imagePath)) {
+                    unlink($imagePath);
+                }
+            }
             $entityManager->remove($event);
             $entityManager->flush();
         }

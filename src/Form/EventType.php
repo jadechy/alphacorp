@@ -10,6 +10,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 class EventType extends AbstractType
 {
@@ -31,10 +32,10 @@ class EventType extends AbstractType
                 'placeholder' => 'Longue description de l\'évènement'
                 ]
             ])
-            ->add('image', TextType::class, ['attr' => [
-                'class' => 'w-full px-8 py-4 mt-5 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white',
-                'placeholder' => 'Nom de l\'image'
-                ]
+            ->add('imageFile', FileType::class, [
+                'label' => 'Image',
+                'mapped' => false,
+                'required' => false,
             ])
             ->add('location', TextType::class, ['attr' => [
                 'class' => 'w-full px-8 py-4 mt-5 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white',
