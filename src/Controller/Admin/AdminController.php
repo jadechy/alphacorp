@@ -25,26 +25,6 @@ class AdminController extends AbstractController
         return $this->render('admin/admin.html.twig');
     }
 
-    #[Route('/response', name: 'response')]
-    public function adminResponse(ResponseRepository $responseRepository): Response
-    {
-        $statuses = [];
-
-        $responses = $responseRepository->findAll();
-
-        foreach ($responses as $response) {
-            $status = $response->getStatus();
-
-            if ($status && !in_array($status, $statuses, true)) {
-                $statuses[] = $status;
-            }
-        }
-
-        return $this->render('admin/response.html.twig', [
-            'responses' => $responses,
-            'statuses' => $statuses
-        ]);
-    }
 
 
 

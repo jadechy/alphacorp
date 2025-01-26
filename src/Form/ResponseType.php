@@ -3,10 +3,11 @@
 namespace App\Form;
 
 use App\Entity\Response;
-use App\Entity\Topic;
 use App\Entity\User;
+use App\Enum\ResponseStatusEnum;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -17,12 +18,27 @@ class ResponseType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('content', TextType::class, ['attr' => [
-                'class' => 'w-full px-8 py-4 rounded-lg font-medium bg-white border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white',
-                'placeholder' => 'Votre réponse'
+            ->add('content', TextType::class, [
+                'attr' => [
+                    'class' => 'input',
+                    'placeholder' => 'Votre réponse'
                 ]
             ])
-        ;
+            ->add('status', EnumType::class, [
+                "class" => ResponseStatusEnum::class,
+                'label' => 'Status',
+                'attr' => [
+                    'class' => 'dashboard-select',
+                ]
+            ])
+            ->add('author', EntityType::class, [ // Ajout du champ user
+                'class' => User::class, // Classe de l'entité User
+                'choice_label' => 'username', // Propriété à afficher dans le select
+                'placeholder' => 'Sélectionnez un utilisateur', // Optionnel, pour une valeur par défaut
+                'attr' => [
+                    'class' => 'select', // Ajout d'une classe CSS pour styliser le select
+                ],
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

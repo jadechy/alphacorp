@@ -1,0 +1,44 @@
+{% extends 'admin/base_admin.html.twig' %}
+
+{% import 'macro/response.html.twig' as macros %}
+
+{% block admin_title %} Respnde id:{{response.id}}{% endblock %} 
+ {% set return_path = 'admin_response_homepage' %} 
+
+{% block admin_content %}
+         <section> 
+
+    <table>
+        <thead>
+            <tr>
+                <th>Catégorie</th>
+                <th>Valeur</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Id</td>
+                <td>{{response.id}}</td>
+            </tr>
+            <tr>
+                <td>Status</td> 
+                <td>{{response.status.value}}</td>
+            </tr>
+            <tr>
+                <td>Auteur</td>
+                <td>{{response.author.id}} - {{response.author.username}}</td>
+            </tr>
+            <tr>
+                <td>Topic</td>
+                <td>{{response.topic.id}} - {{response.topic.title}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="flex justify-center items-center gap-8">
+        <a href="{{ path('admin_response_edit', {'id': response.id}) }}" class="btn">
+            Modifier
+        </a>
+        {{ include('admin/response/_delete_form.html.twig') }} 
+    </div>
+        </section>
+ {% endblock %}
