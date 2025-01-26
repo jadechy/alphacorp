@@ -32,10 +32,11 @@
                 <td>Topics</td>
                 <td>
                     {% for topic in category.topics %}
-                        <div>
-                            {{topic.id}}
+                    <a href={{path("admin_topic_show", {id: topic.id})}} class="badge">
+                             {{topic.id}}
                             {{topic.title}}
-                        </div>
+                            {{ ux_icon('tabler:arrow-bar-right', {class: 'w-6 h-6'}) }}
+                        </a>
                     {% endfor %}
 
                 </td>

@@ -38,7 +38,7 @@
             </tr>
             <tr>
                 <td>Auteur id</td>
-                <td>{{topic.author.id}}</td>
+                <td><a href={{path("admin_user_show", {id:topic.author.id})}} class="badge">{{topic.author.id}}{{ ux_icon('tabler:arrow-bar-right', {class: 'w-6 h-6'}) }}</a></td>
             </tr>
             <tr>
                 <td>Status</td>
@@ -46,20 +46,21 @@
             </tr>
             <tr>
                 <td>Catégorie</td>
-                <td>{{topic.category.name}}</td>
+                <td><a href={{path("admin_category_show", {id:topic.category.id})}} class="badge">{{topic.category.name}}{{ ux_icon('tabler:arrow-bar-right', {class: 'w-6 h-6'}) }}</a></td>
             </tr>
             <tr>
                 <td>Langue</td>
-                <td>{{topic.language.name}}</td>
+                <td><a href={{path("admin_language_show", {id:topic.language.id})}} class="badge">{{topic.language.name}}{{ ux_icon('tabler:arrow-bar-right', {class: 'w-6 h-6'}) }}</a></td>
             </tr>
             <tr>
                 <td>Réponses</td>
                 <td>
                     {% for response in topic.responses %}
-                        <div>
+                        <a href={{path("admin_response_show", {id: response.id})}} class="badge">
                             {{response.id}}
                             {{response.content}}
-                        </div>
+                            {{ ux_icon('tabler:arrow-bar-right', {class: 'w-6 h-6'}) }}
+                        </a>
                     {% endfor %}
 
                 </td>

@@ -26,7 +26,12 @@
                 }
             }
         }
-
+        .badge{
+             @apply rounded-2xl shadow shadow-neutral-900 p-2 flex gap-3 transition;
+            &:hover{
+                @apply scale-110 bg-neutral-800               
+            }
+        }
         tbody {
             tr {
                 transition: background-color 0.2s ease;  

@@ -57,7 +57,7 @@
                 <td>Bromances Alpha</td>
                 <td>
                     {% for bromance in user.bromancesAlpha %}
-                        <div> 
+                        <div class="border rounded-2xl border-neutral-100"> 
                             {{bromance.id}} 
                         </div>
                     {% endfor %}
@@ -77,9 +77,9 @@
                 <td>Topic author</td>
                 <td>
                     {% for topic in user.topics %}
-                        <div> 
-                            {{topic.id}}
-                        </div>
+                        <a href={{path("admin_topic_show", {id:topic.id})}} class="badge"> 
+                            {{topic.id}} {{ ux_icon('tabler:arrow-bar-right', {class: 'w-6 h-6'}) }} 
+                        </a>
                     {% endfor %}
                 </td>
             </tr>
@@ -87,9 +87,9 @@
                 <td>Response topic author</td>
                 <td>
                     {% for response in user.responses %}
-                        <div> 
-                            {{response.id}}
-                        </div>
+                        <a href={{path("admin_response_show", {id:response.id})}} class="badge"> 
+                            {{response.id}}{{ ux_icon('tabler:arrow-bar-right', {class: 'w-6 h-6'}) }}
+                        </a>
                     {% endfor %}
                 </td>
             </tr>
@@ -97,9 +97,9 @@
                 <td>Events</td>
                 <td>
                     {% for event in user.events %}
-                        <div> 
-                            {{event.id}}
-                        </div>
+                        <a href={{path("admin_response_show", {id:event.id})}} class="badge"> 
+                            {{event.id}} {{ ux_icon('tabler:arrow-bar-right', {class: 'w-6 h-6'}) }}
+                        </a>
                     {% endfor %}
                 </td>
             </tr>
@@ -107,8 +107,8 @@
                 <td>Challenges</td>
                 <td>
                     {% for challenge in user.challenges %}
-                        <div> 
-                            {{challenge.id}}
+                        <div class="badge"> 
+                            {{challenge.id}} - {{challenge.title}} {{ ux_icon('tabler:arrow-bar-right', {class: 'w-6 h-6'}) }}
                         </div>
                     {% endfor %}
                 </td>
@@ -117,8 +117,8 @@
                 <td>Participations</td>
                 <td>
                     {% for participation in user.participations %}
-                        <div> 
-                            {{participation.id}}
+                        <div class="badge"> 
+                            {{participation.id}} {{ ux_icon('tabler:arrow-bar-right', {class: 'w-6 h-6'}) }}
                         </div>
                     {% endfor %}
                 </td>

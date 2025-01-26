@@ -26,11 +26,11 @@
             </tr>
             <tr>
                 <td>Auteur</td>
-                <td>{{response.author.id}} - {{response.author.username}}</td>
+                <td><a href={{path("admin_user_show", {id: response.author.id})}} class="badge">{{response.author.id}} - {{response.author.username}}{{ ux_icon('tabler:arrow-bar-right', {class: 'w-6 h-6'}) }}</a></td>
             </tr>
             <tr>
                 <td>Topic</td>
-                <td>{{response.topic.id}} - {{response.topic.title}}</td>
+                <td><a href={{path("admin_topic_show", {id: response.topic.id})}} class="badge">{{response.topic.id}} - {{response.topic.title}}{{ ux_icon('tabler:arrow-bar-right', {class: 'w-6 h-6'}) }}</a></td>
             </tr>
         </tbody>
     </table>
