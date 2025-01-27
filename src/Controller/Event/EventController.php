@@ -25,7 +25,7 @@ class EventController extends AbstractController
     }
 
     #[Route('/{id}/show', name: 'show')]
-    public function singleEvent(int $id, EventRepository $eventRepository, Event $event): Response
+    public function singleEvent(Event $event): Response
     {
         $user = $this->getUser();
         $isParticipating = $user && $event->getParticipants()->contains($user);
@@ -129,8 +129,8 @@ class EventController extends AbstractController
         return $this->redirectToRoute('app_event_author', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/participate/{id}', name: 'participation')]
-    public function participateEvent(int $id, EventRepository $eventRepository, Event $event, EntityManagerInterface $entityManager): Response
+    #[Route('/participate/{id}', name: 'participate')]
+    public function participateEvent(Event $event, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
         if (!$user) {
@@ -140,14 +140,14 @@ class EventController extends AbstractController
         if (!$event->getParticipants()->contains($user)) {
             $event->addParticipant($user);
         }
-
+        $entityManager->persist($event);
         $entityManager->flush();
 
-        return $this->redirectToRoute('single_event', ['id' => $event->getId()], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_event_show', ['id' => $event->getId()], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/unparticipate/{id}', name: 'unparticipate')]
-    public function unparticipateEvent(int $id, EventRepository $eventRepository, Event $event, EntityManagerInterface $entityManager): Response
+    public function unparticipateEvent(Event $event, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
         if (!$user) {
@@ -156,9 +156,10 @@ class EventController extends AbstractController
 
         if ($event->getParticipants()->contains($user)) {
             $event->removeParticipant($user);
+            $entityManager->persist($event);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('single_event', ['id' => $event->getId()], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_event_show', ['id' => $event->getId()], Response::HTTP_SEE_OTHER);
     }
 }
