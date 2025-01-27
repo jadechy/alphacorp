@@ -36,7 +36,7 @@ class AppFixtures extends Fixture
 
     public const MAX_BROMANCE = 3;
 
-    public const MAX_EVENTS = 5;
+    public const MAX_EVENTS = 12;
 
     public const MAX_CHALLENGES = 15;
 
@@ -81,6 +81,7 @@ class AppFixtures extends Fixture
     protected function createActiveUsers(ObjectManager $manager, array &$users): void
     {
         $roles = ['ROLE_SUPERVISOR', 'ROLE_ALPHA'];
+        $roleCount = count($roles);
 
         for ($i = 0; $i < self::MAX_ACTIVE_USERS; $i++) {
             $user = new User();
@@ -89,8 +90,8 @@ class AppFixtures extends Fixture
 
             $user->setPlainPassword('coucou');
 
-            $randomRole = $roles[array_rand($roles)];
-            $user->setRoles([$randomRole]);
+            $roleIndex = $i % $roleCount;
+            $user->setRoles([$roles[$roleIndex]]);
 
             $user->setStatus(StatusUserEnum::ACTIVE);
             $users[] = $user;
@@ -310,9 +311,12 @@ class AppFixtures extends Fixture
         for ($i = 0; $i < self::MAX_EVENTS; $i++) {
             $event = new Event();
             $event->setTitle(title: "Event n°$i");
-            $event->setDescription(description: "Description n°$i");
+            $event->setShortDescription(shortDescription: "Short description n°$i");
+            $event->setLongDescription(longDescription: "Long description n°$i");
 
             $event->setImage(image: "image n°$i");
+
+            $event->setLocation(location: "Location n°$i");
 
             $event->setStartAt(startAt: new \DateTimeImmutable());
             $event->setEndAt(new \DateTimeImmutable('+1 day'));

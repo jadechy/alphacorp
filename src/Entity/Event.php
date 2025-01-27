@@ -19,11 +19,14 @@ class Event
     #[ORM\Column(length: 50, name: 'EVT_TITLE')]
     private string $title;
 
-    #[ORM\Column(length: 255, name: 'EVT_DESCRIPTION')]
-    private string $description;
+    #[ORM\Column(length: 50, name: 'EVT_SHORT_DESCRIPTION')]
+    private ?string $shortDescription = null;
+
+    #[ORM\Column(length: 255, name: 'EVT_LONG_DESCRIPTION')]
+    private ?string $longDescription = null;
 
     #[ORM\Column(length: 100, name: 'EVT_IMAGE')]
-    private string $image;
+    private ?string $image = null;
 
     #[ORM\Column(name: 'EVT_START_DATE')]
     private \DateTimeImmutable $startAt;
@@ -40,6 +43,9 @@ class Event
     #[ORM\ManyToOne(inversedBy: 'authorEvents')]
     #[ORM\JoinColumn(name:'USR_ID',referencedColumnName:'USR_ID')]
     private ?User $author = null;
+
+    #[ORM\Column(length: 255,name: 'EVT_LOCATION')]
+    private string $location;
 
     public function __construct()
     {
@@ -63,19 +69,31 @@ class Event
         return $this;
     }
 
-    public function getDescription(): string
+    public function getShortDescription(): ?string
     {
-        return $this->description;
+        return $this->shortDescription;
     }
 
-    public function setDescription(string $description): static
+    public function setShortDescription(string $shortDescription): static
     {
-        $this->description = $description;
+        $this->shortDescription = $shortDescription;
 
         return $this;
     }
 
-    public function getImage(): string
+    public function getLongDescription(): ?string
+    {
+        return $this->longDescription;
+    }
+
+    public function setLongDescription(string $longDescription): static
+    {
+        $this->longDescription = $longDescription;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
     {
         return $this->image;
     }
@@ -109,6 +127,31 @@ class Event
         $this->endAt = $endAt;
 
         return $this;
+    }
+
+    /**
+     * Vérifie si l'événement est dans le futur.
+     */
+    public function isInFuture(): bool
+    {
+        return $this->startAt > new \DateTimeImmutable();
+    }
+
+    /**
+     * Vérifie si l'événement est en cours.
+     */
+    public function isOngoing(): bool
+    {
+        $now = new \DateTimeImmutable();
+        return $this->startAt <= $now && $this->endAt >= $now;
+    }
+
+    /**
+     * Vérifie si l'événement est terminé.
+     */
+    public function isFinished(): bool
+    {
+        return $this->endAt < new \DateTimeImmutable();
     }
 
     /**
@@ -146,6 +189,18 @@ class Event
     public function setAuthor(?User $author): static
     {
         $this->author = $author;
+
+        return $this;
+    }
+
+    public function getLocation(): string
+    {
+        return $this->location;
+    }
+
+    public function setLocation(string $location): static
+    {
+        $this->location = $location;
 
         return $this;
     }
