@@ -141,39 +141,6 @@ class EventAdminController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('author_event', [], Response::HTTP_SEE_OTHER);
-    }
-
-    #[Route('/participate/{id}', name: 'participation')]
-    public function participateEvent(int $id, EventRepository $eventRepository, Event $event, EntityManagerInterface $entityManager): Response
-    {
-        $user = $this->getUser();
-        if (!$user) {
-            throw $this->createAccessDeniedException('Vous devez être connecté pour répondre.');
-        }
-
-        if (!$event->getParticipants()->contains($user)) {
-            $event->addParticipant($user);
-        }
-
-        $entityManager->flush();
-
-        return $this->redirectToRoute('admin/single_event', ['id' => $event->getId()], Response::HTTP_SEE_OTHER);
-    }
-
-    #[Route('/unparticipate/{id}', name: 'unparticipate')]
-    public function unparticipateEvent(int $id, EventRepository $eventRepository, Event $event, EntityManagerInterface $entityManager): Response
-    {
-        $user = $this->getUser();
-        if (!$user) {
-            throw $this->createAccessDeniedException('Vous devez être connecté pour effectuer cette action.');
-        }
-
-        if ($event->getParticipants()->contains($user)) {
-            $event->removeParticipant($user);
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('single_event', ['id' => $event->getId()], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('admin_event_homepage', [], Response::HTTP_SEE_OTHER);
     }
 }

@@ -50,21 +50,46 @@
 			</div>
 		</section>
 
-		<!-- Section Events -->
+		<!-- Section Events Author -->
 		<section class="mt-20 ">
-			<h2 class="text-xl font-semibold">Mes Events
-				<span class="text-sm text-neutral-400">- 118</span>
+			<h2 class="text-xl font-semibold">Mes Events crées
+				<span class="text-sm text-neutral-400">-
+					{{ user.authorEvents|length }}</span>
+
 			</h2>
 			<div class="flex gap-8 pt-8">
-
-				<div class="w-60">
-					{% include "parts/components/card_col.html.twig" with {"title": "app_register", "height": 50} %}
-				</div>
-				<div class="w-60">
-					{% include "parts/components/card_col.html.twig" with {"title": "app_register", "height": 50} %}
-				</div>
+				{% for event in user.authorEvents %}
+					<a href={{path("app_event_show", {id: event.id} )}} class=" w-60">
+						{% include "parts/components/card_col.html.twig" with {"title": event.title, "height": 40} %}
+					</a>
+				{% else %}
+					<p>Aucun article trouvé.</p>
+				{% endfor %}
+				<a href={{path("app_event_author")}} class="w-40 border border-neutral-300 rounded-md p-3 flex items-center hover:scale-105 transition font-bold text-center">
+					<p>Voir tous mes évènements crées</p>
+				</a>
 			</div>
 		</section>
+
+		<!-- Section Events Participation -->
+		<section class="mt-20 ">
+			<h2 class="text-xl font-semibold">Ma participation aux events
+				<span class="text-sm text-neutral-400">-
+					{{ user.participations|length }}</span>
+
+
+			</h2>
+			<div class="flex gap-8 pt-8">
+				{% for event in user.participations %}
+					<a href={{path("app_event_show", {id: event.id} )}} class=" w-60">
+						{% include "parts/components/card_col.html.twig" with {"title": event.title, "height": 40} %}
+					</a>
+				{% else %}
+					<p>Aucune participation trouvée.</p>
+				{% endfor %}
+			</div>
+		</section>
+
 
 		<!-- Section Forum -->
 		<section class="mt-20 ">

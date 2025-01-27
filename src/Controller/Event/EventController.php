@@ -126,7 +126,7 @@ class EventController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('author_event', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_event_author', [], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/participate/{id}', name: 'participation')]
