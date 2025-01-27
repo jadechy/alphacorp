@@ -1,98 +1,52 @@
 {% macro afficheReponse(response, topic) %}
-<li class="mt-4 list-none">
-    <div class="p-4 rounded-lg {{ response.author == topic.author and response.status.value == 'deleted' ? 'bg-red-500/20' : (response.author == topic.author ? 'bg-blue-100' : ('ROLE_ADMIN' in response.author.roles ? 'bg-purple-100' : ( response.status.value == 'rejected' or response.status.value == 'deleted' ? 'bg-red-500/20' : 'bg-gray-100'))) }}">
-        <div class="flex items-center">
-            <div class="ml-4 w-full flex items-center justify-between">
-                <div>
-                    <span class="font-medium">{{response.author.username}}</span>
-                    <span class="text-xs text-gray-500 flex items-center justify-between w-full">
-                        <span>{{ response.createdAt|format_datetime('short', 'none', locale: 'fr') }}</span>
-                        <span></span>
-                    </span>
-                </div>
-                <div class="flex gap-4 items-center">
-                    <div>
-                        {% if response.author == topic.author  %}
-                            <span class="py-1.5 px-2.5 bg-blue-500/30 rounded-full flex w-auto justify-center items-center gap-1">
-                                <p class="font-medium text-xs text-blue-600">Auteur</p>
-                            </span>
-                        {% elseif 'ROLE_ADMIN' in response.author.roles %}
-                            <span class="py-1.5 px-2.5 bg-purple-500/30 rounded-full flex w-auto justify-center items-center gap-1">
-                                <p class="font-medium text-xs text-purple-600">Administrateur</p>
-                            </span>
-                        {% endif %}
-                    </div>
-                    <div>
-                        {% if response.status.value == 'validated' and 'ROLE_ADMIN' not in response.author.roles %}
-                            <span class="py-1.5 px-2.5 bg-green-500/30 rounded-full flex w-auto justify-center items-center gap-1">
-                                <p class="font-medium text-xs text-green-600">Validé</p>
-                            </span>
-                        {% elseif response.status.value == 'rejected' and 'ROLE_ADMIN' not in response.author.roles %}
-                            <span class="py-1.5 px-2.5 bg-red-500/30 rounded-full flex w-auto justify-center items-center gap-1">
-                                <p class="font-medium text-xs text-red-600">Rejeté</p>
-                            </span>
-                        {% elseif response.status.value == 'deleted' and 'ROLE_ADMIN' not in response.author.roles %}
-                            <span class="py-1.5 px-2.5 bg-red-500/30 rounded-full flex w-auto justify-center items-center gap-1">
-                                <p class="font-medium text-xs text-red-600">Supprimé</p>
-                            </span>
-                        {% elseif response.status.value == 'waiting' and 'ROLE_ADMIN' not in response.author.roles %}
-                            <span class="py-1.5 px-2.5 bg-orange-500/30 rounded-full flex w-auto justify-center items-center gap-1">
-                                <p class="font-medium text-xs text-orange-600">En attente</p>
-                            </span>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-        </div>
+	<li class="mt-4 list-none rounded-lg p-4 shadow-xl shadow-neutral-900">
+		<div class="flex items-center w">
+			<div class=" w-full flex items-center justify-between">
+				<div class="flex items-center justify-between w-full">
+					<p class="font-medium">{{response.author.username}}</p>
+					<p class="text-xs text-gray-500  ">
+						{{ response.createdAt|format_datetime('short', 'none', locale: 'fr') }}
+					</p>
+				</div>
 
-        {% if response.status.value == 'rejected' %}
-            <p class="mt-4 w-full text-red-500">Le réponse à été rejeté par nos administrateurs.</p>
-        {% elseif response.status.value == 'deleted' %}
-            <p class="mt-4 w-full text-red-500">Cette réponse a été supprimé.</p>
-        {% else %}
-            <p class="mt-4 w-full">{{response.content}}</p>
-        {% endif %}
+				{% if response.author == app.user %}
+					<div class="flex gap-4 items-center ml-2">
 
-        {% if app.user and 'ROLE_ADMIN' in app.user.roles %}
-            <ul class="flex items-center mt-2 gap-4">
-                {% if 'ROLE_ADMIN' not in response.author.roles and response.status.value == 'waiting' %}
-                    <li>
-                        <form method="POST" action="{{ path('response_change_status', { id: response.id }) }}">
-                            <input type="hidden" name="status" value="validated">
-                            <button type="submit" class="relative mt-5 bg-green-700 flex-row p-2 items-center justify-center rounded-md text-sm overflow-hidden border cursor-pointer transition text-white hover:opacity-90 hover:scale-105 w-fit">
-                                Validé
-                            </button>
-                        </form>
-                    </li>
-                    <li>
-                        <form method="POST" action="{{ path('response_change_status', { id: response.id }) }}">
-                            <input type="hidden" name="status" value="rejected">
-                            <button type="submit" class="relative mt-5 bg-red-700 flex-row p-2 items-center justify-center rounded-md text-sm overflow-hidden border cursor-pointer transition text-white hover:opacity-90 hover:scale-105 w-fit">
-                                Rejeté
-                            </button>
-                        </form>
-                    </li>
-                {% elseif response.status.value == 'rejected' %}
-                    <li>
-                        <form method="POST" action="{{ path('response_change_status', { id: response.id }) }}">
-                            <input type="hidden" name="status" value="validated">
-                            <button type="submit" class="relative mt-5 bg-green-700 flex-row p-2 items-center justify-center rounded-md text-sm overflow-hidden border cursor-pointer transition text-white hover:opacity-90 hover:scale-105 w-fit">
-                                Validé
-                            </button>
-                        </form>
-                    </li>
-                {% endif %}
-            </ul>
-        {% endif %}
-        {% if response.author == app.user and response.status.value != 'deleted' %}
-            <form method="POST" action="{{ path('app_response_delete', { id: response.id }) }}">
-                <input type="hidden" name="status" value="deleted">
-                <button type="submit" class="relative mt-5 bg-red-700 flex-row p-2 items-center justify-center rounded-md text-sm overflow-hidden border cursor-pointer transition text-white hover:opacity-90 hover:scale-105 w-fit">
-                    Supprimer
-                </button>
-            </form>
-        {% endif %}
+						{% if response.status.value == 'validated' %}
+							<span class="py-1.5 px-2.5 bg-green-500/30 rounded-full flex w-auto justify-center items-center gap-1">
+								<p class="font-medium text-xs text-green-600">Validé</p>
+							</span>
+						{% elseif response.status.value == 'rejected' %}
+							<span class="py-1.5 px-2.5 bg-red-500/30 rounded-full flex w-auto justify-center items-center gap-1">
+								<p class="font-medium text-xs text-red-600">Rejeté</p>
+							</span>
+						{% elseif response.status.value == 'deleted' %}
+							<span class="py-1.5 px-2.5 bg-red-500/30 rounded-full flex w-auto justify-center items-center gap-1">
+								<p class="font-medium text-xs text-red-600">Supprimé</p>
+							</span>
+						{% elseif response.status.value == 'waiting' %}
+							<span class="py-1.5 px-2.5 bg-orange-500/30 rounded-full flex w-auto justify-center items-center gap-1">
+								<p class="font-medium text-xs text-orange-600">En attente</p>
+							</span>
+						{% endif %}
 
-    </div>
-</li>
+					</div>
+				{% endif %}
+			</div>
+		</div>
+
+
+		<p class="mt-4 w-full">{{response.content}}</p>
+
+
+		{% if response.author == app.user and response.status.value != 'deleted' %}
+			<form method="POST" action="{{ path('app_response_delete', { id: response.id }) }}">
+				<input type="hidden" name="status" value="deleted">
+				<button type="submit" class="text-end w-full text-red-700 hover:underline">
+					Supprimer
+				</button>
+			</form>
+		{% endif %}
+
+	</li>
 {% endmacro %}

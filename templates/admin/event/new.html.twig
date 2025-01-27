@@ -1,0 +1,13 @@
+{% extends 'admin/base_admin.html.twig' %}
+
+{% block admin_title %}Créer un évènemet
+{% endblock %}
+{% set return_path = 'admin_event_homepage' %}
+
+
+{% block admin_content %}
+	<section>
+		{{ include('admin/event/_form.html.twig') }}
+
+	</section>
+{% endblock %}

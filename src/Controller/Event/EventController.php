@@ -13,30 +13,30 @@ use App\Entity\Event;
 use App\Form\EventType;
 use App\Service\FileUploader;
 
-#[Route('/event')]
+#[Route('/event', name: "app_event_")]
 class EventController extends AbstractController
 {
-    #[Route('/', name: 'all_event')]
+    #[Route('/', name: 'homepage')]
     public function allEvent(EventRepository $eventRepository): Response
     {
-        return $this->render('event/all.html.twig', [
+        return $this->render('event/index.html.twig', [
             'events' => $eventRepository->findAll(),
         ]);
     }
 
-    #[Route('/{id}/single', name: 'single_event')]
-    public function singleEvent(int $id, EventRepository $eventRepository, Event $event): Response
+    #[Route('/{id}/show', name: 'show')]
+    public function singleEvent(Event $event): Response
     {
         $user = $this->getUser();
         $isParticipating = $user && $event->getParticipants()->contains($user);
 
-        return $this->render('event/event.html.twig', [
+        return $this->render('event/show.html.twig', [
             'event' => $event,
             'isParticipating' => $isParticipating,
         ]);
     }
 
-    #[Route('/author', name: 'author_event')]
+    #[Route('/author', name: 'author')]
     public function authorEvent(EventRepository $eventRepository): Response
     {
         $user = $this->getUser();
@@ -51,7 +51,7 @@ class EventController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_event_new', methods: ['GET', 'POST'])]
+    #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, FileUploader $fileUploader): Response
     {
         $event = new Event();
@@ -82,7 +82,7 @@ class EventController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_event_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Event $event, EntityManagerInterface $entityManager, FileUploader $fileUploader): Response
     {
         $form = $this->createForm(EventType::class, $event);
@@ -112,10 +112,10 @@ class EventController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_event_delete', methods: ['POST'])]
+    #[Route('/{id}', name: 'delete', methods: ['POST'])]
     public function delete(Request $request, Event $event, EntityManagerInterface $entityManager, FileUploader $fileUploader): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$event->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $event->getId(), $request->getPayload()->getString('_token'))) {
             if ($event->getImage()) {
                 $imagePath = $fileUploader->getTargetDirectory() . $event->getImage();
                 if (file_exists($imagePath)) {
@@ -126,28 +126,28 @@ class EventController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('author_event', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_event_author', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/participate/{id}', name: 'participate_event')]
-    public function participateEvent(int $id, EventRepository $eventRepository, Event $event, EntityManagerInterface $entityManager): Response
+    #[Route('/participate/{id}', name: 'participate')]
+    public function participateEvent(Event $event, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
         if (!$user) {
             throw $this->createAccessDeniedException('Vous devez être connecté pour répondre.');
         }
 
-        if (!$event->getParticipants()->contains($user)) { 
+        if (!$event->getParticipants()->contains($user)) {
             $event->addParticipant($user);
         }
-
+        $entityManager->persist($event);
         $entityManager->flush();
-        
-        return $this->redirectToRoute('single_event', ['id' => $event->getId()], Response::HTTP_SEE_OTHER);
+
+        return $this->redirectToRoute('app_event_show', ['id' => $event->getId()], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/unparticipate/{id}', name: 'unparticipate_event')]
-    public function unparticipateEvent(int $id, EventRepository $eventRepository, Event $event, EntityManagerInterface $entityManager): Response
+    #[Route('/unparticipate/{id}', name: 'unparticipate')]
+    public function unparticipateEvent(Event $event, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
         if (!$user) {
@@ -156,9 +156,10 @@ class EventController extends AbstractController
 
         if ($event->getParticipants()->contains($user)) {
             $event->removeParticipant($user);
+            $entityManager->persist($event);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('single_event', ['id' => $event->getId()], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_event_show', ['id' => $event->getId()], Response::HTTP_SEE_OTHER);
     }
 }

@@ -41,9 +41,7 @@ class AppFixtures extends Fixture
 
     public const MAX_CHALLENGES = 15;
 
-    public function __construct(protected UserPasswordHasherInterface $passwordHasher)
-    {
-    }
+    public function __construct(protected UserPasswordHasherInterface $passwordHasher) {}
 
     public function load(ObjectManager $manager): void
     {
@@ -65,7 +63,7 @@ class AppFixtures extends Fixture
         $this->createCategories($manager, $categories);
         $this->createLanguages($manager, $languages);
         $this->createTopics($manager, $topics);
-        $this->createResponses($manager, $topics, $users); 
+        $this->createResponses($manager, $topics, $users);
 
         $this->linkTopicsToCategoriesAndLanguages($topics, $categories, $languages, $users);
 
@@ -74,7 +72,7 @@ class AppFixtures extends Fixture
         $this->createEvents($manager, $events, $users);
         $this->createChallenges($manager, $challenges, $users, $questions);
         $this->linkUserToAnswerQuestion($manager, $users, $questions);
-        
+
         $manager->flush();
     }
 
@@ -90,9 +88,9 @@ class AppFixtures extends Fixture
             $user = new User();
             $user->setEmail(email: "user_$i@example.com");
             $user->setUsername(username: "user_$i");
-            
+
             $user->setPlainPassword('coucou');
-            
+
             $roleIndex = $i % $roleCount;
             $user->setRoles([$roles[$roleIndex]]);
 
@@ -112,7 +110,7 @@ class AppFixtures extends Fixture
             $user = new User();
             $user->setEmail(email: "admin_$i@example.com");
             $user->setUsername(username: "admin_$i");
-            
+
             $user->setPlainPassword('admin');
 
             $user->setRoles(['ROLE_ADMIN']);
@@ -136,9 +134,9 @@ class AppFixtures extends Fixture
             $user = new User();
             $user->setEmail(email: "user_$i@example.com");
             $user->setUsername(username: "user_$i");
-            
+
             $user->setPlainPassword('banned');
-            
+
             $randomRole = $roles[array_rand($roles)];
             $user->setRoles([$randomRole]);
 
@@ -157,13 +155,13 @@ class AppFixtures extends Fixture
     {
         $roles = ['ROLE_SUPERVISOR', 'ROLE_ALPHA'];
 
-        for ($i = self::MAX_ACTIVE_USERS + self::MAX_ADMIN_USERS + self::MAX_BLOCKED_USERS; $i < self::MAX_ACTIVE_USERS + self::MAX_ADMIN_USERS + self::MAX_BLOCKED_USERS + self::MAX_DELETE_USERS ; $i++) {
+        for ($i = self::MAX_ACTIVE_USERS + self::MAX_ADMIN_USERS + self::MAX_BLOCKED_USERS; $i < self::MAX_ACTIVE_USERS + self::MAX_ADMIN_USERS + self::MAX_BLOCKED_USERS + self::MAX_DELETE_USERS; $i++) {
             $user = new User();
             $user->setEmail(email: "user_$i@example.com");
             $user->setUsername(username: "user_$i");
-            
+
             $user->setPlainPassword('delete');
-            
+
             $randomRole = $roles[array_rand($roles)];
             $user->setRoles([$randomRole]);
 
@@ -256,7 +254,7 @@ class AppFixtures extends Fixture
             $AlphaUsers = array_filter($users, function ($user) {
                 return in_array('ROLE_ALPHA', $user->getRoles());
             });
-            
+
             if (count($AlphaUsers) > 0) {
                 $topic->setAuthor($AlphaUsers[array_rand($AlphaUsers)]);
             }
@@ -268,7 +266,7 @@ class AppFixtures extends Fixture
         $alphaUsers = array_filter($users, function ($user) {
             return in_array('ROLE_ALPHA', $user->getRoles());
         });
-    
+
         if (empty($alphaUsers)) {
             return;
         }
@@ -277,7 +275,7 @@ class AppFixtures extends Fixture
             $alpha = $alphaUsers[array_rand($alphaUsers)];
             do {
                 $follower = $alphaUsers[array_rand($alphaUsers)];
-            } while ($follower === $alpha); 
+            } while ($follower === $alpha);
 
             if ($alpha === $follower) {
                 continue;
@@ -296,9 +294,9 @@ class AppFixtures extends Fixture
                 $randomStatus = $statuses[array_rand($statuses)];
                 $bromance->setStatus($randomStatus);
                 $bromance->setLinkedAt(linkedAt: new \DateTimeImmutable());
-                if($bromance->getStatus() == BromanceStatusEnum::APPROCHE){
+                if ($bromance->getStatus() == BromanceStatusEnum::APPROCHE) {
                     $bromance->setLastStatusUpdate(null);
-                }else {
+                } else {
                     $bromance->setLastStatusUpdate(lastStatusUpdate: new \DateTimeImmutable('+10 day'));
                 }
             } else {
@@ -325,7 +323,7 @@ class AppFixtures extends Fixture
             ['title' => 'Dominateur', 'description' => 'Ton aura impose le respect. Tu domines la meute.', 'minimum' => 2360],
             ['title' => 'Alpha Suprême', 'description' => 'Tu es l\'ultime incarnation du mâle alpha. Respect éternel.', 'minimum' => 5000],
         ];
-        
+
 
         foreach ($array as $element) {
             $rank = new Rank();
@@ -337,14 +335,14 @@ class AppFixtures extends Fixture
         }
     }
 
-    protected function createEvents(ObjectManager $manager, array &$events,array $users): void
+    protected function createEvents(ObjectManager $manager, array &$events, array $users): void
     {
         for ($i = 0; $i < self::MAX_EVENTS; $i++) {
             $event = new Event();
             $event->setTitle(title: "Event n°$i");
             $event->setShortDescription(shortDescription: "Short description n°$i");
             $event->setLongDescription(longDescription: "Long description n°$i");
-            
+
             $event->setImage(image: "image n°$i");
 
             $event->setLocation(location: "Location n°$i");
@@ -363,7 +361,7 @@ class AppFixtures extends Fixture
             $event->setAuthor($author);
 
             foreach ($alphaUsers as $key => $user) {
-                if ($key !== $authorIndex && rand(0, 1)) { 
+                if ($key !== $authorIndex && rand(0, 1)) {
                     $event->getParticipants()->add($user);
                     $user->getEvents()->add($event);
                 }
@@ -384,11 +382,11 @@ class AppFixtures extends Fixture
 
             $challenge->setTitle(title: "$title n°$j");
             $challenge->setDescription(description: "$description");
-            
+
             $supervisors = array_filter($users, function ($user) {
                 return in_array('ROLE_SUPERVISOR', $user->getRoles(), true);
             });
-        
+
             $alphaUsers = array_filter($users, function ($user) {
                 return in_array('ROLE_ALPHA', $user->getRoles(), true);
             });
@@ -405,14 +403,14 @@ class AppFixtures extends Fixture
                     $user->getParticipations()->add($challenge);
                 }
             }
-            
+
             if ($challenge instanceof Test) {
                 $challenge->setStartOn(new \DateTimeImmutable('+1 day'));
                 $challenge->setEndOn(new \DateTimeImmutable('+7 days'));
                 $challenge->setSuccess(random_int(0, 1) === 1);
                 $challenge->setXp(5);
             }
-    
+
             if ($challenge instanceof Quiz) {
                 $this->createQuestions($manager, $challenge, $questions);
                 foreach ($questions as $question) {
@@ -422,7 +420,6 @@ class AppFixtures extends Fixture
 
             $manager->persist(object: $challenge);
             $challenges[] = $challenge;
-
         }
     }
 
@@ -455,19 +452,19 @@ class AppFixtures extends Fixture
     {
         foreach ($users as $user) {
             if (!in_array('ROLE_ALPHA', $user->getRoles(), true)) {
-                continue; 
+                continue;
             }
 
             if (empty($questions)) {
-                continue; 
+                continue;
             }
 
             $randomIndex = array_rand($questions);
-            $question = $questions[$randomIndex]; 
+            $question = $questions[$randomIndex];
 
-            $answers = $question->getAnswers(); 
+            $answers = $question->getAnswers();
 
-            $randomAnswerIndex = array_rand($answers->toArray()); 
+            $randomAnswerIndex = array_rand($answers->toArray());
             $answer = $answers->get($randomAnswerIndex);
 
             $userAnswer = new UserAnswer();

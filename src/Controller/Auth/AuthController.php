@@ -5,7 +5,6 @@ namespace App\Controller\Auth;
 namespace App\Controller\Auth;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,7 +19,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 use App\Entity\User;
-use App\Form\RegistrationFormType;
+use App\Form\RegistrationType;
 use App\Enum\StatusUserEnum;
 
 class AuthController extends AbstractController
@@ -50,7 +49,7 @@ class AuthController extends AbstractController
     public function register(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): Response
     {
         $user = new User();
-        $form = $this->createForm(RegistrationFormType::class, $user);
+        $form = $this->createForm(RegistrationType::class, $user);
 
         $form->handleRequest($request);
 
@@ -89,7 +88,7 @@ class AuthController extends AbstractController
             $user = $doctrine->getRepository(User::class)->findOneBy(['email' => $email]);
             if (!$user) {
                 $this->addFlash('error', 'Aucun utilisateur trouvé avec cette adresse email.');
-                return $this->redirectToRoute('forgot');
+                return $this->redirectToRoute('app_forgot');
             }
 
             $resetToken = Uuid::v4();
@@ -109,8 +108,10 @@ class AuthController extends AbstractController
                 ->from('contact@alphacorp.fr')
                 ->to($user->getEmail())
                 ->subject('Réinitialisation de votre mot de passe')
-                ->html($this->render('emails/forgot.html.twig', ['user' => $user]));
-
+                ->html($this->renderView('emails/forgot.html.twig', [
+                    'user' => $user,
+                    'resetLink' => $resetLink, // Pass the reset link explicitly
+                ]));
             $mailer->send($email);
 
             $this->addFlash('success', 'Un email de réinitialisation de mot de passe a été envoyé.');
@@ -136,7 +137,7 @@ class AuthController extends AbstractController
 
             if ($password !== $repeatPassword) {
                 $this->addFlash('error', 'Les mots de passe ne correspondent pas.');
-                return $this->redirectToRoute('reset', ['token' => $token]);
+                return $this->redirectToRoute('app_reset', ['token' => $token]);
             }
 
             $user->setPlainPassword($password);

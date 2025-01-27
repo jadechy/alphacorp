@@ -1,0 +1,19 @@
+{{ form_start(form) }}
+{{ form_widget(form.username, {'attr': {'class': 'input '}}) }}
+
+{{ form_widget(form.email, {'attr': {'class': 'input my-4'}}) }}
+<div class="w-40 ">
+	{{ form_label(form.gender ) }}
+	{{ form_widget(form.gender, {'attr': {  class: "dashboard-select" }}) }}
+</div>
+{% if is_granted('ROLE_ADMIN') %}
+	<div class="mt-4">
+		{{ form_label(form.isAdmin) }}
+		{{ form_widget(form.isAdmin) }}
+	</div>
+{% endif %}
+<div class="flex gap-6 justify-center items-center mt-4">
+	<button type="submit" class="btn">
+		{{ button_label|default('Enregistrer') }}
+	</button>
+	{{ form_end(form) }}

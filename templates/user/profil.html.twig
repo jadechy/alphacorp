@@ -1,40 +1,108 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Votre profil{% endblock %}
 
-{% block body %}
-    <main class="flex-1 py-10 px-5 sm:px-10">
-        <section>
-            <h1 class="text-lg font-medium text-black">Bonjour <span class="font-bold text-blue-600">{{user.username}}</span></h1>
-
-            <h2 class="text-md font-medium text-gray-700 mt-4">Vos informations</h2>
-
-            <div class="overflow-hidden  border rounded-lg border-gray-300 mt-4">
-                <table class="table-auto min-w-full rounded-xl">
-                    <thead>
-                        <tr class="bg-gray-50">
-                            <th scope="col" class="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"> Username</th>
-                            <th scope="col" class="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"> Email</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-300 ">
-                        <tr class="bg-white transition-all duration-500 hover:bg-gray-50">
-                            <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{{ user.username }}</td>
-                            <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{{ user.email }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="flex items-center justify-center mt-4">
-                <a href="{{ path('app_user_edit', {'id': user.id}) }}">
-                    <button class="relative flex bg-blue-600 flex-row p-2 items-center justify-center rounded-md text-sm overflow-hidden border cursor-pointer transition text-white hover:opacity-90 hover:scale-105">
-                        Modifier vos informations
-                    </button>
-                </a>
-            </div>
-
-        </section>
-    </main>
+{% block title %}Profile
 {% endblock %}
+{% block body %}
+	<div>
+		<pre>
+    {{ dump(user) }}
+</pre>
+		<!-- Section Profil -->
+		<section class="flex gap-6">
+			<img src={{ asset('img/1.png') }} class="w-80 object-cover rounded-sm" alt="Profile Picture"/>
+			<div class="flex justify-between w-full">
+				<div class="flex flex-col justify-between">
+					<div>
+						<p class="font-bold">{{user.username}}</p>
+						<p class="text-neutral-400">{{user.email}}</p>
+						<p class="text-neutral-400">21/09/2003</p>
+					</div>
+					<a href="{{ path('app_user_edit' ) }}" class="btn">Modifier</a>
 
+				</div>
+				<div class="rounded-full bg-fuchsia-500 h-fit px-3 py-1">
+					<p>{{user.xp ? user.xp: 0}}
+						XP</p>
+				</div>
+			</div>
+
+		</section>
+
+		<!-- Section Bromances -->
+		<section class="mt-20 ">
+			<h2 class="text-xl font-semibold">Mes bromances
+				<span class="text-sm text-neutral-400">- 118</span>
+			</h2>
+			<div
+				class="flex gap-5 mt-4">
+				<!-- Card 1 -->
+				<div class="w-35">
+					{% include "parts/components/card_col.html.twig" with {"title": "app_register", "height": 25} %}
+				</div>
+				<div class="w-35">
+					{% include "parts/components/card_col.html.twig" with {"title": "app_register", "height": 25} %}
+				</div>
+
+
+			</div>
+		</section>
+
+		<!-- Section Events Author -->
+		<section class="mt-20 ">
+			<h2 class="text-xl font-semibold">Mes Events crées
+				<span class="text-sm text-neutral-400">-
+					{{ user.authorEvents|length }}</span>
+
+			</h2>
+			<div class="flex gap-8 pt-8">
+				{% for event in user.authorEvents %}
+					<a href={{path("app_event_show", {id: event.id} )}} class=" w-60">
+						{% include "parts/components/card_col.html.twig" with {"title": event.title, "height": 40} %}
+					</a>
+				{% else %}
+					<p>Aucun article trouvé.</p>
+				{% endfor %}
+				<a href={{path("app_event_author")}} class="w-40 border border-neutral-300 rounded-md p-3 flex items-center hover:scale-105 transition font-bold text-center">
+					<p>Voir tous mes évènements crées</p>
+				</a>
+			</div>
+		</section>
+
+		<!-- Section Events Participation -->
+		<section class="mt-20 ">
+			<h2 class="text-xl font-semibold">Ma participation aux events
+				<span class="text-sm text-neutral-400">-
+					{{ user.events|length }}</span>
+
+
+			</h2>
+			<div class="flex gap-8 pt-8">
+				{% for event in user.events %}
+					<a href={{path("app_event_show", {id: event.id} )}} class=" w-60">
+						{% include "parts/components/card_col.html.twig" with {"title": event.title, "height": 40} %}
+					</a>
+				{% else %}
+					<p>Aucune participation trouvée.</p>
+				{% endfor %}
+			</div>
+		</section>
+
+
+		<!-- Section Forum -->
+		<section class="mt-20 ">
+			<h2 class="text-xl font-semibold">Mes articles
+				<span class="text-sm text-neutral-400">-
+					{{ user.topics|length }}</span>
+			</h2>
+			<div class="flex gap-8 pt-8 flex-wrap">
+				{% for topic in user.topics %}
+					{% include "macro/topic_card.html.twig" with {"title": topic.title, "height": 50} %}
+				{% else %}
+					<p>Aucun article trouvé.</p>
+				{% endfor %}
+
+			</div>
+		</section>
+	</div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{{ form_start(form) }}
+<div class="flex flex-col gap-5">
+	{{ form_widget(form.title) }}
+
+	{{ form_widget(form.shortDescription) }}
+
+	{{ form_widget(form.longDescription) }}
+	<div class="flex gap-4">
+		{{ form_widget(form.category) }}
+
+		{{ form_widget(form.language) }}
+	</div>
+</div>
+<div class="flex items-center justify-center gap-5 mt-8">
+
+	<button type="submit" class="btn">
+		{{ button_label|default('Enregistrer') }}
+	</button>
+</div>
+{{ form_end(form) }}

@@ -1,44 +1,42 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/base_admin.html.twig' %}
 
-{% block title %}Administration des demandes de débanissement{% endblock %}
+{% block title %}Dashboard - Demande de débanissement
+{% endblock %}
+{% block h1 %}Dashboard - Demande de débanissement
+{% endblock %}
 
-{% block body %}
-    <main class=" flex-1 py-10  px-5 sm:px-10 ">
-        <section>
-            <h1 class="text-lg font-medium text-black mb-9">Administration
-                <span class="font-bold text-blue-700">des demandes de débanissement</span>
-            </h1>
-        </section>
 
-        <section class="mt-9">
-            <div class="overflow-hidden  border rounded-lg border-gray-300">
-                <table class="table-auto min-w-full rounded-xl">
-                    <thead>
-                        <tr class="bg-gray-50">
-                            <th scope="col" class="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"> ID</th>
-                            <th scope="col" class="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"> Message</th>
-                            <th scope="col" class="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"> Utilisateur</th>
-                            <th scope="col" class="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"> Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-300 ">
-                        {% for banRequest in banRequests %}
-                            <tr class="bg-white transition-all duration-500 hover:bg-gray-50">
-                                <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{{ banRequest.id }}</td>
-                                <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{{ banRequest.message }}</td>
-                                <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{{ banRequest.user.username }}</td>
-                                <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900 flex">
-                                    <a href="{{ path('app_user_deban', {'id': banRequest.user.id}) }}" class="group text-red-500 hover:underline">Débannir</a>
-                                </td>
-                            </tr>
-                        {% else %}
-                            <tr>
-                                <td colspan="4">Aucune demande trouvé.</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </section>
-    </main>    
+{% block admin_content %}
+	<table>
+		<thead>
+			<tr>
+				<th scope="col">
+					ID</th>
+				<th scope="col">
+					Message</th>
+				<th scope="col">
+					Utilisateur</th>
+				<th scope="col">
+					Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for banRequest in banRequests %}
+				<tr>
+					<td>{{ banRequest.id }}</td>
+					<td>{{ banRequest.message }}</td>
+					<td>{{ banRequest.user.username }}</td>
+					<td>
+						<a href="{{ path('app_user_deban', {'id': banRequest.user.id}) }}" class="group text-red-500 hover:underline">Débannir</a>
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="4">Aucune demande trouvé.</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+
 {% endblock %}

@@ -14,14 +14,16 @@ class LanguageType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name', TextType::class, ['attr' => [
-                'class' => 'w-full px-8 py-4 mt-5 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white',
-                'placeholder' => 'Nom de la langue'
+            ->add('name', TextType::class, [
+                'attr' => [
+                    'class' => 'input',
+                    'placeholder' => 'Nom de la langue'
                 ]
             ])
-            ->add('code', TextType::class, ['attr' => [
-                'class' => 'w-full px-8 py-4 mt-5 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white',
-                'placeholder' => 'Code de la langue'
+            ->add('code', TextType::class, [
+                'attr' => [
+                    'class' => 'input',
+                    'placeholder' => 'Code de la langue'
                 ]
             ])
         ;

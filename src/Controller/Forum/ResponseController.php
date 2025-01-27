@@ -10,10 +10,8 @@ use Doctrine\ORM\EntityManagerInterface;
 
 use App\Entity\Response;
 use App\Enum\ResponseStatusEnum;
-use App\Entity\Report;
-use App\Form\ReportType;
-use App\Enum\ReportStatusEnum;
 
+#[Route('/forum')]
 class ResponseController extends AbstractController
 {
     #[Route('/response/delete/{id}', name: 'app_response_delete', methods: ['POST'])]
@@ -23,7 +21,7 @@ class ResponseController extends AbstractController
 
         if (!in_array($status, array_map(fn($enum) => $enum->value, ResponseStatusEnum::cases()), true)) {
             throw $this->createNotFoundException('Statut non valide');
-        }       
+        }
 
         $response->setStatus(ResponseStatusEnum::from($status));
 
