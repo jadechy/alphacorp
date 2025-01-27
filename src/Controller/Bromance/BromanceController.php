@@ -13,38 +13,57 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/bromance')]
+#[Route('/user/bromance', name: "app_bromance_")]
 class BromanceController extends AbstractController
 {
-    #[Route('/all', name: 'bromance_all', methods: ['GET'])]
-    public function allBromance(BromanceRepository $bromanceRepository): Response
-    {
-        $user = $this->getUser(); 
+    #[Route('/', name: 'homepage', methods: ['GET'])]
+    public function allBromance(
+        BromanceRepository $bromanceRepository
+    ): Response {
+        $user = $this->getUser();
 
-        $bromances = $bromanceRepository->findBy([
-            'alpha' => $user
+        $bromancesAlpha = $bromanceRepository->findBy([
+            'alpha' => $user,
+            "request" => BromanceRequestStatusEnum::ACCEPTED
         ]);
-        $bromances = array_merge($bromances, $bromanceRepository->findBy([
-            'follower' => $user
-        ]));
+        $bromancesFollower = $bromanceRepository->findBy([
+            'follower' => $user,
+            "request" => BromanceRequestStatusEnum::PENDING
+        ]);
 
-        return $this->render('bromance/all.html.twig', [
-            'bromances' => $bromances,
+        return $this->render('bromance/index.html.twig', [
+            'bromancesAlpha' => $bromancesAlpha,
+            'bromancesFollower' => $bromancesFollower,
         ]);
     }
 
-    #[Route('/{id}/request', name: 'bromance_request',  methods: ['POST'])]
-    public function requestBromance(int $id, EntityManagerInterface $entityManager, BromanceRepository $bromanceRepository, UserRepository $userRepository): Response
+    #[Route('/request/send', name: 'request_send', methods: ['GET'])]
+    public function requestSend(BromanceRepository $bromanceRepository): Response
+    {
+        $user = $this->getUser();
+
+        $requestSend = $bromanceRepository->findBy(['alpha' => $user]);
+
+        return $this->render('bromance/request_send.html.twig', [
+            'requestSend' => $requestSend,
+        ]);
+    }
+
+
+    #[Route('/request/{user_id}', name: 'request',  methods: ['POST'])]
+    public function requestBromance(int $user_id, EntityManagerInterface $entityManager, BromanceRepository $bromanceRepository, UserRepository $userRepository): Response
     {
         $alpha = $this->getUser();
-        $follower = $userRepository->find($id); 
+        $follower = $userRepository->find($user_id);
 
         if (!$follower) {
-            return $this->redirectToRoute('app_home', ['error' => 'Utilisateur non trouvé']);
+            $this->addFlash('error', 'Utilisateur non trouvé');
+            return $this->redirectToRoute('app_bromance_homepage');
         }
 
         if ($alpha === $follower) {
-            return $this->redirectToRoute('app_home', ['error' => 'Vous ne pouvez pas faire une demande à vous-même']);
+            $this->addFlash('error', 'Vous ne pouvez pas faire une demande à vous-même');
+            return $this->redirectToRoute('app_bromance_homepage');
         }
 
         $existingBromance = $bromanceRepository->findOneBy([
@@ -53,7 +72,8 @@ class BromanceController extends AbstractController
         ]);
 
         if ($existingBromance) {
-            return $this->redirectToRoute('app_home', ['error' => 'Une bromance existe déjà entre ces deux utilisateurs']);
+            $this->addFlash('error', 'Une bromance existe déjà entre ces deux utilisateurs');
+            return $this->redirectToRoute('app_bromance_homepage');
         }
 
         $bromance = new Bromance();
@@ -64,36 +84,28 @@ class BromanceController extends AbstractController
         $entityManager->persist($bromance);
         $entityManager->flush();
 
-        return $this->redirectToRoute('bromance_request_send', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_bromance_request_send', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/request/send', name: 'bromance_request_send', methods: ['GET'])]
-    public function requestSend(BromanceRepository $bromanceRepository): Response
+
+    // LOGIC
+    #[Route('/reponse/{id}', name: 'reponse', methods: ['POST'])]
+    public function reponseDemandeBromance(Bromance $bromance, Request $request, EntityManagerInterface $entityManager, BromanceRepository $bromanceRepository): Response
     {
-        $user = $this->getUser(); 
-
-        $requestSend = $bromanceRepository->findBy(['alpha' => $user]);
-
-        return $this->render('bromance/request_send.html.twig', [
-            'requestSend' => $requestSend,
-        ]);
-    }
-
-    #[Route('/{id}/reponse', name: 'bromance_reponse', methods: ['POST'])]
-    public function reponseDemandeBromance(int $id, Request $request, EntityManagerInterface $entityManager, BromanceRepository $bromanceRepository): Response
-    {
-        $bromance = $bromanceRepository->find($id); 
+        // $bromance = $bromanceRepository->find($id);
 
         if (!$bromance) {
-            return $this->redirectToRoute('home', ['error' => 'Demande de bromance non trouvée']);
+            $this->addFlash('error', 'Demande de bromance non trouvée');
+            return $this->redirectToRoute('app_bromance_homepage');
         }
 
         $user = $this->getUser();
         if ($user !== $bromance->getFollower()) {
-            return $this->redirectToRoute('home', ['error' => 'Vous ne pouvez pas répondre à cette demande']);
+            $this->addFlash('error', 'Vous ne pouvez pas répondre à cette demande');
+            return $this->redirectToRoute('app_bromance_homepage');
         }
 
-        $reponse = $request->request->get('reponse'); 
+        $reponse = $request->request->get('reponse');
 
         if ($reponse === 'accept') {
             $bromance->setRequest(BromanceRequestStatusEnum::ACCEPTED);
@@ -104,27 +116,17 @@ class BromanceController extends AbstractController
             $bromance->setStatus(null);
             $bromance->setLinkedAt(null);
         } else {
-            return $this->redirectToRoute('home', ['error' => 'Réponse invalide']);
+            $this->addFlash('error', 'Réponse invalide');
+            return $this->redirectToRoute('app_bromance_homepage');
         }
 
+        $entityManager->persist($bromance);
         $entityManager->flush();
-
-        return $this->redirectToRoute('bromance_request_recieve', [], Response::HTTP_SEE_OTHER);
+        $this->addFlash('success', 'Réponse valide');
+        return $this->redirectToRoute('app_bromance_homepage', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/request/recieve', name: 'bromance_request_recieve', methods: ['GET'])]
-    public function requestRecieve(BromanceRepository $bromanceRepository): Response
-    {
-        $user = $this->getUser();
-
-        $requestRecieve = $bromanceRepository->findBy(['follower' => $user]);
-
-        return $this->render('bromance/request_recieve.html.twig', [
-            'requestRecieve' => $requestRecieve,
-        ]);
-    }
-
-    #[Route('/bromance/{id}/delete', name: 'bromance_delete', methods: ['POST'])]
+    #[Route('/delete/{id}', name: 'delete', methods: ['POST'])]
     public function deleteBromance(int $id, BromanceRepository $bromanceRepository, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
@@ -133,24 +135,23 @@ class BromanceController extends AbstractController
             'alpha' => $user,
             'follower' => $id
         ]);
-    
+
         if (!$bromance) {
             $bromance = $bromanceRepository->findOneBy([
                 'alpha' => $id,
                 'follower' => $user
             ]);
         }
-    
+
         if (!$bromance) {
             $this->addFlash('error', 'Bromance non trouvée.');
-            return $this->redirectToRoute('bromance_all');
+            return $this->redirectToRoute('app_bromance_homepage');
         }
 
         $entityManager->remove($bromance);
         $entityManager->flush();
 
         $this->addFlash('success', 'Bromance supprimée.');
-        return $this->redirectToRoute('user_profil', ['id' => $id]);
+        return $this->redirectToRoute('app_user_alpha_show', ['id' => $id]);
     }
-
 }

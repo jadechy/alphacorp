@@ -1,19 +1,49 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Demandes envoyées de bromance{% endblock %}
+{% block title %}Demandes envoyées de bromance
+{% endblock %}
 
 {% block body %}
-    <h1>Demandes envoyées de bromance</h1>
+	<a href={{ path("app_bromance_homepage") }} class="btn-secondary flex mb-8">
+		{{ ux_icon('tabler:chevron-left', {class: 'w-6 h-6'}) }}
+		<p>
+			Retour
+		</p>
+	</a>
 
-    {% if requestSend is empty %}
-        <p>Aucune demande de bromance envoyée.</p>
-    {% else %}
-        <ul>
-            {% for bromance in requestSend %}
-                <li>
-                    Demande envoyée à {{ bromance.follower.username }} - Statut : {{ bromance.request.value }}
-                </li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+	{% if requestSend is empty %}
+		<p>Aucune demande de bromance envoyée.</p>
+	{% else %}
+
+		<table>
+			<thead class='border-b  border-neutral-200'>
+				<td>
+					User
+				</td>
+				<td>
+					Date de mise à jour
+				</td>
+				<td class='text-end'>
+					Status
+				</td>
+			</thead>
+			<tbody>
+				{% for bromance in requestSend %}
+					<tr>
+						<td>
+							{{ bromance.follower.username }}
+						</td>
+						<td>
+							{{ bromance.linkedAt|format_datetime('short', 'none', locale: 'fr') }}
+						</td>
+						<td>
+							<div class="bg-green-800 p-2 rounded-full w-fit">
+								{{ bromance.request.value }}
+							</div>
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	{% endif %}
 {% endblock %}

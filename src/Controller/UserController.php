@@ -14,8 +14,6 @@ use App\Enum\StatusUserEnum;
 use App\Form\UserEditType;
 use App\Repository\UserRepository;
 use App\Repository\BromanceRepository;
-use App\Repository\EventRepository;
-use App\Entity\Event;
 
 #[Route('/user', name: "app_user_")]
 class UserController extends AbstractController
@@ -51,7 +49,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/profil/{id}', name: 'profil_show')]
+    #[Route('/alpha/{id}', name: 'alpha_show')]
     public function userProfil(int $id, UserRepository $userRepository, BromanceRepository $bromanceRepository): Response
     {
         $user = $userRepository->findOneBy(['id' => $id]);
@@ -72,40 +70,22 @@ class UserController extends AbstractController
             }
         }
 
-        return $this->render('user/profil/show.html.twig', [
+        return $this->render('user/alpha/show.html.twig', [
             'user' => $user,
             'bromance_exists' => $bromance_exists
         ]);
     }
 
-    #[Route('/profil/alpha', name: 'profil_homepage')]
-    public function allAlphaUserProfil(UserRepository $userRepository): Response
-    {
-        $users = $userRepository->findAll();
 
-        $alphas = [];
-        foreach ($users as $user) {
-            if (in_array('ROLE_ALPHA', $user->getRoles()) && $user->getStatus() == StatusUserEnum::ACTIVE) {
-                array_push($alphas, $user);
-            }
-        }
 
-        return $this->render('user/profil/index.html.twig', [
-            'alphas' => $alphas,
-        ]);
-    }
-
-    #[Route('/profil/search', name: 'search', methods: ['GET'])]
-    public function searchAlphaUser(Request $request, UserRepository $userRepository): Response
+    #[Route('/alpha', name: 'alpha_homepage', methods: ['GET'])]
+    public function searchAlphaUser(Request $request, UserRepository $userRepository, EntityManagerInterface $entityManager): Response
     {
         $keyword = $request->query->get('q', '');
         $users = [];
 
-        if ($keyword) {
-            $users = $userRepository->searchByKeyword($keyword);
-        }
-
-        return $this->render('user/profil/search/search.html.twig', [
+        $users = $keyword ? $userRepository->searchAlphaByKeyword($keyword, $entityManager) : $userRepository->findAll();
+        return $this->render('user/alpha/index.html.twig', [
             'users' => $users,
             'keyword' => $keyword,
         ]);
@@ -118,7 +98,7 @@ class UserController extends AbstractController
         $user = $this->getUser();
 
         if (!$user) {
-            return $this->redirectToRoute('app_login');
+            return $this->redirectToRoute('app_user_login');
         }
 
         if ($user->getStatus() === StatusUserEnum::BANNED) {
@@ -134,7 +114,7 @@ class UserController extends AbstractController
 
                 $this->addFlash('success', 'Votre demande de débannissement a été envoyée avec succès.');
 
-                return $this->redirectToRoute('app_home');
+                return $this->redirectToRoute('app_user_homepage');
             }
 
             return $this->render('user/banned.html.twig', [
@@ -143,6 +123,6 @@ class UserController extends AbstractController
             ]);
         }
 
-        return $this->redirectToRoute('app_home');
+        return $this->redirectToRoute('app_user_homepage');
     }
 }

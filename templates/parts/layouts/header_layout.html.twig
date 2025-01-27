@@ -13,6 +13,8 @@
 				{% if app.user %}
 					{% if not is_granted('ROLE_BANNED') %}
 						{% include "parts/components/nav_link.html.twig" with {"pathName": "app_event_homepage", "label": "Event"} %}
+						{% include "parts/components/nav_link.html.twig" with {"pathName": "app_user_alpha_homepage", "label": "Alpha"} %}
+
 
 						{% include "parts/components/nav_link.html.twig" with {"pathName": "app_forum_homepage", "label": "Forum"} %}
 						{% include "parts/components/nav_link.html.twig" with {"pathName": "app_user_homepage", "label": "Profil"} %}

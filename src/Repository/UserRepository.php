@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -19,9 +20,9 @@ class UserRepository extends ServiceEntityRepository
     public function searchByKeyword(string $keyword): array
     {
         $conn = $this->getEntityManager()->getConnection();
-        
+
         $sql = "SELECT * FROM ALP_USER WHERE MATCH(USR_USERNAME) AGAINST(:keyword)";
-        
+
         $stmt = $conn->prepare($sql);
         $stmt->bindValue("keyword", $keyword);
 
@@ -39,7 +40,16 @@ class UserRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-
+    public function searchAlphaByKeyword(string $keyword, EntityManagerInterface $entityManager): array
+    {
+        $users = $entityManager->getRepository(User::class)
+            ->createQueryBuilder('u')
+            ->where('u.username LIKE :search')
+            ->setParameter('search', '%' . $keyword . '%')
+            ->getQuery()
+            ->getResult();
+        return $users;
+    }
     //    /**
     //     * @return User[] Returns an array of User objects
     //     */
