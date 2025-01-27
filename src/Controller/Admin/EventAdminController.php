@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Event;
+namespace App\Controller\Admin;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,15 +12,24 @@ use App\Repository\EventRepository;
 use App\Entity\Event;
 use App\Form\EventType;
 use App\Service\FileUploader;
+use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route('/event', name: "app_event_")]
-class EventController extends AbstractController
+#[IsGranted('ROLE_ADMIN')]
+#[Route('/admin/event', name: "admin_event_")]
+class EventAdminController extends AbstractController
 {
     #[Route('/', name: 'homepage')]
-    public function allEvent(EventRepository $eventRepository): Response
+    public function allEvent(PaginatorInterface $paginator, Request $request, EventRepository $eventRepository): Response
     {
-        return $this->render('event/index.html.twig', [
-            'events' => $eventRepository->findAll(),
+        $query = $eventRepository->findAll();
+        $pagination = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            10
+        );
+        return $this->render('admin/event/index.html.twig', [
+            'pagination' => $pagination,
         ]);
     }
 
@@ -30,7 +39,7 @@ class EventController extends AbstractController
         $user = $this->getUser();
         $isParticipating = $user && $event->getParticipants()->contains($user);
 
-        return $this->render('event/show.html.twig', [
+        return $this->render('admin/event/show.html.twig', [
             'event' => $event,
             'isParticipating' => $isParticipating,
         ]);
@@ -46,7 +55,7 @@ class EventController extends AbstractController
 
         $events = $eventRepository->findBy(['author' => $user]);
 
-        return $this->render('event/author.html.twig', [
+        return $this->render('admin/event/author.html.twig', [
             'events' => $events,
         ]);
     }
@@ -55,7 +64,11 @@ class EventController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager, FileUploader $fileUploader): Response
     {
         $event = new Event();
-        $form = $this->createForm(EventType::class, $event);
+        $form = $this->createForm(
+            EventType::class,
+            $event,
+            ['is_admin' => true]
+        );
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -64,8 +77,6 @@ class EventController extends AbstractController
                 throw $this->createAccessDeniedException('Vous devez être connecté pour créer un événement.');
             }
 
-            $event->setAuthor($user);
-
             $imageFile = $form->get('imageFile')->getData();
             $fileName = $fileUploader->upload($imageFile);
             $event->setImage($fileName);
@@ -73,19 +84,23 @@ class EventController extends AbstractController
             $entityManager->persist($event);
             $entityManager->flush();
 
-            return $this->redirectToRoute('author_event', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('admin_event_homepage', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('event/new.html.twig', [
+        return $this->render('admin/event/new.html.twig', [
             'event' => $event,
             'form' => $form,
         ]);
     }
 
     #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Event $event, EntityManagerInterface $entityManager, FileUploader $fileUploader): Response
+    public function edit(string $id, Request $request, Event $event, EntityManagerInterface $entityManager, FileUploader $fileUploader): Response
     {
-        $form = $this->createForm(EventType::class, $event);
+        $form = $this->createForm(
+            EventType::class,
+            $event,
+            ['is_admin' => true]
+        );
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -103,10 +118,10 @@ class EventController extends AbstractController
 
             $entityManager->flush();
 
-            return $this->redirectToRoute('author_event', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('admin_event_show', ["id" => $id], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('event/edit.html.twig', [
+        return $this->render('admin/event/edit.html.twig', [
             'event' => $event,
             'form' => $form,
         ]);
@@ -143,7 +158,7 @@ class EventController extends AbstractController
 
         $entityManager->flush();
 
-        return $this->redirectToRoute('single_event', ['id' => $event->getId()], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('admin/single_event', ['id' => $event->getId()], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/unparticipate/{id}', name: 'unparticipate')]

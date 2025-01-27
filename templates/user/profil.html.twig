@@ -12,7 +12,7 @@
 </pre>
 		<!-- Section Profil -->
 		<section class="flex gap-6">
-			<img src="{{ asset('img/1.png') }}" class="w-80 object-cover rounded-sm" alt="Profile Picture"/>
+			<img src={{ asset('img/1.png') }} class="w-80 object-cover rounded-sm" alt="Profile Picture"/>
 			<div class="flex justify-between w-full">
 				<div class="flex flex-col justify-between">
 					<div>
@@ -56,6 +56,7 @@
 				<span class="text-sm text-neutral-400">- 118</span>
 			</h2>
 			<div class="flex gap-8 pt-8">
+
 				<div class="w-60">
 					{% include "parts/components/card_col.html.twig" with {"title": "app_register", "height": 50} %}
 				</div>
@@ -73,9 +74,7 @@
 			</h2>
 			<div class="flex gap-8 pt-8 flex-wrap">
 				{% for topic in user.topics %}
-
 					{% include "macro/topic_card.html.twig" with {"title": topic.title, "height": 50} %}
-
 				{% else %}
 					<p>Aucun article trouvé.</p>
 				{% endfor %}

@@ -18,6 +18,7 @@ class TopicType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+
         $builder
             ->add('title', TextType::class, [
                 'attr' => [
@@ -50,20 +51,23 @@ class TopicType extends AbstractType
                 'attr' => [
                     'class' => 'dashboard-select',
                 ]
-            ])
-            ->add('status', EnumType::class, [
+            ]);
+        if ($options['is_admin']) {
+            $builder->add('status', EnumType::class, [
                 "class" => TopicStatusEnum::class,
                 'label' => 'Status',
                 'attr' => [
                     'class' => 'dashboard-select',
                 ]
             ]);
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => Topic::class,
+            'is_admin' => false,
         ]);
     }
 }

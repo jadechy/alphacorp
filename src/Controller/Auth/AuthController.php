@@ -5,7 +5,6 @@ namespace App\Controller\Auth;
 namespace App\Controller\Auth;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,7 +19,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 use App\Entity\User;
-use App\Form\RegistrationFormType;
+use App\Form\RegistrationType;
 use App\Enum\StatusUserEnum;
 
 class AuthController extends AbstractController
@@ -50,7 +49,7 @@ class AuthController extends AbstractController
     public function register(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): Response
     {
         $user = new User();
-        $form = $this->createForm(RegistrationFormType::class, $user);
+        $form = $this->createForm(RegistrationType::class, $user);
 
         $form->handleRequest($request);
 

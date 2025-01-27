@@ -33,13 +33,18 @@
         path: 'admin_banrequest', 
         icon :"user-x",
     },
+    {
+        label: 'Évènement',
+        path: 'admin_event_homepage', 
+        icon :"calendar-filled",
+    },
 ] %}
 {% block admin_content %}
-	<section class="grid grid-cols-2 gap-y-5 sm:grid-cols-4 gap-x-5">
+	<section class="grid grid-cols-2 gap-y-5 sm:grid-cols-4  gap-x-5">
 		{% for item in data %}
-			<a href="{{ path(item.path) }}" class="relative flex flex-col items-center justify-center rounded-xl overflow-hidden aspect-square border hover:scale-105 cursor-pointer transition hover:bg-neutral-700 ">
+			<a href="{{ path(item.path) }}" class="relative flex flex-col items-center justify-center rounded-xl overflow-hidden aspect-square border hover:scale-105 cursor-pointer transition hover:bg-neutral-700">
 				{{ ux_icon('tabler:' ~ item.icon, {class: 'w-17 h-17 mb-4'}) }}
-				<p class="capitalize font-medium text-3xl truncate">{{ item.label }}</p>
+				<p class="capitalize font-medium text-2xl truncate">{{ item.label }}</p>
 			</a>
 		{% endfor %}
 	</section>

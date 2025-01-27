@@ -17,19 +17,22 @@ class EventType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('title', TextType::class, ['attr' => [
-                'class' => 'w-full px-8 py-4 mt-5 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white',
-                'placeholder' => 'Titre de l\'évènement'
+            ->add('title', TextType::class, [
+                'attr' => [
+                    'class' => 'input',
+                    'placeholder' => 'Titre de l\'évènement'
                 ]
             ])
-            ->add('shortDescription', TextType::class, ['attr' => [
-                'class' => 'w-full px-8 py-4 mt-5 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white',
-                'placeholder' => 'Courte description de l\'évènement'
+            ->add('shortDescription', TextType::class, [
+                'attr' => [
+                    'class' => 'input',
+                    'placeholder' => 'Courte description de l\'évènement'
                 ]
             ])
-            ->add('longDescription', TextType::class, ['attr' => [
-                'class' => 'w-full px-8 py-4 mt-5 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white',
-                'placeholder' => 'Longue description de l\'évènement'
+            ->add('longDescription', TextType::class, [
+                'attr' => [
+                    'class' => 'input',
+                    'placeholder' => 'Longue description de l\'évènement'
                 ]
             ])
             ->add('imageFile', FileType::class, [
@@ -37,9 +40,10 @@ class EventType extends AbstractType
                 'mapped' => false,
                 'required' => false,
             ])
-            ->add('location', TextType::class, ['attr' => [
-                'class' => 'w-full px-8 py-4 mt-5 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white',
-                'placeholder' => 'Lieu de l\'évènement'
+            ->add('location', TextType::class, [
+                'attr' => [
+                    'class' => 'input',
+                    'placeholder' => 'Lieu de l\'évènement'
                 ]
             ])
             ->add('startAt', null, [
@@ -51,12 +55,23 @@ class EventType extends AbstractType
                 'label' => 'Date de fin'
             ])
         ;
+        if ($options['is_admin']) {
+            $builder->add('author', EntityType::class, [
+                "class" => User::class,
+                'choice_label' => 'username',
+                'label' => 'Auhor',
+                'attr' => [
+                    'class' => 'dashboard-select',
+                ]
+            ]);
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => Event::class,
+            'is_admin' => false,
         ]);
     }
 }

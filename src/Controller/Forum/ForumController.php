@@ -12,9 +12,9 @@ use Symfony\Component\Routing\Attribute\Route;
 class ForumController extends AbstractController
 {
 
-    #[Route('/', name: 'app_forum', methods: ['GET'])]
-    public function search(): HttpResponse
-    {
-        return $this->render('forum/index.html.twig');
-    }
+    // #[Route('/', name: 'app_forum', methods: ['GET'])]
+    // public function search(): HttpResponse
+    // {
+    //     return $this->render('forum/index.html.twig');
+    // }
 }

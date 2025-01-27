@@ -7,7 +7,8 @@ use App\Entity\BanRequest;
 use App\Entity\Topic;
 use App\Entity\Response;
 use App\Enum\StatusUserEnum;
-use App\Form\UserType;
+use App\Form\Admin\UserAdminType;
+use App\Form\RegistrationType;
 use App\Form\UserEditType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -41,7 +42,7 @@ final class UserAdminController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): HttpResponse
     {
         $user = new User();
-        $form = $this->createForm(UserType::class, $user, [
+        $form = $this->createForm(RegistrationType::class, $user, [
             'is_admin' => $this->isGranted('ROLE_ADMIN'),
         ]);
         $form->handleRequest($request);
@@ -85,9 +86,7 @@ final class UserAdminController extends AbstractController
     #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, User $user, EntityManagerInterface $entityManager): HttpResponse
     {
-        $form = $this->createForm(UserEditType::class, $user, [
-            'is_admin' => $this->isGranted('ROLE_ADMIN'),
-        ]);
+        $form = $this->createForm(UserAdminType::class, $user, []);
 
         $form->handleRequest($request);
 
