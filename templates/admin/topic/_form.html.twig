@@ -1,0 +1,72 @@
+{{ form_start(form) }}
+<table>
+	<thead>
+		<tr>
+			<th>Catégorie</th>
+			<th>Valeur</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>Title</td>
+			<td>{{ form_widget(form.title) }}</td>
+
+		</tr>
+		<tr>
+			<td>Short description</td>
+			<td>{{ form_widget(form.shortDescription) }}</td>
+
+		</tr>
+		<tr>
+			<td>Description</td>
+			<td>{{ form_widget(form.longDescription) }}</td>
+
+		</tr>
+		<tr>
+			<td>Auteur</td>
+			<td>
+				{{ form_widget(form.author) }}
+
+			</td>
+		</tr>
+		<tr>
+			<td>Status</td>
+			<td>
+				{{ form_widget(form.status) }}
+			</td>
+		</tr>
+
+
+		<tr>
+			<td>Catégorie</td>
+			<td>
+				{{ form_widget(form.category) }}
+			</td>
+		</tr>
+		<tr>
+			<td>Langue</td>
+			<td>
+				{{ form_widget(form.language) }}
+			</td>
+		</tr>
+		<tr>
+			<td>Réponses</td>
+			<td>
+				{% for response in topic.responses %}
+					<a href={{path("admin_response_show", {id: response.id} )}} class="badge">
+						{{response.id}}
+						{{response.content}}
+						{{ ux_icon('tabler:arrow-bar-right', {class: 'w-6 h-6'}) }}
+					</a>
+				{% endfor %}
+
+			</td>
+		</tr>
+	</tbody>
+</table>
+<div class="flex justify-center mb-4">
+	<button type="submit" class="btn">
+		{{ button_label|default('Enregistrer') }}
+	</button>
+</div>
+{{ form_end(form) }}

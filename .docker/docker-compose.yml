@@ -55,7 +55,7 @@ services:
         networks:
             - symfony_app
 
-    mailhoge:
+    mailhog:
         image: mailhog/mailhog 
         ports:
             - "1025:1025"  # SMTP Server

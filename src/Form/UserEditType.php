@@ -3,13 +3,14 @@
 namespace App\Form;
 
 use App\Entity\User;
+use App\Enum\StatusUserEnum;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 
 class UserEditType extends AbstractType
 {
@@ -17,51 +18,54 @@ class UserEditType extends AbstractType
     {
         $userRoles = $options['data']->getRoles();
 
-        $defaultGender = null;
-        if (in_array('ROLE_ALPHA', $userRoles)) {
-            $defaultGender = 'male';
-        } elseif (in_array('ROLE_SUPERVISOR', $userRoles)) {
-            $defaultGender = 'female';
-        }
-
         $builder
-            ->add('username', TextType::class, ['attr' => [
-                'class' => 'w-full px-8 py-4 mt-5 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white',
-                'placeholder' => 'Nom d\'utilisateur'
-                ]
-            ])
-            ->add('email', TextType::class, ['attr' => [
-                'class' => 'w-full px-8 py-4 mt-5 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white',
-                'placeholder' => 'Email'
-                ]
-            ])
-            ->add('gender', ChoiceType::class, [
-                'label' => 'Sexe',
-                'choices' => [
-                    'Homme' => 'male',
-                    'Femme' => 'female',
-                ],
-                'expanded' => true,
-                'multiple' => false,
-                'mapped' => false, 
-                'data' => $defaultGender,
+            ->add('username', TextType::class, [
                 'attr' => [
-                    'class' => 'mt-5',
+
+                    'placeholder' => 'Nom d\'utilisateur'
+                ]
+            ])
+            ->add('email', TextType::class, [
+                'attr' => [
+
+                    'placeholder' => 'Email'
+                ]
+            ])
+            ->add('xp', NumberType::class, [
+                'attr' => [
+                    'placeholder' => 'xp'
+                ]
+            ])
+            ->add('status', ChoiceType::class, [
+                'label' => 'Statut',
+                'choices' => [
+                    'Actif' => StatusUserEnum::ACTIVE,
+                    'Banni' => StatusUserEnum::BANNED,
+                    'Supprimé' => StatusUserEnum::DELETE,
+                ],
+                'expanded' => false,
+                'multiple' => false,
+                'data' => StatusUserEnum::ACTIVE, // Valeur par défaut
+                'placeholder' => 'Sélectionnez un statut',
+                'attr' => [
+                    'class' => 'form-control',
+                ],
+            ])
+            ->add('roles', ChoiceType::class, [
+                'label' => 'Rôles',
+                'choices' => [
+                    'Utilisateur' => 'ROLE_USER',
+                    'Administrateur' => 'ROLE_ADMIN',
+                    'Alpha' => 'ROLE_ALPHA',
+                    'Superviseur' => 'ROLE_SUPERVISOR',
+                ],
+                'expanded' => true, // Cases à cocher pour les rôles
+                'multiple' => true,
+                'data' => ['ROLE_USER'], // Valeur par défaut
+                'attr' => [
+                    // 'class' => 'form-check',
                 ],
             ]);
-            
-            if ($options['is_admin']) {
-                $builder->add('isAdmin', CheckboxType::class, [
-                    'label' => 'Administrateur',
-                    'required' => false,
-                    'mapped' => false,
-                    'data' => in_array('ROLE_ADMIN', $options['data']->getRoles()),
-                    'attr' => [
-                        'class' => 'w-full px-8 py-4 mt-5'
-                    ],
-                ]);
-            }
-        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

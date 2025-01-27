@@ -1,0 +1,49 @@
+{% extends 'admin/base_admin.html.twig' %}
+
+{% block admin_title %}Langues
+{% endblock %}
+{% set return_path = 'admin_homepage' %}
+{% block admin_content %}
+
+	<table class="mt-4">
+		<thead>
+			<tr>
+				<th scope="col">
+					ID</th>
+				<th scope="col">
+					Nom</th>
+				<th scope="col">
+					Label</th>
+				<th scope="col">
+					Actions</th>
+			</tr>
+		</thead>
+		<tbody class="divide-y divide-gray-300 ">
+			{% for language in pagination.items %}
+				<tr>
+					<td>{{ language.id }}</td>
+					<td>{{ language.name }}</td>
+					<td>{{ language.code }}</td>
+					<td>
+						<a href="{{ path('admin_language_show', {'id': language.id}) }}">
+							{{ ux_icon('tabler:eye', {class: 'w-6 h-6'}) }}
+						</a>
+						<a href="{{ path('admin_language_edit', {'id': language.id}) }}">
+							{{ ux_icon('tabler:edit', {class: 'w-6 h-6'}) }}
+						</a>
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="4">Aucune langue trouvé.</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	{{ knp_pagination_render(pagination) }}
+
+	<a href="{{ path('admin_language_new') }}" class="btn">
+		Créer une nouvelle langue
+	</a>
+
+{% endblock %}

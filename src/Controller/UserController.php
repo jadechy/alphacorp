@@ -6,7 +6,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Doctrine\ORM\EntityManagerInterface;
 
 use App\Entity\BanRequest;
@@ -16,9 +15,10 @@ use App\Enum\StatusUserEnum;
 use App\Repository\EventRepository;
 use App\Entity\Event;
 
+#[Route('/user', name: "app_user_")]
 class UserController extends AbstractController
 {
-    #[Route('/profil', name: 'app_user_profil')]
+    #[Route('/', name: 'profil')]
     public function myProfil(): Response
     {
         $user = $this->getUser();
@@ -27,8 +27,17 @@ class UserController extends AbstractController
             'user' => $user,
         ]);
     }
+    #[Route('/edit', name: 'edit')]
+    public function myProfilEdit(): Response
+    {
+        $user = $this->getUser();
 
-    #[Route('/banned', name: 'app_user_banned')]
+        return $this->render('user/edit.html.twig', [
+            'user' => $user,
+        ]);
+    }
+
+    #[Route('/banned', name: 'banned')]
     public function banned(Request $request, EntityManagerInterface $em): Response
     {
         $user = $this->getUser();

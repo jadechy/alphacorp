@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Forum - Catégorie
+{% endblock %}
+{% block h1 %}Forum - Catégorie
+{% endblock %}
+
+
+{% block body %}
+	<section>
+		<div class="flex flex-row items-center space-x-6">
+			<nav class="flex space-x-6 font-medium">
+				{% for category in categories %}
+					<a href="{{ path('app_category', { id : category.id }) }}" class="border border-fuchsia-500 rounded-full px-3
+							                    hover:scale-105 hover:bg-fuchsia-900
+							                     {% if categoryChose == category %} bg-fuchsia-500  {% endif %}">
+						{{category.label}}
+					</a>
+				{% endfor %}
+			</nav>
+		</div>
+
+		<div class="flex flex-wrap gap-6 mt-6">
+			{% for topic in categoryChose.topics %}
+				{% if topic.status.value == 'open' or topic.status.value == 'close' %}
+					{% include 'macro/topic_card.html.twig' %}
+				{% endif %}
+			{% endfor %}
+		</div>
+	</section>
+{% endblock %}

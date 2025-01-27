@@ -1,29 +1,26 @@
-<article class="mt-9 bg-gray-100 p-4 rounded-lg">
-    {% if topic.status.value == 'open' %}
-        <span class="py-1.5 px-2.5 bg-green-500/30 rounded-full flex w-20 justify-center items-center gap-1">
-            <p class="font-medium text-xs text-green-600">Ouvert</p>
-        </span>
-    {% elseif topic.status.value == 'close' %}
-        <span class="py-1.5 px-2.5 bg-red-500/30 rounded-full flex w-20 justify-center items-center gap-1">
-            <p class="font-medium text-xs text-red-600">Fermé</p>
-        </span>
-    {% elseif topic.status.value == 'waiting' %}
-        <span class="py-1.5 px-2.5 bg-orange-500/30 rounded-full flex w-20 justify-center items-center gap-1">
-            <p class="font-medium text-xs text-orange-600">En attente</p>
-        </span>
-    {% endif %}
+<a href="{{ path('app_topic', { id : topic.id }) }}">
+	<article class="p-4 rounded-lg shadow-lg shadow-neutral-900 w-80 hover:scale-110 transition">
+		<div class="flex justify-between items-center">
 
-    <h3 class="text-center text-md font-bold my-4">{{topic.title}}</h3>
-    <p class="text-center">{{topic.shortDescription}}</p>
-    <ul class="w-full p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900 flex gap-4 justify-center items-center">
-        <li class="py-1.5 px-2.5 bg-orange-500/30 rounded-full flex w-20 justify-center items-center gap-1"><p class="font-medium text-xs text-orange-600">{{topic.language.name}}</p></li>
-    </ul>
-    <p class="text-center">Il y a : <span class="font-semibold">{{ topic.responses|length }}</span> réponses</p>
-    <div class="flex items-center justify-center">
-        <a href="{{ path('app_topic', { id : topic.id }) }}">
-            <button type="submit" class="relative mt-5 bg-blue-700 flex-row p-2 items-center justify-center rounded-md text-sm overflow-hidden border cursor-pointer transition text-white hover:opacity-90 hover:scale-105 w-fit">
-                {{ button_label|default('Lire') }}
-            </button>
-        </a>
-    </div>
-</article>
+			<p class="text-xs text-neutral-500">{{topic.language.name}}</p>
+			{% if topic.status.value == 'open' %}
+				<span class="py-1.5 px-2 bg-green-500/30 rounded-full flex w-fit justify-center items-center gap-1">
+					<p class="font-medium text-xs text-green-600">Ouvert</p>
+				</span>
+			{% elseif topic.status.value == 'close' %}
+				<span class="py-1.5 px-2 bg-red-500/30 rounded-full flex w-fit justify-center items-center gap-1">
+					<p class="font-medium text-xs text-red-600">Fermé</p>
+				</span>
+			{% elseif topic.status.value == 'waiting' %}
+				<span class="py-1.5 px-2 bg-orange-500/30 rounded-full flex w-fit justify-center items-center gap-1">
+					<p class="font-medium text-xs text-orange-600">En attente</p>
+				</span>
+			{% endif %}
+		</div>
+		<h3 class="text-md font-bold my-4">{{topic.title}}</h3>
+		<p class="mb-3">{{topic.shortDescription}}</p>
+
+		<p class="text-xs text-neutral-500 text-end">{{ button_label|default('En lire +') }}</p>
+
+	</article>
+</a>

@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profile
+{% endblock %}
+{% block h1 %}Mon profile - Édition
+{% endblock %}
+
+{% block body %}
+	<div>
+		<!-- Section Profil -->
+		<section class="flex gap-6">
+			<img src="{{ asset('img/1.png') }}" class="w-80 object-cover rounded-sm" alt="Profile Picture"/>
+			<div class="flex justify-between w-full">
+				<div class="flex flex-col justify-between">
+					<div>
+						<p class="font-bold">Cecoule</p>
+						<p class="text-neutral-400">cece.lecerf@gmail.com</p>
+						<p class="text-neutral-400">21/09/2003</p>
+					</div>
+				</div>
+				<div class="rounded-full bg-fuchsia-500 h-fit px-3 py-1">
+					<p>800 XP</p>
+				</div>
+			</div>
+
+		</section>
+
+
+	</div>
+{% endblock %}

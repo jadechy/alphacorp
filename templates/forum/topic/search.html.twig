@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Rechercher un topic
+{% endblock %}
+{% block h1 %}Rechercher un topic
+{% endblock %}
+
+
+{% block body %}
+	<section>
+		<form method="get" action="{{ path('app_forum') }}" class="flex items-center gap-5 mb-6 mt-4">
+			<input type="text" name="q" value="{{ keyword|default('') }}" placeholder="Tapez un mot-clé..." class="input">
+			<button type="submit" class="btn">
+				Rechercher
+			</button>
+		</form>
+
+		{% if keyword %}
+			<h2 class="text-md font-medium text-neutral-400">Résultats pour "{{ keyword }}"</h2>
+			{% if topics is not empty %}
+				<div class="flex gap-6 flex-wrap">
+					{% for topic in topics %}
+						{% if topic.status.value == 'open' or topic.status.value == 'close' %}
+							{% include 'macro/topic_card.html.twig' %}
+						{% endif %}
+					{% endfor %}
+				</div>
+			{% else %}
+				<p class="text-gray-500">Aucun topic trouvé pour "{{ keyword }}".</p>
+			{% endif %}
+		{% endif %}
+	</section>
+{% endblock %}

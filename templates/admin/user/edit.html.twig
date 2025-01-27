@@ -1,0 +1,151 @@
+{% extends 'admin/base_admin.html.twig' %}
+
+{% block admin_title %}Modifier
+	{{user.username}}
+{% endblock %}
+{% set return_path = 'admin_user_show' %}
+{% set return_params = { id: user.id } %}
+
+{% block admin_content %}
+	<section>
+		{{ form_start(form) }}
+
+		<table>
+			<thead>
+				<tr>
+					<th>Catégorie</th>
+					<th>Valeur</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Id</td>
+					<td>{{user.id}}</td>
+				</tr>
+				{# <tr>
+																				                <td>Created</td>
+																				                <td>{{user.createdAt|format_datetime('short', 'none', locale: 'fr')}}</td>
+																				            </tr> #}
+				<tr>
+					<td>Username</td>
+					<td>
+						{{ form_widget(form.username, {'attr': {'class': 'input '}}) }}</td>
+				</tr>
+				<tr>
+					<td>email</td>
+					<td>{{ form_widget(form.email, {'attr': {'class': 'input'}}) }}</td>
+				</tr>
+				<tr>
+					<td>Roles</td>
+					<td>
+						{{ form_widget(form.roles) }}
+					</td>
+				</tr>
+				<tr>
+					<td>Status</td>
+					<td>
+						{{ form_widget(form.status, {'attr': {  class: "dashboard-select" }}) }}
+					</td>
+				</tr>
+				<tr>
+					<td>XP</td>
+					<td>
+						{{ form_widget(form.xp, {'attr': {  class: "input" }}) }}</td>
+				</tr>
+				<tr>
+					<td>Reset token</td>
+					<td>{{user.resetToken}}</td>
+				</tr>
+				<tr>
+					<td>Bromances Alpha</td>
+					<td>
+						{% for bromance in user.bromancesAlpha %}
+							<div>
+								{{bromance.id}}
+							</div>
+						{% endfor %}
+					</td>
+				</tr>
+				<tr>
+					<td>Bromances Follower</td>
+					<td>
+						{% for bromance in user.bromancesFollower %}
+							<div>
+								{{bromance.id}}
+							</div>
+						{% endfor %}
+					</td>
+				</tr>
+				<tr>
+					<td>Topic author</td>
+					<td>
+						{% for topic in user.topics %}
+							<div>
+								{{topic.id}}
+							</div>
+						{% endfor %}
+					</td>
+				</tr>
+				<tr>
+					<td>Response topic author</td>
+					<td>
+						{% for response in user.responses %}
+							<div>
+								{{response.id}}
+							</div>
+						{% endfor %}
+					</td>
+				</tr>
+				<tr>
+					<td>Events</td>
+					<td>
+						{% for event in user.events %}
+							<div>
+								{{event.id}}
+							</div>
+						{% endfor %}
+					</td>
+				</tr>
+				<tr>
+					<td>Challenges</td>
+					<td>
+						{% for challenge in user.challenges %}
+							<div>
+								{{challenge.id}}
+							</div>
+						{% endfor %}
+					</td>
+				</tr>
+				<tr>
+					<td>Participations</td>
+					<td>
+						{% for participation in user.participations %}
+							<div>
+								{{participation.id}}
+							</div>
+						{% endfor %}
+					</td>
+				</tr>
+				<tr>
+					<td>Ban request</td>
+					<td>
+						{% for banRequest in user.banRequests %}
+							<div>
+								{{banRequest.id}}
+							</div>
+						{% endfor %}
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="flex gap-5 items-center justify-center">
+			<button type="submit" class="btn">
+				{{ button_label|default('Enregistrer') }}
+			</button>
+			{{ form_end(form) }}
+			{{ include('admin/user/_delete_form.html.twig') }}
+		</div>
+
+
+	</div>
+</section>{% endblock %}
