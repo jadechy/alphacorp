@@ -1,0 +1,77 @@
+{% extends 'admin/base_admin.html.twig' %}
+
+{% block admin_title %}Évènements
+{% endblock %}
+{% set return_path = 'admin_homepage' %}
+
+
+{% block admin_content %}
+	<section>
+		<table>
+			<thead>
+				<tr>
+					<th scope="col">
+						ID
+					</th>
+					<th scope="col">
+						Titre
+					</th>
+					<th scope="col">
+						Description
+					</th>
+					<th scope="col">
+						Image
+					</th>
+					<th scope="col">
+						Début
+					</th>
+					<th scope="col">
+						Fin
+					</th>
+					<th scope="col">
+						Lieu
+					</th>
+					<th scope="col">
+						Auteur
+					</th>
+					<th scope="col">
+						Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for event in pagination.items %}
+					<tr>
+						<td>{{ event.id }}</td>
+						<td>{{ event.title }}</td>
+						<td>{{ event.shortDescription }}</td>
+						<td>{{ event.image }}</td>
+						<td>{{ event.startAt ? event.startAt|date('Y-m-d H:i:s') : '' }}</td>
+						<td>{{ event.endAt ? event.endAt|date('Y-m-d H:i:s') : '' }}</td>
+						<td>{{ event.location }}</td>
+						<td>{{ event.author.username }}</td>
+						<td>
+							<a href="{{ path('admin_event_show', {'id': event.id}) }}">
+								{{ ux_icon('tabler:eye', {class: 'w-6 h-6'}) }}
+							</a>
+							<a href="{{ path('admin_event_edit', {'id': event.id}) }}">
+								{{ ux_icon('tabler:edit', {class: 'w-6 h-6'}) }}
+							</a>
+						</td>
+
+					</tr>
+				{% else %}
+					<tr>
+						<td colspan="4">Aucun évènements trouvé.</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		{{ knp_pagination_render(pagination) }}
+		<div class="flex justify-center">
+			<a href={{path("admin_event_new")}} class="btn">
+				Créer un nouvel event
+			</a>
+		</div>
+
+	</section>
+{% endblock %}

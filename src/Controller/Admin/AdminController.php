@@ -33,12 +33,4 @@ class AdminController extends AbstractController
             'banRequests' => $banRequestRepository->findAll(),
         ]);
     }
-
-    #[Route('/event', name: 'admin_event')]
-    public function adminEvents(EventRepository $eventRepository): Response
-    {
-        return $this->render('admin/event.html.twig', [
-            'events' => $eventRepository->findAll(),
-        ]);
-    }
 }

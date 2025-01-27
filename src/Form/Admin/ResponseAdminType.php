@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Form;
+namespace App\Form\Admin;
 
 use App\Entity\Response;
 use App\Entity\User;
@@ -13,7 +13,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-class ResponseType extends AbstractType
+class ResponseAdminType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -23,6 +23,21 @@ class ResponseType extends AbstractType
                     'class' => 'input',
                     'placeholder' => 'Votre réponse'
                 ]
+            ])
+            ->add('status', EnumType::class, [
+                "class" => ResponseStatusEnum::class,
+                'label' => 'Status',
+                'attr' => [
+                    'class' => 'dashboard-select',
+                ]
+            ])
+            ->add('author', EntityType::class, [
+                'class' => User::class,
+                'choice_label' => 'username',
+                'placeholder' => 'Sélectionnez un utilisateur',
+                'attr' => [
+                    'class' => 'select',
+                ],
             ]);
     }
 

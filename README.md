@@ -50,13 +50,13 @@ compose require install
 
 ```bash
 php bin/console doctrine:migrations:migrate
- 
+```
 
  ### 7. Charger les fixtures de la base de données
 
 ```bash
 php bin/console doctrine:fixtures:load
- 
+```
 ---
 
 ## Lancer l'application

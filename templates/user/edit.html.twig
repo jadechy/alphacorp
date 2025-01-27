@@ -8,20 +8,17 @@
 {% block body %}
 	<div>
 		<!-- Section Profil -->
-		<section class="flex gap-6">
+		<section class="flex gap-6 w-full">
 			<img src="{{ asset('img/1.png') }}" class="w-80 object-cover rounded-sm" alt="Profile Picture"/>
-			<div class="flex justify-between w-full">
-				<div class="flex flex-col justify-between">
-					<div>
-						<p class="font-bold">Cecoule</p>
-						<p class="text-neutral-400">cece.lecerf@gmail.com</p>
-						<p class="text-neutral-400">21/09/2003</p>
-					</div>
-				</div>
-				<div class="rounded-full bg-fuchsia-500 h-fit px-3 py-1">
-					<p>800 XP</p>
-				</div>
-			</div>
+			{{ form_start(form, {'attr': {'class': 'flex flex-col justify-between gap-8 w-full'}}) }}
+			{{ form_widget(form.username) }}
+			{{ form_widget(form.email) }}
+			{{ form_widget(form.gender) }}
+			<button type="submit" class="btn">
+				{{ button_label|default('Enregistrer') }}
+			</button>
+			{{ form_end(form) }}
+
 
 		</section>
 

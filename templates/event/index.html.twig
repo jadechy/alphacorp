@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Vos évènements
+{% block title %}Tous les évènements
 {% endblock %}
-{% import 'macro/event_card.html.twig' as macros %}
 
+{% import 'macro/event_card.html.twig' as macros %}
 
 {% block body %}
 	<section class="flex flex-col gap-10 mt-10">
@@ -11,5 +11,4 @@
 			{{ macros.AfficheEventCard(event) }}
 		{% endfor %}
 	</section>
-
 {% endblock %}

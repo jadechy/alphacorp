@@ -4,7 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Response;
 use App\Enum\ResponseStatusEnum;
-use App\Form\ResponseType;
+use App\Form\Admin\ResponseAdminType;
 use App\Repository\ResponseRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\Paginator;
@@ -49,7 +49,7 @@ final class ResponseAdminController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): HttpResponse
     {
         $response = new Response();
-        $form = $this->createForm(ResponseType::class, $response);
+        $form = $this->createForm(ResponseAdminType::class, $response);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -74,7 +74,7 @@ final class ResponseAdminController extends AbstractController
     #[Route('/edit/{id}', name: 'edit', methods: ['GET', 'POST'])]
     public function editTopic(Request $request, Response $response, EntityManagerInterface $entityManager): HttpResponse
     {
-        $form = $this->createForm(ResponseType::class, $response);
+        $form = $this->createForm(ResponseAdminType::class, $response);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

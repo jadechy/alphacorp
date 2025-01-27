@@ -11,14 +11,12 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\BanRequest;
 use App\Form\BanRequestType;
 use App\Enum\StatusUserEnum;
-
-use App\Repository\EventRepository;
-use App\Entity\Event;
+use App\Form\UserEditType;
 
 #[Route('/user', name: "app_user_")]
 class UserController extends AbstractController
 {
-    #[Route('/', name: 'profil')]
+    #[Route('/', name: 'homepage')]
     public function myProfil(): Response
     {
         $user = $this->getUser();
@@ -28,14 +26,27 @@ class UserController extends AbstractController
         ]);
     }
     #[Route('/edit', name: 'edit')]
-    public function myProfilEdit(): Response
+    public function myProfilEdit(Request $request, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
-
+        $form = $this->createForm(UserEditType::class, $user);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $gender = $form->get('gender')->getData();
+            if ($gender === 'male') {
+                $user->setRoles(['ROLE_ALPHA']);
+            } elseif ($gender === 'female') {
+                $user->setRoles(['ROLE_SUPERVISOR']);
+            }
+            $entityManager->flush();
+            return $this->redirectToRoute('app_user_homepage', [], Response::HTTP_SEE_OTHER);
+        }
         return $this->render('user/edit.html.twig', [
             'user' => $user,
+            "form" => $form->createView(),
         ]);
     }
+
 
     #[Route('/banned', name: 'banned')]
     public function banned(Request $request, EntityManagerInterface $em): Response

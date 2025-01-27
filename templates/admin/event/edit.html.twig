@@ -1,0 +1,17 @@
+{% extends 'admin/base_admin.html.twig' %}
+
+{% block admin_title %}Modifier un évènement :
+	{{event.title}}
+{% endblock %}
+{% set return_path = 'admin_event_show' %}
+{% set return_params = { id: event.id } %}
+
+{% block admin_content %}
+	<main class=" flex-1 py-10  px-5 sm:px-10 ">
+		<section>
+
+			{{ include('admin/event/_form.html.twig', {'button_label': 'Modifier'}) }}
+			{{ include('admin/event/_delete_form.html.twig') }}
+		</section>
+	</main>
+{% endblock %}

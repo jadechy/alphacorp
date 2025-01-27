@@ -12,14 +12,14 @@ use App\Entity\Category;
 #[Route('/forum')]
 class CategoryController extends AbstractController
 {
-    #[Route('/category/{id}', name: 'app_category')]
-    public function categoryTopics(CategoryRepository $categoryRepository, Category $category): Response
-    {
-        $categories = $categoryRepository->findAll();
+    // #[Route('/category/{id}', name: 'app_category')]
+    // public function categoryTopics(CategoryRepository $categoryRepository, Category $category): Response
+    // {
+    //     $categories = $categoryRepository->findAll();
 
-        return $this->render('forum/category/category.html.twig', [
-            'categoryChose' => $category,
-            'categories' => $categories
-        ]);
-    }
+    //     return $this->render('forum/category/category.html.twig', [
+    //         'categoryChose' => $category,
+    //         'categories' => $categories
+    //     ]);
+    // }
 }

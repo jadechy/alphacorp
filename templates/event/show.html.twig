@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{event.title}}
+{% endblock %}
+
+{% block body %}
+	<section class="flex gap-10 justify-start">
+
+		<img src={{ asset('img/1.png') }} alt="Event Image" class="w-80 object-cover "/>
+		<div class="w-full flex flex-col gap-5">
+			<div>
+				{% if event.isInFuture() %}
+					<span class="py-1.5 px-2.5 bg-green-700/80 rounded-full flex w-20 justify-center items-center gap-1">
+						<p class="font-medium text-xs">Ouvert</p>
+					</span>
+				{% elseif event.isFinished() %}
+					<span class="py-1.5 px-2.5 bg-red-700/80 rounded-full flex w-20 justify-center items-center gap-1">
+						<p class="font-medium text-xs">Fermé</p>
+					</span>
+				{% elseif event.isOngoing() %}
+					<span class="py-1.5 px-2.5 bg-orange-700/80 rounded-full flex w-20 justify-center items-center gap-1">
+						<p class="font-medium text-xs">En cours</p>
+					</span>
+				{% endif %}
+			</div>
+
+			<div class="text-neutral-400">
+				<p>{{event.location}}</p>
+				<p>
+					{{ event.startAt|format_datetime('short', 'none', locale: 'fr') }}
+					-
+					{{ event.endAt|format_datetime('short', 'none', locale: 'fr') }}</p>
+			</div>
+			<p>{{event.longDescription}}</p>
+			<p class="italic">-
+				{{ event.participants|length }}
+				participants à cet évènement
+			</p>
+			{% if event.author != app.user and 'ROLE_ADMIN' not in app.user.roles and event.isInFuture() %}
+				{% if isParticipating %}
+					<a href="{{ path('app_event_unparticipate', { id: event.id }) }}">
+						<button type="submit" class="btn-secondary">
+							Ne plus participer
+						</button>
+					</a>
+				{% else %}
+					<a href="{{ path('app_event_participate', { id: event.id }) }}">
+						<button type="submit" class="btn">
+							{{ button_label|default('Participer') }}
+						</button>
+					</a>
+				{% endif %}
+			{% endif %}
+			<div>
+				{% if event.author == app.user or 'ROLE_ADMIN' in app.user.roles %}
+					{% for participant in event.participants %}
+						<p>{{participant.username}}</p>
+					{% endfor %}
+
+					{{ include('event/_delete_form.html.twig') }}
+				{% endif %}
+			</div>
+
+			<p class="border-t mt-2 pt-2">
+				Auteur :
+				{{event.author.username}}
+			</p>
+		</div>
+
+
+	</section>
+{% endblock %}

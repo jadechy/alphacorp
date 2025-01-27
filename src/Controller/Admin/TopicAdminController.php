@@ -12,9 +12,9 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use App\Repository\TopicRepository;
 use App\Entity\Topic;
 use App\Entity\Response;
-use App\Form\ResponseType;
 use App\Enum\ResponseStatusEnum;
 use App\Enum\TopicStatusEnum;
+use App\Form\Admin\ResponseAdminType;
 use App\Form\Admin\TopicAdminType;
 use Knp\Component\Pager\PaginatorInterface;
 
@@ -68,7 +68,7 @@ class TopicAdminController extends AbstractController
     public function topic(string $id, Request $request, Topic $topic, EntityManagerInterface $entityManager): HttpResponse
     {
         $response = new Response();
-        $form = $this->createForm(ResponseType::class, $response);
+        $form = $this->createForm(ResponseAdminType::class, $response);
         $form->handleRequest($request);
 
         $user = $this->getUser();
@@ -136,7 +136,11 @@ class TopicAdminController extends AbstractController
     #[Route('/edit/{id}', name: 'edit', methods: ['GET', 'POST'])]
     public function editTopic(Request $request, Topic $topic, EntityManagerInterface $entityManager): HttpResponse
     {
-        $form = $this->createForm(TopicAdminType::class, $topic);
+        $form = $this->createForm(
+            TopicAdminType::class,
+            $topic,
+            ['is_admin' => true]
+        );
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($topic);

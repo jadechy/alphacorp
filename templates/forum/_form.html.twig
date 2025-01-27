@@ -9,7 +9,6 @@
 		{{ form_widget(form.category) }}
 
 		{{ form_widget(form.language) }}
-		{{ form_widget(form.status) }}
 	</div>
 </div>
 <div class="flex items-center justify-center gap-5 mt-8">
@@ -17,4 +16,5 @@
 	<button type="submit" class="btn">
 		{{ button_label|default('Enregistrer') }}
 	</button>
-	{{ form_end(form) }}
+</div>
+{{ form_end(form) }}

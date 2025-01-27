@@ -1,0 +1,90 @@
+{{ form_start(form) }}
+<table>
+	<thead>
+		<tr>
+			<th>Catégorie</th>
+			<th>Valeur</th>
+		</tr>
+	</thead>
+	<tbody>
+		{# <tr>
+																									<td>Id</td>
+																									<td>{{event.id}}</td>
+																								</tr> #}
+		<tr>
+			<td>Title</td>
+			<td>{{ form_widget(form.title) }}</td>
+		</tr>
+		<tr>
+			<td>Short description</td>
+			<td>{{ form_widget(form.shortDescription) }}</td>
+		</tr>
+		<tr>
+			<td>Long description</td>
+			<td>{{ form_widget(form.longDescription) }}</td>
+		</tr>
+		<tr>
+			<td>Location</td>
+			<td>{{form_widget(form.location)}}</td>
+
+		</tr>
+		<tr>
+			<td>Start</td>
+			<td>{{form_widget(form.startAt)}}</td>
+
+		</tr>
+		<tr>
+			<td>End</td>
+			<td>{{form_widget(form.endAt)}}</td>
+
+		</tr>
+		<tr>
+			<td>Image</td>
+			<td>
+				{% if event and event.image %}
+					<div class="border-r pr-2">
+						<p>Image actuelle :</p>
+						<img src="{{ asset(event.image) }}" alt="Event Image" style="max-width: 200px;">
+					</div>
+					{{ form_row(form.imageFile, { 'label': 'Nouvelle image' },  ) }}
+				{% else %}
+					{{ form_widget(form.imageFile,{"attr":{class: "flex flex-col"}}) }}
+
+				{% endif %}
+
+
+			</td>
+		</tr>
+		<tr>
+			<td>Author</td>
+			<td>{{form_widget(form.author)}}</td>
+
+		</tr>
+
+
+		<tr>
+			<td>
+				Participants -
+				{{ event.participants|length }}
+			</td>
+			<td>
+				{% for participant in event.participants %}
+					{# au click de dessus ça enlève le user de la liste #}
+					<a href={{path("admin_user_show", {id: participant.id} )}}>
+						{{participant.id}}
+						{{participant.username}}
+						{# icon croix #}
+					</a>
+				{% endfor %}
+				{# bouton + qui ouvre un select avec l'ensemble des users non présent dans la liste #}
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<div class="flex justify-center mb-4">
+	<button type="submit" class="btn">
+		{{ button_label|default('Enregistrer') }}
+	</button>
+</div>
+{{ form_end(form) }}
