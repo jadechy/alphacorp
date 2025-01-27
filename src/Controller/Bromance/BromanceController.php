@@ -51,8 +51,8 @@ class BromanceController extends AbstractController
     }
 
     // LOGIC
-    #[Route('/request/{user_id}', name: 'request',  methods: ['POST'])]
-    public function requestBromance(User $user, EntityManagerInterface $entityManager, BromanceRepository $bromanceRepository): Response
+    #[Route('/request/{id}', name: 'request',  methods: ['POST'])]
+    public function requestBromance(User $user, EntityManagerInterface $entityManager, BromanceRepository $bromanceRepository, string $id): Response
     {
         $alpha = $this->getUser();
         $follower = $user;
@@ -85,7 +85,7 @@ class BromanceController extends AbstractController
         $entityManager->persist($bromance);
         $entityManager->flush();
 
-        return $this->redirectToRoute('app_bromance_request_send', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_user_alpha_show', ["id" => $id], Response::HTTP_SEE_OTHER);
     }
 
 

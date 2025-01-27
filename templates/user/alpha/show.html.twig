@@ -31,7 +31,7 @@
 								</div>
 							{% else %}
 								<div class="flex items-center justify-center mt-4">
-									<form action="{{ path('app_bromance_request', {'user_id': user.id}) }}" method="POST">
+									<form action="{{ path('app_bromance_request', {id: user.id}) }}" method="POST">
 										<button type="submit" class="btn">Demande de bromance</button>
 									</form>
 								</div>
@@ -51,17 +51,18 @@
 		<!-- Section Bromances -->
 		<section class="mt-20 ">
 			<h2 class="text-xl font-semibold">Ses bromances
-				<span class="text-sm text-neutral-400">- 118</span>
+				<span class="text-sm text-neutral-400">-
+					{{user.bromancesAlpha|length}}</span>
+
 			</h2>
-			<div
-				class="flex gap-5 mt-4">
-				<!-- Card 1 -->
-				<div class="w-35">
-					{% include "parts/components/card_col.html.twig" with {"title": "app_register", "height": 25} %}
-				</div>
-				<div class="w-35">
-					{% include "parts/components/card_col.html.twig" with {"title": "app_register", "height": 25} %}
-				</div>
+			<div class="flex gap-5 mt-4">
+				{% for bromance in user.bromancesAlpha %}
+					<a href={{path("app_user_alpha_show", {id: bromance.follower.id} )}} class=" w-60">
+						{% include "parts/components/card_col.html.twig" with {"title": bromance.follower.username, "height": 40} %}
+					</a>
+				{% else %}
+					<p>Aucune participation trouvée.</p>
+				{% endfor %}
 
 
 			</div>

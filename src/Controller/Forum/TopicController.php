@@ -16,27 +16,37 @@ use App\Form\ResponseType;
 use App\Enum\ResponseStatusEnum;
 use App\Enum\TopicStatusEnum;
 use App\Form\TopicType;
+use App\Repository\CategoryRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 
 #[Route('/forum', name: "app_forum_")]
 class TopicController extends AbstractController
 {
-
     #[Route('/', name: 'homepage', methods: ['GET'])]
-    public function search(Request $request, TopicRepository $topicRepository): HttpResponse
-    {
+    public function search(
+        Request $request,
+        TopicRepository $topicRepository,
+        CategoryRepository $categoryRepository
+    ): HttpResponse {
         $keyword = $request->query->get('q', '');
-        $topics = [];
+        $categoryLabel = $request->query->get('category', '');
+        $categories = $categoryRepository->findAll();
 
-        if ($keyword && strlen($keyword) > 0) {
-            $topics = $topicRepository->searchByKeyword($keyword);
+        $topics = [];
+        if ($keyword || $categoryLabel) {
+            $topics = $topicRepository->searchByFilters($keyword, $categoryLabel);
         } else {
             $topics = $topicRepository->findAll();
         }
+        $selectedCategory = $categoryLabel
+            ? $categoryRepository->findOneBy(["label" => $categoryLabel])
+            : null;
 
         return $this->render('forum/index.html.twig', [
             'topics' => $topics,
             'keyword' => $keyword,
+            'categories' => $categories,
+            'category_selected' => $selectedCategory,
         ]);
     }
     #[Route('/show/{id}', name: 'show')]
