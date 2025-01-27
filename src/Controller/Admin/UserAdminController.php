@@ -65,7 +65,7 @@ final class UserAdminController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            return $this->redirectToRoute('admin_user', [], HttpResponse::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('admin_user_homepage', [], HttpResponse::HTTP_SEE_OTHER);
         }
 
         return $this->render('/admin/user/new.html.twig', [
@@ -92,26 +92,8 @@ final class UserAdminController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $gender = $form->get('gender')->getData();
-            if ($gender === 'male') {
-                $user->setRoles(['ROLE_ALPHA']);
-            } elseif ($gender === 'female') {
-                $user->setRoles(['ROLE_SUPERVISOR']);
-            }
-
-            if ($this->isGranted('ROLE_ADMIN')) {
-                if ($form->get('isAdmin')->getData()) {
-                    $user->setRoles(['ROLE_ADMIN']);
-                }
-            }
-
             $entityManager->flush();
-
-            if ($this->isGranted('ROLE_ADMIN')) {
-                return $this->redirectToRoute('admin_user', [], HttpResponse::HTTP_SEE_OTHER);
-            } else {
-                return $this->redirectToRoute('app_user_profil', [], HttpResponse::HTTP_SEE_OTHER);
-            }
+            return $this->redirectToRoute('admin_user_homepage', [], HttpResponse::HTTP_SEE_OTHER);
         }
 
         return $this->render('/admin/user/edit.html.twig', [

@@ -74,13 +74,10 @@ class TopicController extends AbstractController
         ]);
     }
 
-    // #[IsGranted('ROLE_ALPHA')]
+    #[IsGranted('ROLE_ALPHA')]
     #[Route('/new/topic', name: 'app_topic_new', methods: ['GET', 'POST'])]
     public function newTopic(Request $request, EntityManagerInterface $entityManager, Security $security): HttpResponse
     {
-        if (!$security->isGranted('ROLE_ALPHA') && !$security->isGranted('ROLE_ADMIN')) {
-            throw $this->createAccessDeniedException('Vous n’avez pas les autorisations nécessaires.');
-        }
         $topic = new Topic();
         $form = $this->createForm(TopicType::class, $topic);
         $form->handleRequest($request);
@@ -108,13 +105,10 @@ class TopicController extends AbstractController
         ]);
     }
 
-    // #[IsGranted('ROLE_ALPHA, ROLE_ADMIN')]
+    #[IsGranted('ROLE_ALPHA')]
     #[Route('/edit/topic/{id}', name: 'app_topic_edit', methods: ['GET', 'POST'])]
     public function editTopic(Request $request, Topic $topic, EntityManagerInterface $entityManager, Security $security): HttpResponse
     {
-        if (!$security->isGranted('ROLE_ALPHA') && !$security->isGranted('ROLE_ADMIN')) {
-            throw $this->createAccessDeniedException('Vous n’avez pas les autorisations nécessaires.');
-        }
         $form = $this->createForm(TopicType::class, $topic);
         $form->handleRequest($request);
 
@@ -130,7 +124,7 @@ class TopicController extends AbstractController
         ]);
     }
 
-    #[IsGranted('ROLE_ALPHA', 'ROLE_ADMIN')]
+    #[IsGranted('ROLE_ALPHA')]
     #[Route('/delete/topic/{id}', name: 'app_topic_delete', methods: ['POST'])]
     public function delete(Request $request, Topic $topic, EntityManagerInterface $entityManager): HttpResponse
     {
@@ -157,22 +151,5 @@ class TopicController extends AbstractController
         return $this->render('forum/topic/author.html.twig', [
             'topics' => $topics,
         ]);
-    }
-
-    #[IsGranted('ROLE_ADMIN')]
-    #[Route('/topic/{id}/status', name: 'topic_change_status', methods: ['POST'])]
-    public function changeStatus(Topic $topic, Request $request, EntityManagerInterface $entityManager): HttpResponse
-    {
-        $status = $request->request->get('status');
-
-        if (!in_array($status, array_map(fn($enum) => $enum->value, TopicStatusEnum::cases()), true)) {
-            throw $this->createNotFoundException('Statut non valide');
-        }
-
-        $topic->setStatus(TopicStatusEnum::from($status));
-
-        $entityManager->flush();
-
-        return $this->redirectToRoute('admin_topic', [], HttpResponse::HTTP_SEE_OTHER);
     }
 }

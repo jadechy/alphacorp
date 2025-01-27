@@ -60,10 +60,10 @@ class UserEditType extends AbstractType
                     'Superviseur' => 'ROLE_SUPERVISOR',
                 ],
                 'expanded' => true, // Cases à cocher pour les rôles
-                'multiple' => true, // Permet de sélectionner plusieurs rôles
+                'multiple' => true,
                 'data' => ['ROLE_USER'], // Valeur par défaut
                 'attr' => [
-                    'class' => 'form-check', // Optionnel, pour styliser
+                    // 'class' => 'form-check',
                 ],
             ]);
     }

@@ -105,13 +105,13 @@ final class ResponseAdminController extends AbstractController
         $entityManager->flush();
 
 
-        if ($referer && str_contains($referer, $this->generateUrl('admin_response'))) {
-            return $this->redirectToRoute('admin_response', [], HttpResponse::HTTP_SEE_OTHER);
+        if ($referer && str_contains($referer, $this->generateUrl('admin_response_homepage'))) {
+            return $this->redirectToRoute('admin_response_homepage', [], HttpResponse::HTTP_SEE_OTHER);
         }
 
-        if ($referer && str_contains($referer, $this->generateUrl('app_report_show', ['id' => $report->getId()]))) {
-            return $this->redirectToRoute('admin_report', [], HttpResponse::HTTP_SEE_OTHER);
-        }
+        // if ($referer && str_contains($referer, $this->generateUrl('admin_response_homepage', ['id' => $report->getId()]))) {
+        //     return $this->redirectToRoute('admin_report', [], HttpResponse::HTTP_SEE_OTHER);
+        // }
 
         return $this->redirectToRoute('admin_response_show', ['id' => $response->getTopic()->getId()], HttpResponse::HTTP_SEE_OTHER);
     }

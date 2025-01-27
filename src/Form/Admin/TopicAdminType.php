@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Form;
+namespace App\Form\Admin;
 
 use App\Entity\Category;
 use App\Entity\Language;
 use App\Entity\Topic;
+use App\Entity\User;
 use App\Enum\TopicStatusEnum;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -14,7 +15,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-class TopicType extends AbstractType
+class TopicAdminType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -51,6 +52,13 @@ class TopicType extends AbstractType
                     'class' => 'dashboard-select',
                 ]
             ])
+            ->add('author', EntityType::class, [
+                'class' => User::class,
+                'choice_label' => 'username',
+                'attr' => [
+                    'class' => 'dashboard-select',
+                ]
+            ])
             ->add('status', EnumType::class, [
                 "class" => TopicStatusEnum::class,
                 'label' => 'Status',
@@ -64,6 +72,7 @@ class TopicType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Topic::class,
+
         ]);
     }
 }

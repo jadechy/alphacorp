@@ -15,11 +15,10 @@ use App\Entity\Response;
 use App\Form\ResponseType;
 use App\Enum\ResponseStatusEnum;
 use App\Enum\TopicStatusEnum;
-use App\Form\TopicType;
+use App\Form\Admin\TopicAdminType;
 use Knp\Component\Pager\PaginatorInterface;
-use Symfony\Bundle\SecurityBundle\Security;
 
-#[IsGranted('ROLE_ADMIN')]
+// #[IsGranted('ROLE_ADMIN')]
 #[Route('/admin/topic', name: "admin_topic_")]
 class TopicAdminController extends AbstractController
 {
@@ -65,7 +64,7 @@ class TopicAdminController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'show')]
+    #[Route('/show/{id}', name: 'show')]
     public function topic(string $id, Request $request, Topic $topic, EntityManagerInterface $entityManager): HttpResponse
     {
         $response = new Response();
@@ -92,7 +91,7 @@ class TopicAdminController extends AbstractController
             $entityManager->persist($response);
             $entityManager->flush();
 
-            return $this->redirectToRoute('admin_topic_home', ['id' => $id], HttpResponse::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('admin_topic_homepage', ['id' => $id], HttpResponse::HTTP_SEE_OTHER);
         }
 
         return $this->render('admin/topic/show.html.twig', [
@@ -103,18 +102,20 @@ class TopicAdminController extends AbstractController
     }
 
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
-    public function newTopic(Request $request, EntityManagerInterface $entityManager, Security $security): HttpResponse
+    public function newTopic(Request $request, EntityManagerInterface $entityManager): HttpResponse
     {
+        $user = $this->getUser();
+        if (!$user) {
+            throw $this->createAccessDeniedException('Vous devez être connecté pour ajouter un topic.');
+        }
         $topic = new Topic();
-        $form = $this->createForm(TopicType::class, $topic);
+        $topic->setAuthor($user);
+
+        $form = $this->createForm(TopicAdminType::class, $topic);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user = $this->getUser();
-            if (!$user) {
-                throw $this->createAccessDeniedException('Vous devez être connecté pour ajouter un topic.');
-            }
-            $topic->setAuthor($user);
+
 
             $topic->setStatus(TopicStatusEnum::WAITING);
 
@@ -123,7 +124,7 @@ class TopicAdminController extends AbstractController
             $entityManager->persist($topic);
             $entityManager->flush();
 
-            return $this->redirectToRoute('admin_topic_user', [], HttpResponse::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('admin_topic_homepage', [], HttpResponse::HTTP_SEE_OTHER);
         }
 
         return $this->render('admin/topic/new.html.twig', [
@@ -133,15 +134,15 @@ class TopicAdminController extends AbstractController
     }
 
     #[Route('/edit/{id}', name: 'edit', methods: ['GET', 'POST'])]
-    public function editTopic(Request $request, Topic $topic, EntityManagerInterface $entityManager, Security $security): HttpResponse
+    public function editTopic(Request $request, Topic $topic, EntityManagerInterface $entityManager): HttpResponse
     {
-        $form = $this->createForm(TopicType::class, $topic);
+        $form = $this->createForm(TopicAdminType::class, $topic);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($topic);
             $entityManager->flush();
 
-            return $this->redirectToRoute('admin_topic_search', [], HttpResponse::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('admin_topic_homepage', [], HttpResponse::HTTP_SEE_OTHER);
         }
 
         return $this->render('admin/topic/edit.html.twig', [
@@ -153,11 +154,30 @@ class TopicAdminController extends AbstractController
     #[Route('/delete/{id}', name: 'delete', methods: ['POST'])]
     public function delete(Request $request, Topic $topic, EntityManagerInterface $entityManager): HttpResponse
     {
+        dump($topic);
+
         if ($this->isCsrfTokenValid('delete' . $topic->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($topic);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('admin_topic_user', [], HttpResponse::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('admin_topic_homepage', [], HttpResponse::HTTP_SEE_OTHER);
+    }
+
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/status/{id}', name: 'change_status', methods: ['POST'])]
+    public function changeStatus(Topic $topic, Request $request, EntityManagerInterface $entityManager): HttpResponse
+    {
+        $status = $request->request->get('status');
+
+        if (!in_array($status, array_map(fn($enum) => $enum->value, TopicStatusEnum::cases()), true)) {
+            throw $this->createNotFoundException('Statut non valide');
+        }
+
+        $topic->setStatus(TopicStatusEnum::from($status));
+
+        $entityManager->flush();
+
+        return $this->redirectToRoute('admin_topic_homepage', [], HttpResponse::HTTP_SEE_OTHER);
     }
 }

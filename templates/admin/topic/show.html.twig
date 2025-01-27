@@ -2,76 +2,84 @@
 
 {% import 'macro/response.html.twig' as macros %}
 
-{% block admin_title %}{{topic.title}}{% endblock %} 
- {% set return_path = 'admin_topic_home' %} 
+{% block admin_title %}
+	{{topic.title}}
+{% endblock %}
+{% set return_path = 'admin_topic_homepage' %}
 
 {% block admin_content %}
-         <section> 
+	<section>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Catégorie</th>
-                <th>Valeur</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Id</td>
-                <td>{{topic.id}}</td>
-            </tr>
-            <tr>
-                <td>Created</td>
-                <td>{{topic.createdAt|format_datetime('short', 'none', locale: 'fr')}}</td>
-            </tr>
-            <tr>
-                <td>Title</td>
-                <td>{{topic.title}}</td>
-            </tr>
-            <tr>
-                <td>Short description</td>
-                <td>{{topic.shortDescription}}</td>
-            </tr>
-            <tr>
-                <td>Description</td>
-                <td>{{topic.longDescription}}</td>
-            </tr>
-            <tr>
-                <td>Auteur id</td>
-                <td><a href={{path("admin_user_show", {id:topic.author.id})}} class="badge">{{topic.author.id}}{{ ux_icon('tabler:arrow-bar-right', {class: 'w-6 h-6'}) }}</a></td>
-            </tr>
-            <tr>
-                <td>Status</td>
-                <td>{{topic.status.value}}</td>
-            </tr>
-            <tr>
-                <td>Catégorie</td>
-                <td><a href={{path("admin_category_show", {id:topic.category.id})}} class="badge">{{topic.category.name}}{{ ux_icon('tabler:arrow-bar-right', {class: 'w-6 h-6'}) }}</a></td>
-            </tr>
-            <tr>
-                <td>Langue</td>
-                <td><a href={{path("admin_language_show", {id:topic.language.id})}} class="badge">{{topic.language.name}}{{ ux_icon('tabler:arrow-bar-right', {class: 'w-6 h-6'}) }}</a></td>
-            </tr>
-            <tr>
-                <td>Réponses</td>
-                <td>
-                    {% for response in topic.responses %}
-                        <a href={{path("admin_response_show", {id: response.id})}} class="badge">
-                            {{response.id}}
-                            {{response.content}}
-                            {{ ux_icon('tabler:arrow-bar-right', {class: 'w-6 h-6'}) }}
-                        </a>
-                    {% endfor %}
+		<table>
+			<thead>
+				<tr>
+					<th>Catégorie</th>
+					<th>Valeur</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Id</td>
+					<td>{{topic.id}}</td>
+				</tr>
+				<tr>
+					<td>Created</td>
+					<td>{{topic.createdAt|format_datetime('short', 'none', locale: 'fr')}}</td>
+				</tr>
+				<tr>
+					<td>Title</td>
+					<td>{{topic.title}}</td>
+				</tr>
+				<tr>
+					<td>Short description</td>
+					<td>{{topic.shortDescription}}</td>
+				</tr>
+				<tr>
+					<td>Description</td>
+					<td>{{topic.longDescription}}</td>
+				</tr>
+				<tr>
+					<td>Auteur id</td>
+					<td>
+						<a href={{path("admin_user_show", {id:topic.author.id} )}} class="badge">{{topic.author.id}}{{ ux_icon('tabler:arrow-bar-right', {class: 'w-6 h-6'}) }}</a>
+					</td>
+				</tr>
+				<tr>
+					<td>Status</td>
+					<td>{{topic.status.value}}</td>
+				</tr>
+				<tr>
+					<td>Catégorie</td>
+					<td>
+						<a href={{path("admin_category_show", {id:topic.category.id} )}} class="badge">{{topic.category.name}}{{ ux_icon('tabler:arrow-bar-right', {class: 'w-6 h-6'}) }}</a>
+					</td>
+				</tr>
+				<tr>
+					<td>Langue</td>
+					<td>
+						<a href={{path("admin_language_show", {id:topic.language.id} )}} class="badge">{{topic.language.name}}{{ ux_icon('tabler:arrow-bar-right', {class: 'w-6 h-6'}) }}</a>
+					</td>
+				</tr>
+				<tr>
+					<td>Réponses</td>
+					<td>
+						{% for response in topic.responses %}
+							<a href={{path("admin_response_show", {id: response.id} )}} class="badge">
+								{{response.id}}
+								{{response.content}}
+								{{ ux_icon('tabler:arrow-bar-right', {class: 'w-6 h-6'}) }}
+							</a>
+						{% endfor %}
 
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <div class="flex justify-center items-center gap-8">
-        <a href="{{ path('admin_topic_edit', {'id': topic.id}) }}" class="btn">
-            Modifier
-        </a>
-        {{ include('admin/user/_delete_form.html.twig') }} 
-    </div>
-        </section>
- {% endblock %}
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="flex justify-center items-center gap-8">
+			<a href="{{ path('admin_topic_edit', {'id': topic.id}) }}" class="btn">
+				Modifier
+			</a>
+			{{ include('admin/user/_delete_form.html.twig') }}
+		</div>
+	</section>
+{% endblock %}
