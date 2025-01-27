@@ -42,9 +42,11 @@
 				<p class="text-neutral-300 align-bottom">{{ event.participants|length }}
 					participants
 				</p>
-				<p class="btn-secondary">
-					Participer à l'event
-				</p>
+				{% if event.isInFuture() and not event.isUserParticipating(app.user) %}
+					<p class="btn-secondary">
+						Participer à l'event
+					</p>
+				{% endif %}
 			</div>
 		</div>
 	</a>

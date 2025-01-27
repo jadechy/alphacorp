@@ -181,6 +181,15 @@ class Event
         return $this;
     }
 
+    public function isUserParticipating(?User $user): bool
+    {
+        if (!$user) {
+            return false;
+        }
+        
+        return $this->getParticipants()->contains($user);
+    }
+
     public function getAuthor(): ?User
     {
         return $this->author;

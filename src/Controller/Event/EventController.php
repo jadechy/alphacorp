@@ -19,20 +19,19 @@ class EventController extends AbstractController
     #[Route('/', name: 'homepage')]
     public function allEvent(EventRepository $eventRepository): Response
     {
+        $user = $this->getUser();
+        $events =  $eventRepository->findAllExcludingUser($user);
+
         return $this->render('event/index.html.twig', [
-            'events' => $eventRepository->findAll(),
+            'events' => $events,
         ]);
     }
 
     #[Route('/{id}/show', name: 'show')]
     public function singleEvent(Event $event): Response
     {
-        $user = $this->getUser();
-        $isParticipating = $user && $event->getParticipants()->contains($user);
-
         return $this->render('event/show.html.twig', [
             'event' => $event,
-            'isParticipating' => $isParticipating,
         ]);
     }
 
@@ -137,7 +136,7 @@ class EventController extends AbstractController
             throw $this->createAccessDeniedException('Vous devez être connecté pour répondre.');
         }
 
-        if (!$event->getParticipants()->contains($user)) {
+        if (!$event->isUserParticipating($user)) {
             $event->addParticipant($user);
         }
         $entityManager->persist($event);
@@ -154,7 +153,7 @@ class EventController extends AbstractController
             throw $this->createAccessDeniedException('Vous devez être connecté pour effectuer cette action.');
         }
 
-        if ($event->getParticipants()->contains($user)) {
+        if ($event->isUserParticipating($user)) {
             $event->removeParticipant($user);
             $entityManager->persist($event);
             $entityManager->flush();

@@ -38,7 +38,7 @@
 				participants à cet évènement
 			</p>
 			{% if event.author != app.user and 'ROLE_ADMIN' not in app.user.roles and event.isInFuture() %}
-				{% if isParticipating %}
+				{% if event.isUserParticipating(app.user) %}
 					<a href="{{ path('app_event_unparticipate', { id: event.id }) }}">
 						<button type="submit" class="btn-secondary">
 							Ne plus participer
