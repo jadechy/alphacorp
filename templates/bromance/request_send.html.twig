@@ -4,46 +4,49 @@
 {% endblock %}
 
 {% block body %}
-	<a href={{ path("app_bromance_homepage") }} class="btn-secondary flex mb-8">
-		{{ ux_icon('tabler:chevron-left', {class: 'w-6 h-6'}) }}
-		<p>
-			Retour
-		</p>
-	</a>
+<a href={{ path("app_bromance_homepage") }} class="btn-secondary flex mb-8">
+	{{ ux_icon('tabler:chevron-left', {class: 'w-6 h-6'}) }}
+	<p>
+		Retour
+	</p>
+</a>
 
-	{% if requestSend is empty %}
-		<p>Aucune demande de bromance envoyée.</p>
-	{% else %}
+{% if requestSend is empty %}
+	<p>Aucune demande de bromance envoyée.</p>
+{% else %}
 
-		<table>
-			<thead class='border-b  border-neutral-200'>
-				<td>
-					User
-				</td>
-				<td>
-					Date de mise à jour
-				</td>
-				<td class='text-end'>
-					Status
-				</td>
-			</thead>
-			<tbody>
-				{% for bromance in requestSend %}
-					<tr>
-						<td>
+	<table>
+		<thead class='border-b  border-neutral-200'>
+			<td>
+				User
+			</td>
+			<td>
+				Date de mise à jour
+			</td>
+			<td class='text-end'>
+				Status
+			</td>
+		</thead>
+		<tbody>
+			{% for bromance in requestSend %}
+				{% set color=  bromance.request.name == "PENDING"? "bg-orange-600": bromance.request.name == "ACCEPTED" ?"bg-green-800": "bg-red-800" %}
+				<tr>
+					<td>
+						<div class="flex">
+							<img src={{asset("/img/1.png")}}/>
 							{{ bromance.follower.username }}
-						</td>
-						<td>
-							{{ bromance.linkedAt|format_datetime('short', 'none', locale: 'fr') }}
-						</td>
-						<td>
-							<div class="bg-green-800 p-2 rounded-full w-fit">
-								{{ bromance.request.value }}
-							</div>
-						</td>
-					</tr>
-				{% endfor %}
-			</tbody>
-		</table>
-	{% endif %}
-{% endblock %}
+						</div>
+					</td>
+					<td>
+						{{ bromance.linkedAt|format_datetime('short', 'none', locale: 'fr') }}
+					</td>
+					<td>
+						<div class="{{color}} p-2 rounded-full w-fit">
+							{{ bromance.request.value }}
+						</div>
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</tbody>
+</table>{% endif %}{% endblock %}

@@ -5,7 +5,7 @@
 
 {% block body %}
 	<section>
-		<h2 class="italic text-xl mb-8">Mes bromances</h2>
+		<h2 class="text-xl mb-8">Mes bromances</h2>
 		{% if bromancesAlpha is not empty %}
 			<div class="grid grid-cols-2 gap-y-5 sm:grid-cols-4 gap-x-5">
 				{% for bromance in bromancesAlpha %}
@@ -14,10 +14,12 @@
 					</a>
 				{% endfor %}
 			</div>
+		{% else %}
+			<p class="text-neutral-500">Pas de bromance</p>
 		{% endif %}
 	</section>
 	<section class="border-t mt-16 pt-8">
-		{% if bromancesAlpha is empty %}
+		{% if bromancesFollower is not empty %}
 			<h2 class="italic text-xl mb-8">Gestion des demandes</h2>
 			<div class="flex justify-between">
 				<ul class="w-3/4">

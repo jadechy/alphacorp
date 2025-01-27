@@ -3,6 +3,7 @@
 namespace App\Controller\Bromance;
 
 use App\Entity\Bromance;
+use App\Entity\User;
 use App\Enum\BromanceRequestStatusEnum;
 use App\Enum\BromanceStatusEnum;
 use App\Repository\BromanceRepository;
@@ -49,12 +50,12 @@ class BromanceController extends AbstractController
         ]);
     }
 
-
+    // LOGIC
     #[Route('/request/{user_id}', name: 'request',  methods: ['POST'])]
-    public function requestBromance(int $user_id, EntityManagerInterface $entityManager, BromanceRepository $bromanceRepository, UserRepository $userRepository): Response
+    public function requestBromance(User $user, EntityManagerInterface $entityManager, BromanceRepository $bromanceRepository): Response
     {
         $alpha = $this->getUser();
-        $follower = $userRepository->find($user_id);
+        $follower = $user;
 
         if (!$follower) {
             $this->addFlash('error', 'Utilisateur non trouvé');
@@ -88,11 +89,9 @@ class BromanceController extends AbstractController
     }
 
 
-    // LOGIC
     #[Route('/reponse/{id}', name: 'reponse', methods: ['POST'])]
-    public function reponseDemandeBromance(Bromance $bromance, Request $request, EntityManagerInterface $entityManager, BromanceRepository $bromanceRepository): Response
+    public function reponseDemandeBromance(Bromance $bromance, Request $request, EntityManagerInterface $entityManager): Response
     {
-        // $bromance = $bromanceRepository->find($id);
 
         if (!$bromance) {
             $this->addFlash('error', 'Demande de bromance non trouvée');
