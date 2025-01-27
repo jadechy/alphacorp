@@ -8,6 +8,8 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 
+use App\Entity\User;
+use App\Entity\Event;
 use App\Entity\BanRequest;
 use App\Form\BanRequestType;
 use App\Enum\StatusUserEnum;
@@ -15,7 +17,7 @@ use App\Form\UserEditType;
 use App\Repository\UserRepository;
 use App\Repository\BromanceRepository;
 use App\Repository\EventRepository;
-use App\Entity\Event;
+
 
 #[Route('/user', name: "app_user_")]
 class UserController extends AbstractController
@@ -38,8 +40,10 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $gender = $form->get('gender')->getData();
             if ($gender === 'male') {
+                /** @var User $user */
                 $user->setRoles(['ROLE_ALPHA']);
             } elseif ($gender === 'female') {
+                /** @var User $user */
                 $user->setRoles(['ROLE_SUPERVISOR']);
             }
             $entityManager->flush();
@@ -121,6 +125,7 @@ class UserController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
+        /** @var User $user */
         if ($user->getStatus() === StatusUserEnum::BANNED) {
             $banRequest = new BanRequest();
             $banRequest->setUser($user);

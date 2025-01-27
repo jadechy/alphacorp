@@ -16,6 +16,7 @@ class TopicRepository extends ServiceEntityRepository
         parent::__construct($registry, Topic::class);
     }
 
+    /** @return array<Topic> */
     public function searchByKeyword(string $keyword): array
     {
         $conn = $this->getEntityManager()->getConnection();
@@ -33,6 +34,7 @@ class TopicRepository extends ServiceEntityRepository
             return [];
         }
 
+        /** @var array<Topic> */
         return $this->createQueryBuilder('t')
             ->where('t.id IN (:ids)')
             ->setParameter('ids', $ids)

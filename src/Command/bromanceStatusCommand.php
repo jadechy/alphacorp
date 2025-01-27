@@ -10,8 +10,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use Doctrine\ORM\EntityManagerInterface;
 
-use App\Repository\BromanceRepository;
+use App\Entity\User;
 use App\Entity\Bromance;
+use App\Repository\BromanceRepository;
 use App\Enum\BromanceRequestStatusEnum;
 use App\Enum\BromanceStatusEnum;
 
@@ -36,11 +37,12 @@ class bromanceStatusCommand extends Command
         $output->writeln('Démarrage de la mise à jour des statuts des bromances...');
         $now = new \DateTime();
 
+        /** @var array<Bromance> */
         $bromances = $this->bromanceRepository->findByRequestStatus(BromanceRequestStatusEnum::ACCEPTED->value);
         
         foreach ($bromances as $bromance) {
-            
             $lastUpdate = $bromance->getLastStatusUpdate() ?? $bromance->getLinkedAt();
+            /** @var BromanceStatusEnum $currentStatus */
             $currentStatus = $bromance->getStatus();
 
             $transitionInterval = $currentStatus->getTransitionInterval();
@@ -54,8 +56,11 @@ class bromanceStatusCommand extends Command
                     $bromance->setLastStatusUpdate($now);
     
                     $this->entityManager->persist($bromance);
-    
-                    $output->writeln("Mise à jour de la bromance entre {$bromance->getAlpha()->getUsername()} et {$bromance->getFollower()->getUsername()} à '{$newStatus->value}'.");
+                    /** @var User $alpha */
+                    $alpha = $bromance->getAlpha();
+                    /** @var User $follower */
+                    $follower = $bromance->getFollower();
+                    $output->writeln("Mise à jour de la bromance entre {$alpha->getUsername()} et {$follower->getUsername()} à '{$newStatus->value}'.");
                 }
             }
         }

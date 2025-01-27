@@ -367,7 +367,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->challenges->contains($challenge)) {
             $this->challenges->add($challenge);
-            $challenge->setSupervisor($this);
+            $challenge->setAuthor($this);
         }
 
         return $this;
@@ -377,8 +377,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->challenges->removeElement($challenge)) {
             // set the owning side to null (unless already changed)
-            if ($challenge->getSupervisor() === $this) {
-                $challenge->setSupervisor(null);
+            if ($challenge->getAuthor() === $this) {
+                $challenge->setAuthor(null);
             }
         }
 

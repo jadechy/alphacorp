@@ -8,15 +8,16 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Bundle\SecurityBundle\Security;
 
-use App\Repository\TopicRepository;
+use App\Entity\User;
 use App\Entity\Topic;
 use App\Entity\Response;
 use App\Form\ResponseType;
 use App\Enum\ResponseStatusEnum;
 use App\Enum\TopicStatusEnum;
 use App\Form\TopicType;
-use Symfony\Bundle\SecurityBundle\Security;
+use App\Repository\TopicRepository;
 
 #[Route('/forum', name: "app_forum_")]
 class TopicController extends AbstractController
@@ -28,7 +29,7 @@ class TopicController extends AbstractController
         $keyword = $request->query->get('q', '');
         $topics = [];
 
-        if ($keyword && strlen($keyword) > 0) {
+        if (!empty($keyword)) {
             $topics = $topicRepository->searchByKeyword($keyword);
         } else {
             $topics = $topicRepository->findAll();
@@ -51,6 +52,7 @@ class TopicController extends AbstractController
             if (!$user) {
                 throw $this->createAccessDeniedException('Vous devez être connecté pour répondre.');
             }
+            /** @var User $user */
             $response->setAuthor($user);
 
             $response->setTopic($topic);
@@ -89,6 +91,7 @@ class TopicController extends AbstractController
             if (!$user) {
                 throw $this->createAccessDeniedException('Vous devez être connecté pour ajouter un topic.');
             }
+            /** @var User $user */
             $topic->setAuthor($user);
 
             $topic->setStatus(TopicStatusEnum::WAITING);

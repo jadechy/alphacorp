@@ -69,18 +69,6 @@ class Challenge
         return $this;
     }
 
-    public function getSupervisor(): ?User
-    {
-        return $this->supervisor;
-    }
-
-    public function setSupervisor(?User $supervisor): static
-    {
-        $this->supervisor = $supervisor;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, User>
      */

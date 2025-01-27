@@ -16,7 +16,7 @@ class BanRequest
     private int $id;
 
     #[ORM\Column(type: Types::TEXT, name: 'BAN_MESSAGE')]
-    private ?string $message = null;
+    private string $message;
 
     #[ORM\ManyToOne(inversedBy: 'banRequests')]
     #[ORM\JoinColumn(name:'USR_ID',referencedColumnName:'USR_ID')]
@@ -27,7 +27,7 @@ class BanRequest
         return $this->id;
     }
 
-    public function getMessage(): ?string
+    public function getMessage(): string
     {
         return $this->message;
     }

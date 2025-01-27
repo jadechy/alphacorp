@@ -8,6 +8,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 
+use App\Entity\Topic;
 use App\Entity\Response;
 use App\Enum\ResponseStatusEnum;
 
@@ -27,6 +28,8 @@ class ResponseController extends AbstractController
 
         $entityManager->flush();
 
-        return $this->redirectToRoute('app_topic', ['id' => $response->getTopic()->getId()], HttpResponse::HTTP_SEE_OTHER);
+        /** @var Topic $topic */
+        $topic = $response->getTopic();
+        return $this->redirectToRoute('app_topic', ['id' => $topic->getId()], HttpResponse::HTTP_SEE_OTHER);
     }
 }

@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 use App\Repository\TopicRepository;
+use App\Entity\User;
 use App\Entity\Topic;
 use App\Entity\Response;
 use App\Enum\ResponseStatusEnum;
@@ -51,7 +52,7 @@ class TopicAdminController extends AbstractController
 
             $status = $topic->getStatus();
 
-            if ($status && !in_array($status, $statuses, true)) {
+            if (!in_array($status, $statuses, true)) {
                 $statuses[] = $status;
             }
         }
@@ -76,6 +77,7 @@ class TopicAdminController extends AbstractController
             if (!$user) {
                 throw $this->createAccessDeniedException('Vous devez être connecté pour répondre.');
             }
+            /** @var User $user */
             $response->setAuthor($user);
 
             $response->setTopic($topic);
@@ -109,6 +111,7 @@ class TopicAdminController extends AbstractController
             throw $this->createAccessDeniedException('Vous devez être connecté pour ajouter un topic.');
         }
         $topic = new Topic();
+        /** @var User $user */
         $topic->setAuthor($user);
 
         $form = $this->createForm(TopicAdminType::class, $topic);

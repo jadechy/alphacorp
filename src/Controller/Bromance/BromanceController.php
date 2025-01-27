@@ -2,6 +2,7 @@
 
 namespace App\Controller\Bromance;
 
+use App\Entity\User;
 use App\Entity\Bromance;
 use App\Enum\BromanceRequestStatusEnum;
 use App\Enum\BromanceStatusEnum;
@@ -57,6 +58,7 @@ class BromanceController extends AbstractController
         }
 
         $bromance = new Bromance();
+        /** @var User $alpha */
         $bromance->setAlpha($alpha);
         $bromance->setFollower($follower);
         $bromance->setRequest(BromanceRequestStatusEnum::PENDING);
