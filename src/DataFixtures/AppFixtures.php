@@ -296,9 +296,15 @@ class AppFixtures extends Fixture
                 $randomStatus = $statuses[array_rand($statuses)];
                 $bromance->setStatus($randomStatus);
                 $bromance->setLinkedAt(linkedAt: new \DateTimeImmutable());
+                if($bromance->getStatus() == BromanceStatusEnum::APPROCHE){
+                    $bromance->setLastStatusUpdate(null);
+                }else {
+                    $bromance->setLastStatusUpdate(lastStatusUpdate: new \DateTimeImmutable('+10 day'));
+                }
             } else {
                 $bromance->setStatus(null);
                 $bromance->setLinkedAt(null);
+                $bromance->setLastStatusUpdate(null);
             }
 
             $manager->persist($bromance);

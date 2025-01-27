@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\BromanceRepository;
 use App\Enum\BromanceStatusEnum;
 use App\Enum\BromanceRequestStatusEnum;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: BromanceRepository::class)]
@@ -32,6 +33,9 @@ class Bromance
 
     #[ORM\Column(nullable: true, name: 'BRO_LINK_DATE')]
     private ?\DateTimeImmutable $linkedAt = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true, name: 'BRO_LAST_STATUS_UPDATE')]
+    private ?\DateTimeInterface $lastStatusUpdate = null;
 
     public function getId(): int
     {
@@ -94,6 +98,18 @@ class Bromance
     public function setLinkedAt(?\DateTimeImmutable $linkedAt): static
     {
         $this->linkedAt = $linkedAt;
+
+        return $this;
+    }
+
+    public function getLastStatusUpdate(): ?\DateTimeInterface
+    {
+        return $this->lastStatusUpdate;
+    }
+
+    public function setLastStatusUpdate(?\DateTimeInterface $lastStatusUpdate): static
+    {
+        $this->lastStatusUpdate = $lastStatusUpdate;
 
         return $this;
     }

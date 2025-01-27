@@ -16,6 +16,15 @@ class BromanceRepository extends ServiceEntityRepository
         parent::__construct($registry, Bromance::class);
     }
 
+    public function findByRequestStatus(string $request)
+    {
+        return $this->createQueryBuilder('b')
+            ->andWhere('b.request = :request')
+            ->setParameter('request', $request)
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return Bromance[] Returns an array of Bromance objects
     //     */
