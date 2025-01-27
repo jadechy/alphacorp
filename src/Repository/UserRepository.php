@@ -16,6 +16,30 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
+    public function searchByKeyword(string $keyword): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        
+        $sql = "SELECT * FROM ALP_USER WHERE MATCH(USR_USERNAME) AGAINST(:keyword)";
+        
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue("keyword", $keyword);
+
+        $result = $stmt->execute();
+
+        $ids = array_column($result->fetchAllAssociative(), 'USR_ID');
+
+        if (empty($ids)) {
+            return [];
+        }
+
+        return $this->createQueryBuilder('t')
+            ->where('t.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return User[] Returns an array of User objects
     //     */

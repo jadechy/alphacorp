@@ -12,6 +12,10 @@ use App\Entity\BanRequest;
 use App\Form\BanRequestType;
 use App\Enum\StatusUserEnum;
 use App\Form\UserEditType;
+use App\Repository\UserRepository;
+use App\Repository\BromanceRepository;
+use App\Repository\EventRepository;
+use App\Entity\Event;
 
 #[Route('/user', name: "app_user_")]
 class UserController extends AbstractController
@@ -44,6 +48,66 @@ class UserController extends AbstractController
         return $this->render('user/edit.html.twig', [
             'user' => $user,
             "form" => $form->createView(),
+        ]);
+    }
+
+    #[Route('/profil/{id}', name: 'profil_show')]
+    public function userProfil(int $id, UserRepository $userRepository, BromanceRepository $bromanceRepository): Response
+    {
+        $user = $userRepository->findOneBy(['id' => $id]);
+
+        $bromance_exists = false;
+
+        if ($this->getUser()) {
+            $bromance_exists = $bromanceRepository->findOneBy([
+                'alpha' => $this->getUser(),
+                'follower' => $user
+            ]) !== null;
+
+            if (!$bromance_exists) {
+                $bromance_exists = $bromanceRepository->findOneBy([
+                    'alpha' => $user,
+                    'follower' => $this->getUser()
+                ]) !== null;
+            }
+        }
+
+        return $this->render('user/profil/show.html.twig', [
+            'user' => $user,
+            'bromance_exists' => $bromance_exists
+        ]);
+    }
+
+    #[Route('/profil/alpha', name: 'profil_homepage')]
+    public function allAlphaUserProfil(UserRepository $userRepository): Response
+    {
+        $users = $userRepository->findAll();
+
+        $alphas = [];
+        foreach ($users as $user) {
+            if (in_array('ROLE_ALPHA', $user->getRoles()) && $user->getStatus() == StatusUserEnum::ACTIVE) {
+                array_push($alphas, $user);
+            }
+        }
+
+        return $this->render('user/profil/index.html.twig', [
+            'alphas' => $alphas,
+        ]);
+    }
+
+    #[Route('/profil/search', name: 'search', methods: ['GET'])]
+    public function searchAlphaUser(Request $request, UserRepository $userRepository): Response
+    {
+        $keyword = $request->query->get('q', '');
+        $users = [];
+
+        if ($keyword) {
+            $users = $userRepository->searchByKeyword($keyword);
+        }
+
+        return $this->render('user/profil/search/search.html.twig', [
+            'users' => $users,
+            'keyword' => $keyword,
         ]);
     }
 
