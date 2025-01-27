@@ -1,10 +1,11 @@
 {% extends 'admin/base_admin.html.twig' %}
 
-{% block admin_title %}Créer un nouvelle réponse{% endblock %} 
- {% set return_path = 'admin_response_homepage' %} 
+{% block admin_title %}Créer un nouvelle réponse
+{% endblock %}
+{% set return_path = 'admin_response_homepage' %}
 
 {% block admin_content %}
-         <section>
-             {{ include('admin/response/_form.html.twig') }}
-         </section>
- {% endblock %}
+	<section>
+		{{ include('admin/response/_form.html.twig') }}
+	</section>
+{% endblock %}

@@ -1,11 +1,11 @@
 {{ form_start(form) }}
-    {{ form_widget(form.name, {"attr":{class: "input mt-8"}}) }}
+{{ form_widget(form.name, {"attr":{class: "input mt-8"}}) }}
 
-    {{ form_widget(form.code, {"attr":{class: "input my-4"}}) }}
-            <div class="flex items-center justify-center  mt-4 gap-5 ">
- 
+{{ form_widget(form.code, {"attr":{class: "input my-4"}}) }}
+<div class="flex items-center justify-center  mt-4 gap-5 ">
 
-    <button type="submit" class="btn">
-        {{ button_label|default('Enregistrer') }}
-    </button>
-{{ form_end(form) }}
+
+	<button type="submit" class="btn">
+		{{ button_label|default('Enregistrer') }}
+	</button>
+	{{ form_end(form) }}

@@ -1,146 +1,155 @@
 {% extends 'admin/base_admin.html.twig' %}
 
-{% block admin_title %}Utilisateur {{ user.username }}{% endblock %} 
-  {% set return_path = 'admin_user_homepage' %} 
+{% block admin_title %}Utilisateur
+	{{ user.username }}
+{% endblock %}
+{% set return_path = 'admin_user_homepage' %}
 
-{% block admin_content %} 
-    <section>
-        <table> 
-        <thead>
-            <tr>
-                <th>Catégorie</th>
-                <th>Valeur</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Id</td>
-                <td>{{user.id}}</td>
-            </tr>
-            {# <tr>
-                <td>Created</td>
-                <td>{{user.createdAt|format_datetime('short', 'none', locale: 'fr')}}</td>
-            </tr> #}
-            <tr>
-                <td>Username</td>
-                <td>{{user.username}}</td>
-            </tr>
-            <tr>
-                <td>email</td>
-                <td>{{user.email}}</td>
-            </tr>   
-            <tr>
-                <td>Roles</td>
-                <td>
-                
-                    {% for role in user.roles %}
-                        <div>
-                            {{role}} 
-                        </div>
-                    {% endfor %}
-                </td>
-            </tr>
-            <tr>
-                <td>Status</td>
-                <td> {{user.status.value}}
-                </td>
-            </tr>
-            <tr>
-                <td>XP</td>
-                <td>{{user.xp}}</td>
-            </tr>
-            <tr>
-                <td>Reset token</td>
-                <td>{{user.resetToken}}</td>
-            </tr>
-            <tr>
-                <td>Bromances Alpha</td>
-                <td>
-                    {% for bromance in user.bromancesAlpha %}
-                        <div class="border rounded-2xl border-neutral-100"> 
-                            {{bromance.id}} 
-                        </div>
-                    {% endfor %}
-                </td>
-            </tr>
-            <tr>
-                <td>Bromances Follower</td>
-                <td>
-                    {% for bromance in user.bromancesFollower %}
-                        <div> 
-                            {{bromance.id}} 
-                        </div>
-                    {% endfor %}
-                </td>
-            </tr>
-            <tr>
-                <td>Topic author</td>
-                <td>
-                    {% for topic in user.topics %}
-                        <a href={{path("admin_topic_show", {id:topic.id})}} class="badge"> 
-                            {{topic.id}} {{ ux_icon('tabler:arrow-bar-right', {class: 'w-6 h-6'}) }} 
-                        </a>
-                    {% endfor %}
-                </td>
-            </tr>
-            <tr>
-                <td>Response topic author</td>
-                <td>
-                    {% for response in user.responses %}
-                        <a href={{path("admin_response_show", {id:response.id})}} class="badge"> 
-                            {{response.id}}{{ ux_icon('tabler:arrow-bar-right', {class: 'w-6 h-6'}) }}
-                        </a>
-                    {% endfor %}
-                </td>
-            </tr>
-            <tr>
-                <td>Events</td>
-                <td>
-                    {% for event in user.events %}
-                        <a href={{path("admin_response_show", {id:event.id})}} class="badge"> 
-                            {{event.id}} {{ ux_icon('tabler:arrow-bar-right', {class: 'w-6 h-6'}) }}
-                        </a>
-                    {% endfor %}
-                </td>
-            </tr>
-            <tr>
-                <td>Challenges</td>
-                <td>
-                    {% for challenge in user.challenges %}
-                        <div class="badge"> 
-                            {{challenge.id}} - {{challenge.title}} {{ ux_icon('tabler:arrow-bar-right', {class: 'w-6 h-6'}) }}
-                        </div>
-                    {% endfor %}
-                </td>
-            </tr>
-            <tr>
-                <td>Participations</td>
-                <td>
-                    {% for participation in user.participations %}
-                        <div class="badge"> 
-                            {{participation.id}} {{ ux_icon('tabler:arrow-bar-right', {class: 'w-6 h-6'}) }}
-                        </div>
-                    {% endfor %}
-                </td>
-            </tr>
-            <tr>
-                <td>Ban request</td>
-                <td>
-                    {% for banRequest in user.banRequests %}
-                        <div> 
-                            {{banRequest.id}}
-                        </div>
-                    {% endfor %}
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <div class="flex justify-center items-center gap-8">
-        <a href="{{ path('admin_user_edit', {'id': user.id}) }}" class="btn">
-            Modifier
-        </a>
-        {{ include('admin/user/_delete_form.html.twig') }} 
-    </div>
-    </section>
-   
+{% block admin_content %}
+	<section>
+		<table>
+			<thead>
+				<tr>
+					<th>Catégorie</th>
+					<th>Valeur</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Id</td>
+					<td>{{user.id}}</td>
+				</tr>
+				{# <tr>
+				                <td>Created</td>
+				                <td>{{user.createdAt|format_datetime('short', 'none', locale: 'fr')}}</td>
+				            </tr> #}
+				<tr>
+					<td>Username</td>
+					<td>{{user.username}}</td>
+				</tr>
+				<tr>
+					<td>email</td>
+					<td>{{user.email}}</td>
+				</tr>
+				<tr>
+					<td>Roles</td>
+					<td>
+
+						{% for role in user.roles %}
+							<div>
+								{{role}}
+							</div>
+						{% endfor %}
+					</td>
+				</tr>
+				<tr>
+					<td>Status</td>
+					<td>
+						{{user.status.value}}
+					</td>
+				</tr>
+				<tr>
+					<td>XP</td>
+					<td>{{user.xp}}</td>
+				</tr>
+				<tr>
+					<td>Reset token</td>
+					<td>{{user.resetToken}}</td>
+				</tr>
+				<tr>
+					<td>Bromances Alpha</td>
+					<td>
+						{% for bromance in user.bromancesAlpha %}
+							<div class="border rounded-2xl border-neutral-100">
+								{{bromance.id}}
+							</div>
+						{% endfor %}
+					</td>
+				</tr>
+				<tr>
+					<td>Bromances Follower</td>
+					<td>
+						{% for bromance in user.bromancesFollower %}
+							<div>
+								{{bromance.id}}
+							</div>
+						{% endfor %}
+					</td>
+				</tr>
+				<tr>
+					<td>Topic author</td>
+					<td>
+						{% for topic in user.topics %}
+							<a href={{path("admin_topic_show", {id:topic.id} )}} class="badge">
+								{{topic.id}}
+								{{ ux_icon('tabler:arrow-bar-right', {class: 'w-6 h-6'}) }}
+							</a>
+						{% endfor %}
+					</td>
+				</tr>
+				<tr>
+					<td>Response topic author</td>
+					<td>
+						{% for response in user.responses %}
+							<a href={{path("admin_response_show", {id:response.id} )}} class="badge">
+								{{response.id}}{{ ux_icon('tabler:arrow-bar-right', {class: 'w-6 h-6'}) }}
+							</a>
+						{% endfor %}
+					</td>
+				</tr>
+				<tr>
+					<td>Events</td>
+					<td>
+						{% for event in user.events %}
+							<a href={{path("admin_response_show", {id:event.id} )}} class="badge">
+								{{event.id}}
+								{{ ux_icon('tabler:arrow-bar-right', {class: 'w-6 h-6'}) }}
+							</a>
+						{% endfor %}
+					</td>
+				</tr>
+				<tr>
+					<td>Challenges</td>
+					<td>
+						{% for challenge in user.challenges %}
+							<div class="badge">
+								{{challenge.id}}
+								-
+								{{challenge.title}}
+								{{ ux_icon('tabler:arrow-bar-right', {class: 'w-6 h-6'}) }}
+							</div>
+						{% endfor %}
+					</td>
+				</tr>
+				<tr>
+					<td>Participations</td>
+					<td>
+						{% for participation in user.participations %}
+							<div class="badge">
+								{{participation.id}}
+								{{ ux_icon('tabler:arrow-bar-right', {class: 'w-6 h-6'}) }}
+							</div>
+						{% endfor %}
+					</td>
+				</tr>
+				<tr>
+					<td>Ban request</td>
+					<td>
+						{% for banRequest in user.banRequests %}
+							<div>
+								{{banRequest.id}}
+							</div>
+						{% endfor %}
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="flex justify-center items-center gap-8">
+			<a href="{{ path('admin_user_edit', {'id': user.id}) }}" class="btn">
+				Modifier
+			</a>
+			{{ include('admin/user/_delete_form.html.twig') }}
+		</div>
+	</section>
+
 {% endblock %}

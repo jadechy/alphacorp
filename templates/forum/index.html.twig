@@ -1,20 +1,22 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Forum - Rechercher par...{% endblock %}
-{% block h1 %}Forum - Rechercher par...{% endblock %}
+{% block title %}Forum - Rechercher par...
+{% endblock %}
+{% block h1 %}Forum - Rechercher par...
+{% endblock %}
 
 
 {% block body %}
 
-            <section class="grid grid-cols-2 gap-y-5 sm:grid-cols-2 gap-x-20"> 
+	<section class="grid grid-cols-2 gap-y-5 sm:grid-cols-2 gap-x-20">
 
-            <a href={{ path('app_category', {'id': 1}) }} class="relative flex flex-col items-center justify-center rounded-xl overflow-hidden aspect-square border hover:scale-105 cursor-pointer transition hover:bg-neutral-700 ">
-                {{ ux_icon('tabler:folder', {class: 'w-17 h-17 mb-4'}) }}
-                <p class="capitalize font-medium text-3xl truncate">Catégorie</p>
-            </a>            
-            <a href={{ path('app_topic_search', {'id': 1}) }} class="relative flex flex-col items-center justify-center rounded-xl overflow-hidden aspect-square border hover:scale-105 cursor-pointer transition hover:bg-neutral-700 ">
-                {{ ux_icon('tabler:book', {class: 'w-17 h-17 mb-4'}) }}
-                <p class="capitalize font-medium text-3xl truncate">Sujet</p>
-            </a>
-            </section>
- {% endblock %}
+		<a href={{ path('app_category', {'id': 1} ) }} class="relative flex flex-col items-center justify-center rounded-xl overflow-hidden aspect-square border hover:scale-105 cursor-pointer transition hover:bg-neutral-700 ">
+			{{ ux_icon('tabler:folder', {class: 'w-17 h-17 mb-4'}) }}
+			<p class="capitalize font-medium text-3xl truncate">Catégorie</p>
+		</a>
+		<a href={{ path('app_topic_search', {'id': 1} ) }} class="relative flex flex-col items-center justify-center rounded-xl overflow-hidden aspect-square border hover:scale-105 cursor-pointer transition hover:bg-neutral-700 ">
+			{{ ux_icon('tabler:book', {class: 'w-17 h-17 mb-4'}) }}
+			<p class="capitalize font-medium text-3xl truncate">Sujet</p>
+		</a>
+	</section>
+{% endblock %}

@@ -2,74 +2,79 @@
 
 {% import 'macro/response.html.twig' as macros %}
 
-{% block title %}{{topic.title}}{% endblock %}
-{% block h1 %}{{topic.title}}{% endblock %}
+{% block title %}
+	{{topic.title}}
+{% endblock %}
+{% block h1 %}
+	{{topic.title}}
+{% endblock %}
 
 {% block body %}
-         <section> 
-            <ul class="flex gap-4 justify-end items-center mt-4">
-                <li class="flex gap-2 items-center"> 
-                    <span class="py-1.5 px-2.5 bg-orange-500/30 rounded-full flex w-20 justify-center items-center gap-1">
-                        <p class="font-medium text-xs ">{{topic.category.name}}</p>
-                    </span>
-                </li>
-                <li class="flex gap-2 items-center"> 
-                    <span class="py-1.5 px-2.5 bg-indigo-500/50 rounded-full flex w-20 justify-center items-center gap-1">
-                        <p class="font-medium text-xs ">{{topic.language.name}}</p>
-                    </span>
-                </li>
-            </ul>
+	<section>
+		<ul class="flex gap-4 justify-end items-center mt-4">
+			<li class="flex gap-2 items-center">
+				<span class="py-1.5 px-2.5 bg-orange-500/30 rounded-full flex w-20 justify-center items-center gap-1">
+					<p class="font-medium text-xs ">{{topic.category.name}}</p>
+				</span>
+			</li>
+			<li class="flex gap-2 items-center">
+				<span class="py-1.5 px-2.5 bg-indigo-500/50 rounded-full flex w-20 justify-center items-center gap-1">
+					<p class="font-medium text-xs ">{{topic.language.name}}</p>
+				</span>
+			</li>
+		</ul>
 
-            {% if topic.status.value == 'close' %}
-                <div class="w-full bg-red-500/30   rounded-lg mt-4">
-                    <p class="p-4">Ce topic a été fermé</p>
-                </div>
-            {% elseif topic.status.value == 'waiting' %}
-                <div class="w-full bg-orange-500/30   rounded-lg mt-4">
-                    <p class="p-4">Ce topic est en attente de confirmation de la part de nos administrateurs.</p>
-                </div>
-            {% endif %}
-            
-            <div class="mt-4  ">
-                <p >{{topic.longDescription}}</p>
-                <p class="  text-neutral-500">Écrit par : {{topic.author.username}}</p>
-            </div>
- 
-            {% if  "ROLE_ADMIN" in user.roles %}
+		{% if topic.status.value == 'close' %}
+			<div class="w-full bg-red-500/30   rounded-lg mt-4">
+				<p class="p-4">Ce topic a été fermé</p>
+			</div>
+		{% elseif topic.status.value == 'waiting' %}
+			<div class="w-full bg-orange-500/30   rounded-lg mt-4">
+				<p class="p-4">Ce topic est en attente de confirmation de la part de nos administrateurs.</p>
+			</div>
+		{% endif %}
 
-                        <div class=" mt-8 pt-4 ">
-                      <a href="{{ path("app_topic_edit", {id:topic.id}) }}" class="btn-secondary">
-            Modifier
-            </a>
-                        </div>
-            {% endif %}
-            <div class="mt-8 pt-4 border-t border-t-neutral-300">
-            <h2>Réponses :</h2>
-                {% for response in topic.responses %}
-                    {% if response.status.value == "validated" %}
-                        {% include './macro/response.html.twig' %}
-                    {{ macros.afficheReponse(response, topic) }}
-                    {% endif %}
-                    
-                {% endfor %}
-            </div>
+		<div class="mt-4  ">
+			<p>{{topic.longDescription}}</p>
+			<p class="  text-neutral-500">Écrit par :
+				{{topic.author.username}}</p>
+		</div>
 
-            {% if topic.status.value == 'open' %}
-                {{ form_start(form) }}
-                    <div class="mt-9  p-4 rounded-lg">
-                        <h3 class="text-center text-md font-bold my-4">Souhaitez-vous apporter une réponse ?</h3>
-                             {{ form_widget(form.content, {'attr': {'class': 'input'}}) }}
-                      
-                            <p class="opacity-50 text-xs italic mt-4 block">* Votre réponse sera publié et visible par tous après avoir été analysé par notre système.</p>
-                     
-                        <div class="flex items-center justify-center mt-2">
-                            <button type="submit" class="btn">
-                                {{ button_label|default('Ajouter votre réponse') }}
-                            </button>
-                        </div>
-                    </div>
-                {{ form_end(form) }}
-            {% endif %}
-                
-        </section>
- {% endblock %}
+		{% if  "ROLE_ADMIN" in user.roles %}
+
+			<div class=" mt-8 pt-4 ">
+				<a href="{{ path("app_topic_edit", {id:topic.id}) }}" class="btn-secondary">
+					Modifier
+				</a>
+			</div>
+		{% endif %}
+		<div class="mt-8 pt-4 border-t border-t-neutral-300">
+			<h2>Réponses :</h2>
+			{% for response in topic.responses %}
+				{% if response.status.value == "validated" %}
+					{% include './macro/response.html.twig' %}
+					{{ macros.afficheReponse(response, topic) }}
+				{% endif %}
+
+			{% endfor %}
+		</div>
+
+		{% if topic.status.value == 'open' %}
+			{{ form_start(form) }}
+			<div class="mt-9  p-4 rounded-lg">
+				<h3 class="text-center text-md font-bold my-4">Souhaitez-vous apporter une réponse ?</h3>
+				{{ form_widget(form.content, {'attr': {'class': 'input'}}) }}
+
+				<p class="opacity-50 text-xs italic mt-4 block">* Votre réponse sera publié et visible par tous après avoir été analysé par notre système.</p>
+
+				<div class="flex items-center justify-center mt-2">
+					<button type="submit" class="btn">
+						{{ button_label|default('Ajouter votre réponse') }}
+					</button>
+				</div>
+			</div>
+			{{ form_end(form) }}
+		{% endif %}
+
+	</section>
+{% endblock %}

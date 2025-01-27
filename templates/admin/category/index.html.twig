@@ -1,49 +1,48 @@
 {% extends 'admin/base_admin.html.twig' %}
 
-{% block admin_title %}Catégories{% endblock %}
- {% set return_path = 'admin_homepage' %} 
+{% block admin_title %}Catégories
+{% endblock %}
+{% set return_path = 'admin_homepage' %}
 
 {% block admin_content %}
-    <table class="mt-9" >
-        <thead>
-            <tr  >
-                <th scope="col">ID</th>
-                <th scope="col">Name</th> 
-                <th scope="col">Label</th>  
-                <th scope="col">Nombre de Topics</th> 
-                <th scope="col"> </th> 
-            </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-300 ">
-            {% for category in pagination.items %}
-                <tr >
-                    <td >{{ category.id }}</td>
-                    <td >{{ category.name }}</td>
-                    <td >{{ category.label }}</td>
-                    <td >{{ category.topics|length }}</td> 
-                    <td>
-                        <a href="{{ path('admin_category_show', {'id': category.id}) }}">
-                                {{ ux_icon('tabler:eye', {class: 'w-6 h-6'}) }} 
-                        </a>
-                        <a href="{{ path('admin_category_edit', {'id': category.id}) }}">
-                            {{ ux_icon('tabler:edit', {class: 'w-6 h-6'}) }} 
-                        </a>
-                    </td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="4">Aucun topic trouvé.</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-                {{ knp_pagination_render(pagination) }}
+	<table class="mt-9">
+		<thead>
+			<tr>
+				<th scope="col">ID</th>
+				<th scope="col">Name</th>
+				<th scope="col">Label</th>
+				<th scope="col">Nombre de Topics</th>
+				<th scope="col"></th>
+			</tr>
+		</thead>
+		<tbody class="divide-y divide-gray-300 ">
+			{% for category in pagination.items %}
+				<tr>
+					<td>{{ category.id }}</td>
+					<td>{{ category.name }}</td>
+					<td>{{ category.label }}</td>
+					<td>{{ category.topics|length }}</td>
+					<td>
+						<a href="{{ path('admin_category_show', {'id': category.id}) }}">
+							{{ ux_icon('tabler:eye', {class: 'w-6 h-6'}) }}
+						</a>
+						<a href="{{ path('admin_category_edit', {'id': category.id}) }}">
+							{{ ux_icon('tabler:edit', {class: 'w-6 h-6'}) }}
+						</a>
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="4">Aucun topic trouvé.</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	{{ knp_pagination_render(pagination) }}
 
-    <div class="flex">
-        <a href="{{ path('admin_category_new') }}" class="btn w-full">
-        Ajouter une catégorie
-        </a>
-    </div>
-  {% endblock %}
- 
-
+	<div class="flex">
+		<a href="{{ path('admin_category_new') }}" class="btn w-full">
+			Ajouter une catégorie
+		</a>
+	</div>
+{% endblock %}

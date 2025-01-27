@@ -1,7 +1,6 @@
 <li>
-    <a href="{{ path(pathName, parameters | default({})) }}"
-       class="  hover:text-fuchsia-300 font-bold
-       {{  app.request.attributes.get('_route') == pathName ? 'text-fuchsia-500': 'text-white '}}   ">
-        {{ label }}
-    </a> 
+	<a href="{{ path(pathName, parameters | default({})) }}" class="  hover:text-fuchsia-300 font-bold
+			       {{  app.request.attributes.get('_route') == pathName ? 'text-fuchsia-500': 'text-white '}}   ">
+		{{ label }}
+	</a>
 </li>
