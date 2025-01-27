@@ -61,13 +61,11 @@
 					{{ include('event/_delete_form.html.twig') }}
 				{% endif %}
 			</div>
-
-			<p class="border-t mt-2 pt-2">
+			<a href="{{ path('user_profil', {'id': event.author.id}) }}" class="border-t mt-2 pt-2">
 				Auteur :
 				{{event.author.username}}
-			</p>
+			</a>
+
 		</div>
-
-
 	</section>
 {% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Demandes envoyées de bromance{% endblock %}
+
+{% block body %}
+    <h1>Demandes envoyées de bromance</h1>
+
+    {% if requestSend is empty %}
+        <p>Aucune demande de bromance envoyée.</p>
+    {% else %}
+        <ul>
+            {% for bromance in requestSend %}
+                <li>
+                    Demande envoyée à {{ bromance.follower.username }} - Statut : {{ bromance.request.value }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}
