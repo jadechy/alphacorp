@@ -18,7 +18,6 @@ use App\Repository\UserRepository;
 use App\Repository\BromanceRepository;
 use App\Repository\EventRepository;
 
-
 #[Route('/user', name: "app_user_")]
 class UserController extends AbstractController
 {
