@@ -52,7 +52,6 @@ class AppFixtures extends Fixture
         $categories = [];
         $languages = [];
         $topics = [];
-        $responses = [];
         $ranks = [];
         $events = [];
         $challenges = [];
@@ -67,11 +66,11 @@ class AppFixtures extends Fixture
         $this->createCategories($manager, $categories);
 
         $this->createLanguages($manager, $languages);
-        $this->createTopics($manager, $topics);
+        $this->createTopics($manager, $topics, $categories, $languages, $users);
 
         $this->createResponses($manager, $topics, $users);
 
-        $this->linkTopicsToCategoriesAndLanguages($topics, $categories, $languages, $users);
+        // $this->linkTopicsToCategoriesAndLanguages($topics, $categories, $languages, $users);
 
         $this->createBromance($manager, $users);
         $this->createRank($manager, $ranks);
@@ -264,7 +263,7 @@ class AppFixtures extends Fixture
         }
     }
 
-    protected function createTopics(ObjectManager $manager, array $topics)
+    protected function createTopics(ObjectManager $manager, array $topics, array $categories, array $languages, array $users)
     {
         for ($j = 0; $j < self::MAX_TOPICS; $j++) {
             $topic = new Topic();
@@ -273,6 +272,9 @@ class AppFixtures extends Fixture
             $topic->setLongDescription(longDescription: "Long description $j");
             $topic->setCreatedAt(createdAt: new \DateTimeImmutable());
             $topic->setStatus(random_int(0, 1) === 1 ? TopicStatusEnum::OPEN : TopicStatusEnum::WAITING);
+            $topic->setCategory($categories[$j % count($categories)]);
+            $topic->setLanguage($languages[$j % count($languages)]);
+            $topic->setAuthor($users[$j % count($users)]);
             $manager->persist(object: $topic);
             $topics[] = $topic;
         }

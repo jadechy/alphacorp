@@ -50,6 +50,21 @@ class EventController extends AbstractController
         ]);
     }
 
+    #[Route('/user_participate', name: 'user_participate')]
+    public function userParticipateEvent(EventRepository $eventRepository): Response
+    {
+        $user = $this->getUser();
+        if (!$user) {
+            throw $this->createAccessDeniedException('Vous devez être connecté pour effectuer cette action.');
+        }
+
+        $events = $eventRepository->findEventsByParticipant($user);
+
+        return $this->render('event/author.html.twig', [
+            'events' => $events,
+        ]);
+    }
+
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, FileUploader $fileUploader): Response
     {

@@ -149,7 +149,7 @@ class TopicController extends AbstractController
     }
 
     #[IsGranted('ROLE_ALPHA')]
-    #[Route('/user', name: 'user')]
+    #[Route('/user', name: 'author')]
     public function userTopic(TopicRepository $topicRepository): HttpResponse
     {
         $user = $this->getUser();

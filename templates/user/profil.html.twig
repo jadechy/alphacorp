@@ -5,9 +5,6 @@
 {% endblock %}
 {% block body %}
 	<div>
-		<pre>
-    {{ dump(user) }}
-</pre>
 		<!-- Section Profil -->
 		<section class="flex gap-6">
 			<img src={{ asset('img/1.png') }} class="w-80 object-cover rounded-sm" alt="Profile Picture"/>
@@ -29,6 +26,11 @@
 
 		</section>
 
+
+		<pre>
+	{{ dump(user) }}
+</pre>
+
 		<!-- Section Bromances -->
 		<section class="mt-20 flex justify-between">
 			<h2 class="text-xl font-semibold">Mes bromances
@@ -47,16 +49,21 @@
 
 			</h2>
 			<div class="flex gap-8 pt-8">
-				{% for event in user.authorEvents %}
+				{% for event in user.authorEvents|slice(0, 4) %}
+
 					<a href={{path("app_event_show", {id: event.id} )}} class=" w-60">
 						{% include "parts/components/card_col.html.twig" with {"title": event.title, "height": 40} %}
 					</a>
 				{% else %}
 					<p>Aucun article trouvé.</p>
 				{% endfor %}
-				<a href={{path("app_event_author")}} class="w-40 border border-neutral-300 rounded-md p-3 flex items-center hover:scale-105 transition font-bold text-center">
-					<p>Voir tous mes évènements crées</p>
-				</a>
+				{% if user.authorEvents|length > 4 %}
+					<a href={{path("app_event_author")}} class="w-40 border border-neutral-300 rounded-md p-3 flex items-center hover:scale-105 transition font-bold text-center">
+						<p>Voir tous mes évènements crées</p>
+					</a>
+				{% endif %}
+
+
 			</div>
 		</section>
 
@@ -65,8 +72,6 @@
 			<h2 class="text-xl font-semibold">Ma participation aux events
 				<span class="text-sm text-neutral-400">-
 					{{ user.events|length }}</span>
-
-
 			</h2>
 			<div class="flex gap-8 pt-8">
 				{% for event in user.events %}
@@ -76,6 +81,11 @@
 				{% else %}
 					<p>Aucune participation trouvée.</p>
 				{% endfor %}
+				{% if user.events|length > 4 %}
+					<a href={{path("app_event_user_participate")}} class="w-40 border border-neutral-300 rounded-md p-3 flex items-center hover:scale-105 transition font-bold text-center">
+						<p>Voir tous les évènements auquels je participe</p>
+					</a>
+				{% endif %}
 			</div>
 		</section>
 
@@ -92,6 +102,11 @@
 				{% else %}
 					<p>Aucun article trouvé.</p>
 				{% endfor %}
+				{% if user.topics|length > 5 %}
+					<a href={{path("app_forum_author")}} class="w-40 border border-neutral-300 rounded-md p-3 flex items-center hover:scale-105 transition font-bold text-center">
+						<p>Voir tous mes articles</p>
+					</a>
+				{% endif %}
 
 			</div>
 		</section>

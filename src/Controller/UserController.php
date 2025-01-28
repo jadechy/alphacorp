@@ -14,17 +14,21 @@ use App\Enum\StatusUserEnum;
 use App\Form\UserEditType;
 use App\Repository\UserRepository;
 use App\Repository\BromanceRepository;
+use App\Repository\RankRepository;
 
 #[Route('/user', name: "app_user_")]
 class UserController extends AbstractController
 {
     #[Route('/', name: 'homepage')]
-    public function myProfil(): Response
+    public function myProfil(RankRepository $rankRepository): Response
     {
         $user = $this->getUser();
-
+        // find rank were user.rank > currentRank et user.rank< nextRank
+        $ranks = $rankRepository->findAll();
         return $this->render('user/profil.html.twig', [
             'user' => $user,
+            "currentRank" => $currentRank,
+            "nextRank" => $nextRank
         ]);
     }
     #[Route('/edit', name: 'edit')]
