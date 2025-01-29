@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}Profile
+{% endblock %}
+{% block body %}
+	<div>
+		<!-- Section Profil -->
+		<section class="flex gap-6">
+			<img src={{ asset('img/1.png') }} class="w-80 object-cover rounded-sm" alt="Profile Picture"/>
+			<div class="flex justify-between w-full">
+				<div class="flex flex-col justify-between">
+					<div>
+						<p class="font-bold">{{user.username}}</p>
+						<p class="text-neutral-400">{{user.email}}</p>
+						<p class="text-neutral-400">21/09/2003</p>
+					</div>
+					{% if user == app.user %}
+						<a href="{{ path('app_user_edit' ) }}" class="btn">Modifier</a>
+					{% endif %}
+				</div>
+				<div class="rounded-full bg-fuchsia-500 h-fit px-3 py-1">
+					<p>{{user.xp ? user.xp: 0}}
+						XP</p>
+				</div>
+			</div>
+
+		</section>
+		{% if user.xp %}
+			<section class="my-20">
+				<div class="flex justify-between mb-4">
+					<p>{{currentRank.title}}</p>
+					<p>{{nextRank.title}}</p>
+
+				</div>
+				<div class="w-full h-6 border overflow-hidden rounded-full">
+					<div class="h-8 bg-white" style="width: {{ pourcentage }}%;"></div>
+				</div>
+				<div class="flex justify-between mt-2">
+					<p class="text-sm text-gray-300 italic">{{currentRank.description}}</p>
+					<a href={{path("app_rank_homepage")}} class="hover:underline">
+						En découvrir + sur les ranks
+					</a>
+				</div>
+			</section>
+		{% endif %}
+
+		{% include 'parts/layouts/user/bromance_layout.html.twig' with {"path_bromance": "app_bromance_homepage"}  %}
+
+
+		<!-- Section Events Author -->
+		{% include 'parts/layouts/user/event_author_layout.html.twig' with {"path_event_author": "app_event_author"}  %}
+
+
+		<!-- Section Events Participation -->
+		{% include 'parts/layouts/user/event_participate_layout.html.twig' with {"path_event_participate": "app_event_user_participate"}  %}
+
+
+		<!-- Section Forum -->
+		{% include 'parts/layouts/user/forum_author_layout.html.twig' with {"path_forum_author": "app_forum_author"}  %}
+
+	</div>
+{% endblock %}

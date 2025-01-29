@@ -4,11 +4,9 @@ namespace App\Controller\Bromance;
 
 use App\Entity\User;
 use App\Entity\Bromance;
-use App\Entity\User;
 use App\Enum\BromanceRequestStatusEnum;
 use App\Enum\BromanceStatusEnum;
 use App\Repository\BromanceRepository;
-use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;

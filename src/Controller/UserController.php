@@ -9,34 +9,38 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 
 use App\Entity\User;
-use App\Entity\Event;
 use App\Entity\BanRequest;
+use App\Entity\Rank;
 use App\Form\BanRequestType;
 use App\Enum\StatusUserEnum;
 use App\Form\UserEditType;
-use App\Repository\UserRepository;
-use App\Repository\BromanceRepository;
 use App\Repository\RankRepository;
+use App\Repository\UserRepository;
+use App\Service\CategoryColorService;
 
 #[Route('/user', name: "app_user_")]
 class UserController extends AbstractController
 {
-    #[Route('/', name: 'homepage')]
-    public function myProfil(RankRepository $rankRepository): Response
+    #[Route('/show/{id}', name: 'homepage')]
+    public function myProfil(User $user, RankRepository $rankRepository, CategoryColorService $categoryColorService): Response
     {
-        $user = $this->getUser();
+        $currentRank = new Rank();
+        $nextRank = new Rank();
+        $pourcentage = 0;
         $userXp = $user->getXp();
         if ($userXp) {
             $currentRank = $rankRepository->findCurrentRank($userXp);
             $nextRank = $rankRepository->findNextRank($userXp);
+            $pourcentage =  (($userXp - $currentRank->getMinimum()) / ($nextRank->getMinimum() - $currentRank->getMinimum())) * 100;
         }
+        $colorsCategories = $categoryColorService->getCategoryColors();
 
-        $pourcentage =  (($userXp - $currentRank->getMinimum()) / ($nextRank->getMinimum() - $currentRank->getMinimum())) * 100;
-        return $this->render('user/profil.html.twig', [
+        return $this->render('user/show.html.twig', [
             'user' => $user,
             "currentRank" => $currentRank,
             "nextRank" => $nextRank,
-            "pourcentage" => $pourcentage
+            "pourcentage" => $pourcentage,
+            "colorsCategories" => $colorsCategories
         ]);
     }
     #[Route('/edit', name: 'edit')]
@@ -62,49 +66,6 @@ class UserController extends AbstractController
             "form" => $form->createView(),
         ]);
     }
-
-    #[Route('/alpha/{id}', name: 'alpha_show')]
-    public function userProfil(int $id, UserRepository $userRepository, BromanceRepository $bromanceRepository): Response
-    {
-        $user = $userRepository->findOneBy(['id' => $id]);
-
-        $bromance_exists = false;
-
-        if ($this->getUser()) {
-            $bromance_exists = $bromanceRepository->findOneBy([
-                'alpha' => $this->getUser(),
-                'follower' => $user
-            ]) !== null;
-
-            if (!$bromance_exists) {
-                $bromance_exists = $bromanceRepository->findOneBy([
-                    'alpha' => $user,
-                    'follower' => $this->getUser()
-                ]) !== null;
-            }
-        }
-
-        return $this->render('user/alpha/show.html.twig', [
-            'user' => $user,
-            'bromance_exists' => $bromance_exists
-        ]);
-    }
-
-
-
-    #[Route('/alpha', name: 'alpha_homepage', methods: ['GET'])]
-    public function searchAlphaUser(Request $request, UserRepository $userRepository, EntityManagerInterface $entityManager): Response
-    {
-        $keyword = $request->query->get('q', '');
-        $users = [];
-
-        $users = $keyword ? $userRepository->searchAlphaByKeyword($keyword, $entityManager) : $userRepository->findAll();
-        return $this->render('user/alpha/index.html.twig', [
-            'users' => $users,
-            'keyword' => $keyword,
-        ]);
-    }
-
 
     #[Route('/banned', name: 'banned')]
     public function banned(Request $request, EntityManagerInterface $em): Response
@@ -139,5 +100,18 @@ class UserController extends AbstractController
         }
 
         return $this->redirectToRoute('app_user_homepage');
+    }
+
+    #[Route('/alpha', name: 'alpha')]
+    public function searchAlphaUser(Request $request, UserRepository $userRepository, EntityManagerInterface $entityManager): Response
+    {
+        $keyword = $request->query->get('q', '');
+        $users = [];
+
+        $users = $keyword ? $userRepository->searchAlphaByKeyword($keyword, $entityManager) : $userRepository->findAll();
+        return $this->render('user/alpha_search.html.twig', [
+            'users' => $users,
+            'keyword' => $keyword,
+        ]);
     }
 }

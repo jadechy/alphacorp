@@ -43,7 +43,7 @@ class AppFixtures extends Fixture
     protected $faker;
     public function __construct(protected UserPasswordHasherInterface $passwordHasher)
     {
-        $this->faker = Factory::create('fr_FR'); // Remplacez 'fr_FR' par la langue souhaitée
+        $this->faker = Factory::create('fr_FR');
     }
 
     public function load(ObjectManager $manager): void
