@@ -23,12 +23,18 @@ class UserController extends AbstractController
     public function myProfil(RankRepository $rankRepository): Response
     {
         $user = $this->getUser();
-        // find rank were user.rank > currentRank et user.rank< nextRank
-        $ranks = $rankRepository->findAll();
+        $userXp = $user->getXp();
+        if ($userXp) {
+            $currentRank = $rankRepository->findCurrentRank($userXp);
+            $nextRank = $rankRepository->findNextRank($userXp);
+        }
+
+        $pourcentage =  (($userXp - $currentRank->getMinimum()) / ($nextRank->getMinimum() - $currentRank->getMinimum())) * 100;
         return $this->render('user/profil.html.twig', [
             'user' => $user,
             "currentRank" => $currentRank,
-            "nextRank" => $nextRank
+            "nextRank" => $nextRank,
+            "pourcentage" => $pourcentage
         ]);
     }
     #[Route('/edit', name: 'edit')]
