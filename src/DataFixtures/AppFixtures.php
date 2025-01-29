@@ -82,7 +82,10 @@ class AppFixtures extends Fixture
     }
 
     /**
-     * @return User[] 
+     * Crée des utilisateurs actifs.
+     *
+     * @param ObjectManager $manager
+     * @param User[] $users Tableau d'objets User.
      */
     protected function createActiveUsers(ObjectManager $manager, array &$users): void
     {
@@ -108,7 +111,10 @@ class AppFixtures extends Fixture
     }
 
     /**
-     * @return User[] 
+     * Crée des utilisateurs admin.
+     *
+     * @param ObjectManager $manager
+     * @param User[] $users Tableau d'objets User.
      */
     protected function createUser(ObjectManager $manager, array &$users): void
     {
@@ -175,7 +181,10 @@ class AppFixtures extends Fixture
     }
 
     /**
-     * @return User[] 
+     * Crée des utilisateurs bannis.
+     *
+     * @param ObjectManager $manager
+     * @param User[] $users Tableau d'objets User.
      */
     protected function createBannedUsers(ObjectManager $manager, array &$users): void
     {
@@ -200,7 +209,10 @@ class AppFixtures extends Fixture
     }
 
     /**
-     * @return User[] 
+     * Crée des utilisateurs supprimés.
+     *
+     * @param ObjectManager $manager
+     * @param User[] $users Tableau d'objets User.
      */
     protected function createDeleteUsers(ObjectManager $manager, array &$users): void
     {
@@ -224,6 +236,12 @@ class AppFixtures extends Fixture
         }
     }
 
+    /**
+     * Crée des catégories.
+     *
+     * @param ObjectManager $manager
+     * @param Category[] $categories Tableau d'objets Category.
+     */
     protected function createCategories(ObjectManager $manager, array &$categories): void
     {
         $array = [
@@ -244,6 +262,12 @@ class AppFixtures extends Fixture
         }
     }
 
+    /**
+     * Crée des langues.
+     *
+     * @param ObjectManager $manager
+     * @param Language[] $languages Tableau d'objets Language.
+     */
     protected function createLanguages(ObjectManager $manager, array &$languages): void
     {
         $array = [
@@ -263,6 +287,15 @@ class AppFixtures extends Fixture
         }
     }
 
+    /**
+     * Crée des topics.
+     *
+     * @param ObjectManager $manager
+     * @param Topic[] $topics Tableau d'objets Topic.
+     * @param Category[] $categories Tableau d'objets Category.
+     * @param Language[] $languages Tableau d'objets de Language.
+     * @param User[] $users Tableau d'objets d'User.
+     */
     protected function createTopics(ObjectManager $manager, array $topics, array $categories, array $languages, array $users)
     {
         for ($j = 0; $j < self::MAX_TOPICS; $j++) {
@@ -280,6 +313,13 @@ class AppFixtures extends Fixture
         }
     }
 
+    /**
+     * Crée des réponses au topic.
+     *
+     * @param ObjectManager $manager
+     * @param Topic[] $topics Tableau d'objets Topic.
+     * @param User[] $users Tableau d'objets User.
+     */
     protected function createResponses(ObjectManager $manager, array $topics, array $users): void
     {
         /** @var Topic $topic */
@@ -297,6 +337,14 @@ class AppFixtures extends Fixture
         }
     }
 
+    /**
+     * Lie les topics à une catégorie et une langue.
+     *
+     * @param Topic[] $topics Tableau d'objets Topic.
+     * @param Category[] $categories Tableau d'objets Category.
+     * @param Language[] $languages Tableau d'objets Language.
+     * @param User[] $users Tableau d'objets User.
+     */
     protected function linkTopicsToCategoriesAndLanguages(array $topics, array $categories, array $languages, array $users): void
     {
         /** @var Topic $topic */
@@ -314,6 +362,12 @@ class AppFixtures extends Fixture
         }
     }
 
+    /**
+     * Crée des bromances netre User avec le role ALPHA.
+     *
+     * @param ObjectManager $manager
+     * @param User[] $users Tableau d'objets User.
+     */
     protected function createBromance(ObjectManager $manager, array $users): void
     {
         $alphaUsers = array_filter($users, function ($user) {
@@ -362,6 +416,12 @@ class AppFixtures extends Fixture
         }
     }
 
+    /**
+     * Crée des rank.
+     *
+     * @param ObjectManager $manager
+     * @param Rank[] $ranks Tableau d'objets Rank.
+     */
     protected function createRank(ObjectManager $manager, array &$ranks): void
     {
         $array = [
@@ -388,6 +448,13 @@ class AppFixtures extends Fixture
         }
     }
 
+    /**
+     * Crée des évènements.
+     *
+     * @param ObjectManager $manager
+     * @param Event[] $events Tableau d'objets Event.
+     * @param User[] $users Tableau d'objets User.
+     */
     protected function createEvents(ObjectManager $manager, array &$events, array $users): void
     {
         for ($i = 0; $i < self::MAX_EVENTS; $i++) {
@@ -426,6 +493,14 @@ class AppFixtures extends Fixture
         }
     }
 
+    /**
+     * Crée des challenges.
+     *
+     * @param ObjectManager $manager
+     * @param Challenge[] $challenges Tableau d'objets Challenge.
+     * @param User[] $users Tableau d'objets User.
+     * @param Question[] $questions Tableau d'objets Question.
+     */
     protected function createChallenges(ObjectManager $manager, array &$challenges, array $users, array &$questions): void
     {
         for ($j = 0; $j < self::MAX_CHALLENGES; $j++) {
@@ -476,6 +551,12 @@ class AppFixtures extends Fixture
         }
     }
 
+    /**
+     * Crée des questions.
+     *
+     * @param ObjectManager $manager
+     * @param Question[] $questions Tableau d'objets Question.
+     */
     protected function createQuestions(ObjectManager $manager, Quiz $quiz, array &$questions): void
     {
         for ($k = 0; $k < random_int(3, 10); $k++) {
@@ -501,6 +582,13 @@ class AppFixtures extends Fixture
         }
     }
 
+    /**
+     * Lie les réponses au questions à un utilisateur ALPHA.
+     *
+     * @param ObjectManager $manager
+     * @param User[] $users Tableau d'objets User.
+     * @param Question[] $questions Tableau d'objets Question.
+     */
     protected function linkUserToAnswerQuestion(ObjectManager $manager, array $users, array $questions): void
     {
         foreach ($users as $user) {

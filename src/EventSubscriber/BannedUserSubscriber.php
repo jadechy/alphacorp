@@ -22,7 +22,7 @@ class BannedUserSubscriber implements EventSubscriberInterface
         $this->router = $router;
     }
 
-    public function onKernelRequest(RequestEvent $event)
+    public function onKernelRequest(RequestEvent $event): void
     {
         $token = $this->tokenStorage->getToken();
         $user = $token ? $token->getUser() : null;

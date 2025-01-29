@@ -61,7 +61,9 @@ final class UserAdminController extends AbstractController
 
             $user->setStatus(StatusUserEnum::ACTIVE);
 
-            $user->setPlainPassword($form->get('plainPassword')->getData());
+            /** @var string $plainPassword */
+            $plainPassword = $form->get('plainPassword')->getData();
+            $user->setPlainPassword($plainPassword);
 
             $entityManager->persist($user);
             $entityManager->flush();

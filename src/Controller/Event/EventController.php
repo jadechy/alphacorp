@@ -7,9 +7,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-use App\Repository\EventRepository;
+use App\Entity\User;
 use App\Entity\Event;
+use App\Repository\EventRepository;
 use App\Form\EventType;
 use App\Service\FileUploader;
 
@@ -19,6 +21,7 @@ class EventController extends AbstractController
     #[Route('/', name: 'homepage')]
     public function allEvent(EventRepository $eventRepository): Response
     {
+        /** @var User $user */
         $user = $this->getUser();
         $events =  $eventRepository->findAllExcludingUser($user);
 
@@ -78,8 +81,10 @@ class EventController extends AbstractController
                 throw $this->createAccessDeniedException('Vous devez être connecté pour créer un événement.');
             }
 
+            /** @var User $user */
             $event->setAuthor($user);
 
+            /** @var UploadedFile $imageFile */
             $imageFile = $form->get('imageFile')->getData();
             $fileName = $fileUploader->upload($imageFile);
             $event->setImage($fileName);
@@ -111,6 +116,7 @@ class EventController extends AbstractController
                     unlink($fileUploader->getTargetDirectory() . $oldImagePath);
                 }
 
+                /** @var UploadedFile $imageFile */
                 $fileName = $fileUploader->upload($imageFile);
                 $event->setImage($fileName);
             }
@@ -151,6 +157,7 @@ class EventController extends AbstractController
             throw $this->createAccessDeniedException('Vous devez être connecté pour répondre.');
         }
 
+        /** @var User $user */
         if (!$event->isUserParticipating($user)) {
             $event->addParticipant($user);
         }
@@ -168,6 +175,7 @@ class EventController extends AbstractController
             throw $this->createAccessDeniedException('Vous devez être connecté pour effectuer cette action.');
         }
 
+        /** @var User $user */
         if ($event->isUserParticipating($user)) {
             $event->removeParticipant($user);
             $entityManager->persist($event);

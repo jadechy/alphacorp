@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Topic;
 use App\Entity\Response;
 use App\Enum\ResponseStatusEnum;
 use App\Form\Admin\ResponseAdminType;
@@ -35,7 +36,7 @@ final class ResponseAdminController extends AbstractController
         foreach ($query as $response) {
             $status = $response->getStatus();
 
-            if ($status && !in_array($status, $statuses, true)) {
+            if (!in_array($status, $statuses, true)) {
                 $statuses[] = $status;
             }
         }
@@ -109,11 +110,9 @@ final class ResponseAdminController extends AbstractController
             return $this->redirectToRoute('admin_response_homepage', [], HttpResponse::HTTP_SEE_OTHER);
         }
 
-        // if ($referer && str_contains($referer, $this->generateUrl('admin_response_homepage', ['id' => $report->getId()]))) {
-        //     return $this->redirectToRoute('admin_report', [], HttpResponse::HTTP_SEE_OTHER);
-        // }
-
-        return $this->redirectToRoute('admin_response_show', ['id' => $response->getTopic()->getId()], HttpResponse::HTTP_SEE_OTHER);
+        /** @var Topic $topic */
+        $topic = $response->getTopic();
+        return $this->redirectToRoute('admin_response_show', ['id' => $topic->getId()], HttpResponse::HTTP_SEE_OTHER);
     }
     #[Route('/{id}', name: 'delete', methods: ['POST'])]
     public function delete(Request $request, Response $response, EntityManagerInterface $entityManager): HttpResponse

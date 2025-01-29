@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 use App\Repository\EventRepository;
 use App\Entity\Event;
@@ -77,6 +78,7 @@ class EventAdminController extends AbstractController
                 throw $this->createAccessDeniedException('Vous devez être connecté pour créer un événement.');
             }
 
+            /** @var UploadedFile $imageFile */
             $imageFile = $form->get('imageFile')->getData();
             $fileName = $fileUploader->upload($imageFile);
             $event->setImage($fileName);
@@ -112,6 +114,7 @@ class EventAdminController extends AbstractController
                     unlink($fileUploader->getTargetDirectory() . $oldImagePath);
                 }
 
+                /** @var UploadedFile $imageFile */
                 $fileName = $fileUploader->upload($imageFile);
                 $event->setImage($fileName);
             }

@@ -17,8 +17,10 @@ class EventRepository extends ServiceEntityRepository
         parent::__construct($registry, Event::class);
     }
 
+    /** @return array<Event> */
     public function findAllExcludingUser(User $user): array
     {
+        /** @var array<Event> */
         return $this->createQueryBuilder('e')
             ->where('e.author != :user')
             ->setParameter('user', $user)

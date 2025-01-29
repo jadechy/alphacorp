@@ -18,6 +18,7 @@ class TopicRepository extends ServiceEntityRepository
         parent::__construct($registry, Topic::class);
     }
 
+    /** @return array<Topic> */
     public function searchByFilters(string $keyword = '', string $categoryLabel = ''): array
     {
         $queryBuilder = $this->createQueryBuilder('t');
@@ -34,7 +35,7 @@ class TopicRepository extends ServiceEntityRepository
                 ->andWhere('c.label = :categoryLabel')
                 ->setParameter('categoryLabel', $categoryLabel);
         }
-
+        /** @var array<Topic> */
         return $queryBuilder->getQuery()->getResult();
     }
 

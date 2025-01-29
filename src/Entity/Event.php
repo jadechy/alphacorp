@@ -19,13 +19,13 @@ class Event
     #[ORM\Column(length: 50, name: 'EVT_TITLE')]
     private string $title;
 
-    #[ORM\Column(length: 50, name: 'EVT_SHORT_DESCRIPTION')]
+    #[ORM\Column(length: 50, name: 'EVT_SHORT_DESCRIPTION', nullable:true)]
     private ?string $shortDescription = null;
 
-    #[ORM\Column(length: 255, name: 'EVT_LONG_DESCRIPTION')]
+    #[ORM\Column(length: 255, name: 'EVT_LONG_DESCRIPTION', nullable:true)]
     private ?string $longDescription = null;
 
-    #[ORM\Column(length: 100, name: 'EVT_IMAGE')]
+    #[ORM\Column(length: 100, name: 'EVT_IMAGE', nullable:true)]
     private ?string $image = null;
 
     #[ORM\Column(name: 'EVT_START_DATE')]

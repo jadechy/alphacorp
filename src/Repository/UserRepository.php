@@ -17,6 +17,7 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
+    /** @return array<User> */
     public function searchByKeyword(string $keyword): array
     {
         $conn = $this->getEntityManager()->getConnection();
@@ -34,6 +35,7 @@ class UserRepository extends ServiceEntityRepository
             return [];
         }
 
+        /** @var array<User> */
         return $this->createQueryBuilder('t')
             ->where('t.id IN (:ids)')
             ->setParameter('ids', $ids)

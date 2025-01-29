@@ -54,6 +54,7 @@ class AuthController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            /** @var string $password */
             $password = $form->get('plainPassword')->getData();
             $user->setPlainPassword($password);
 
