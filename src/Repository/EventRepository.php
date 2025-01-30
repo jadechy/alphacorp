@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Event;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -15,6 +16,18 @@ class EventRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Event::class);
     }
+
+    /** @return array<Event> */
+    public function findAllExcludingUser(User $user): array
+    {
+        /** @var array<Event> */
+        return $this->createQueryBuilder('e')
+            ->where('e.author != :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult();
+    }
+
 
     //    /**
     //     * @return Event[] Returns an array of Event objects

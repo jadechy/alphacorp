@@ -22,3 +22,13 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    App\EventSubscriber\UserPasswordSubscriber:
+        tags:
+            - { name: 'doctrine.event_subscriber' }
+    
+    App\EventSubscriber\BannedUserSubscriber:
+        arguments:
+            $tokenStorage: '@security.token_storage'
+            $router: '@router'
+        tags:
+            - { name: 'kernel.event_subscriber' }

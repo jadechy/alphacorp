@@ -1,0 +1,16 @@
+{% extends 'admin/base_admin.html.twig' %}
+
+{% block admin_title %}Modifier :
+	{{language.name}}
+{% endblock %}
+{% set return_path = 'admin_language_show' %}
+{% set return_params = { id: language.id } %}
+
+
+{% block admin_content %}
+	<section>
+		{{ include('admin/language/_form.html.twig', {'button_label': 'Enregistrer'}) }}
+		{{ include('admin/language/_delete_form.html.twig') }}
+	</div>
+
+</section>{% endblock %}

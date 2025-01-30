@@ -1,0 +1,52 @@
+{% macro afficheReponse(response, topic) %}
+	<li class="mt-4 list-none rounded-lg p-4 shadow-xl shadow-neutral-900">
+		<div class="flex items-center w">
+			<div class=" w-full flex items-center justify-between">
+				<div class="flex items-center justify-between w-full">
+					<p class="font-medium">{{response.author.username}}</p>
+					<p class="text-xs text-gray-500  ">
+						{{ response.createdAt|format_datetime('short', 'none', locale: 'fr') }}
+					</p>
+				</div>
+
+				{% if response.author == app.user %}
+					<div class="flex gap-4 items-center ml-2">
+
+						{% if response.status.value == 'validated' %}
+							<span class="py-1.5 px-2.5 bg-green-500/30 rounded-full flex w-auto justify-center items-center gap-1">
+								<p class="font-medium text-xs text-green-600">Validé</p>
+							</span>
+						{% elseif response.status.value == 'rejected' %}
+							<span class="py-1.5 px-2.5 bg-red-500/30 rounded-full flex w-auto justify-center items-center gap-1">
+								<p class="font-medium text-xs text-red-600">Rejeté</p>
+							</span>
+						{% elseif response.status.value == 'deleted' %}
+							<span class="py-1.5 px-2.5 bg-red-500/30 rounded-full flex w-auto justify-center items-center gap-1">
+								<p class="font-medium text-xs text-red-600">Supprimé</p>
+							</span>
+						{% elseif response.status.value == 'waiting' %}
+							<span class="py-1.5 px-2.5 bg-orange-500/30 rounded-full flex w-auto justify-center items-center gap-1">
+								<p class="font-medium text-xs text-orange-600">En attente</p>
+							</span>
+						{% endif %}
+
+					</div>
+				{% endif %}
+			</div>
+		</div>
+
+
+		<p class="mt-4 w-full">{{response.content}}</p>
+
+
+		{% if response.author == app.user and response.status.value != 'deleted' %}
+			<form method="POST" action="{{ path('app_response_delete', { id: response.id }) }}">
+				<input type="hidden" name="status" value="deleted">
+				<button type="submit" class="text-end w-full text-red-700 hover:underline">
+					Supprimer
+				</button>
+			</form>
+		{% endif %}
+
+	</li>
+{% endmacro %}

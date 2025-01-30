@@ -1,0 +1,83 @@
+{% extends 'admin/base_admin.html.twig' %}
+
+{% block admin_title %}Utilisateurs
+{% endblock %}
+{% set return_path = 'admin_homepage' %}
+{% block admin_content %}
+
+	<table>
+		<thead>
+			<tr>
+				<th scope="col">
+					ID</th>
+				<th scope="col">
+					Username</th>
+				<th scope="col">
+					Email</th>
+				<th scope="col">
+					Roles</th>
+				<th scope="col">
+					Status</th>
+				<th scope="col">
+					Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for user in pagination.items %}
+				<tr>
+					<td>{{ user.id }}</td>
+					<td>{{ user.username }}</td>
+					<td>{{ user.email }}</td>
+					<td>
+						{% for role in user.roles %}
+							<span class="role">
+								{% if role == 'ROLE_ALPHA' %}
+									Alpha
+								{% elseif role == 'ROLE_SUPERVISOR' %}
+									Superviseuse
+								{% elseif role == 'ROLE_ADMIN' %}
+									Administrateur
+								{% endif %}
+							</span>
+						{% endfor %}
+					</td>
+					<td>
+						{% if user.status.value == 'banni' %}
+							Utilisateur banni
+						{% elseif user.status.value == 'supprimé'%}
+							Compte supprimé
+						{% elseif user.status.value == 'actif'%}
+							Compte actif
+						{% endif %}
+					</td>
+					<td>
+						{% if 'ROLE_BANNED' not in user.roles and 'ROLE_ADMIN' not in user.roles %}
+							<a href="{{ path('admin_user_ban', {'id': user.id}) }}" class="group text-red-500 hover:underline">
+								Bannir
+							</a>
+						{% elseif 'ROLE_ADMIN' in user.roles %}
+							<span></span>
+						{% else %}
+							<span class="text-gray-500">Déjà banni</span>
+						{% endif %}
+						<a href="{{ path('admin_user_show', {'id': user.id}) }}">
+							{{ ux_icon('tabler:eye', {class: 'w-6 h-6'}) }}
+						</a>
+						<a href="{{ path('admin_user_edit', {'id': user.id}) }}">
+							{{ ux_icon('tabler:edit', {class: 'w-6 h-6'}) }}
+						</a>
+
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="4">Aucun utilisateur trouvé.</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	{{ knp_pagination_render(pagination) }}
+	<a href="{{ path('admin_user_new') }}" class="btn">
+		>Créer un nouvel utilisateur
+	</a>
+{% endblock %}

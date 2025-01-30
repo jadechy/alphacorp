@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bromance{% endblock %}
+
+{% block body %}
+    <h1>Toutes mes bromances</h1>
+
+    {% if bromances is empty %}
+        <p>Aucune lien de bromance.</p>
+    {% else %}
+        {% set request_accepted = false %}
+        <ul>
+            {% for bromance in bromances %}
+                {% if bromance.request.value == 'Demande acceptée' %}
+                    <li>
+                        Bromance avec {{ bromance.follower.username }} - Niveau : {{ bromance.status.value }}
+                    </li>
+                    {% set request_accepted = true %}
+                {% endif %}
+            {% endfor %}
+        </ul>
+
+        {% if not request_accepted %}
+            <p>Vos demandes de bromance n'ont pas encore été acceptées.</p>
+        {% endif %}
+        <div class="flex items-center justify-center mt-4">
+            <a href="{{ path('bromance_request_send') }}">
+                <button class="relative flex bg-blue-600 flex-row p-2 items-center justify-center rounded-md text-sm overflow-hidden border cursor-pointer transition text-white hover:opacity-90 hover:scale-105">
+                    Voir toutes mes demandes envoyés.
+                </button>
+            </a>
+            <a href="{{ path('bromance_request_recieve') }}">
+                <button class="relative flex bg-blue-600 flex-row p-2 items-center justify-center rounded-md text-sm overflow-hidden border cursor-pointer transition text-white hover:opacity-90 hover:scale-105">
+                    Voir toutes mes demandes reçu.
+                </button>
+            </a>
+        </div>
+    {% endif %}
+{% endblock %}

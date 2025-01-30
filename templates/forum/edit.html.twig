@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier
+	{{topic.title}}
+{% endblock %}
+
+{% block body %}
+	<section class="mt-8">
+		{{ include('forum/_form.html.twig', {'button_label': 'Enregistrer'}) }}
+		{{ include('forum/_delete_form.html.twig') }}
+	</div>
+</section>{% endblock %}

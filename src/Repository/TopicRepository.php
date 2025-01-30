@@ -16,6 +16,32 @@ class TopicRepository extends ServiceEntityRepository
         parent::__construct($registry, Topic::class);
     }
 
+    /** @return array<Topic> */
+    public function searchByKeyword(string $keyword): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        
+        $sql = "SELECT * FROM ALP_TOPIC WHERE MATCH(TPC_TITLE, TPC_SHORT_DESCRIPTION, TPC_LONG_DESCRIPTION) AGAINST(:keyword)";
+        
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue("keyword", $keyword);
+
+        $result = $stmt->execute();
+
+        $ids = array_column($result->fetchAllAssociative(), 'TPC_ID');
+
+        if (empty($ids)) {
+            return [];
+        }
+
+        /** @var array<Topic> */
+        return $this->createQueryBuilder('t')
+            ->where('t.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return Topic[] Returns an array of Topic objects
     //     */

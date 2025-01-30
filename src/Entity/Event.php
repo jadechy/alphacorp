@@ -19,11 +19,14 @@ class Event
     #[ORM\Column(length: 50, name: 'EVT_TITLE')]
     private string $title;
 
-    #[ORM\Column(length: 255, name: 'EVT_DESCRIPTION')]
-    private string $description;
+    #[ORM\Column(length: 50, name: 'EVT_SHORT_DESCRIPTION', nullable:true)]
+    private ?string $shortDescription = null;
 
-    #[ORM\Column(length: 100, name: 'EVT_IMAGE')]
-    private string $image;
+    #[ORM\Column(length: 255, name: 'EVT_LONG_DESCRIPTION', nullable:true)]
+    private ?string $longDescription = null;
+
+    #[ORM\Column(length: 100, name: 'EVT_IMAGE', nullable:true)]
+    private ?string $image = null;
 
     #[ORM\Column(name: 'EVT_START_DATE')]
     private \DateTimeImmutable $startAt;
@@ -35,11 +38,18 @@ class Event
      * @var Collection<int, User>
      */
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'events')]
-    private Collection $users;
+    private Collection $participants;
+
+    #[ORM\ManyToOne(inversedBy: 'authorEvents')]
+    #[ORM\JoinColumn(name:'USR_ID',referencedColumnName:'USR_ID')]
+    private ?User $author = null;
+
+    #[ORM\Column(length: 255,name: 'EVT_LOCATION')]
+    private string $location;
 
     public function __construct()
     {
-        $this->users = new ArrayCollection();
+        $this->participants = new ArrayCollection();
     }
 
     public function getId(): int
@@ -59,19 +69,31 @@ class Event
         return $this;
     }
 
-    public function getDescription(): string
+    public function getShortDescription(): ?string
     {
-        return $this->description;
+        return $this->shortDescription;
     }
 
-    public function setDescription(string $description): static
+    public function setShortDescription(string $shortDescription): static
     {
-        $this->description = $description;
+        $this->shortDescription = $shortDescription;
 
         return $this;
     }
 
-    public function getImage(): string
+    public function getLongDescription(): ?string
+    {
+        return $this->longDescription;
+    }
+
+    public function setLongDescription(string $longDescription): static
+    {
+        $this->longDescription = $longDescription;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
     {
         return $this->image;
     }
@@ -108,28 +130,86 @@ class Event
     }
 
     /**
-     * @return Collection<int, User>
+     * Vérifie si l'événement est dans le futur.
      */
-    public function getUsers(): Collection
+    public function isInFuture(): bool
     {
-        return $this->users;
+        return $this->startAt > new \DateTimeImmutable();
     }
 
-    public function addUser(User $user): static
+    /**
+     * Vérifie si l'événement est en cours.
+     */
+    public function isOngoing(): bool
     {
-        if (!$this->users->contains($user)) {
-            $this->users->add($user);
-            $user->addEvent($this);
+        $now = new \DateTimeImmutable();
+        return $this->startAt <= $now && $this->endAt >= $now;
+    }
+
+    /**
+     * Vérifie si l'événement est terminé.
+     */
+    public function isFinished(): bool
+    {
+        return $this->endAt < new \DateTimeImmutable();
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getParticipants(): Collection
+    {
+        return $this->participants;
+    }
+
+    public function addParticipant(User $participant): static
+    {
+        if (!$this->participants->contains($participant)) {
+            $this->participants->add($participant);
+            $participant->addEvent($this);
         }
 
         return $this;
     }
 
-    public function removeUser(User $user): static
+    public function removeParticipant(User $participant): static
     {
-        if ($this->users->removeElement($user)) {
-            $user->removeEvent($this);
+        if ($this->participants->removeElement($participant)) {
+            $participant->removeEvent($this);
         }
+
+        return $this;
+    }
+
+    public function isUserParticipating(?User $user): bool
+    {
+        if (!$user) {
+            return false;
+        }
+        
+        return $this->getParticipants()->contains($user);
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): static
+    {
+        $this->author = $author;
+
+        return $this;
+    }
+
+    public function getLocation(): string
+    {
+        return $this->location;
+    }
+
+    public function setLocation(string $location): static
+    {
+        $this->location = $location;
 
         return $this;
     }

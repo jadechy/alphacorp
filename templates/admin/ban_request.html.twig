@@ -1,0 +1,42 @@
+{% extends 'admin/base_admin.html.twig' %}
+
+{% block title %}Dashboard - Demande de débanissement
+{% endblock %}
+{% block h1 %}Dashboard - Demande de débanissement
+{% endblock %}
+
+
+{% block admin_content %}
+	<table>
+		<thead>
+			<tr>
+				<th scope="col">
+					ID</th>
+				<th scope="col">
+					Message</th>
+				<th scope="col">
+					Utilisateur</th>
+				<th scope="col">
+					Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for banRequest in banRequests %}
+				<tr>
+					<td>{{ banRequest.id }}</td>
+					<td>{{ banRequest.message }}</td>
+					<td>{{ banRequest.user.username }}</td>
+					<td>
+						<a href="{{ path('app_user_deban', {'id': banRequest.user.id}) }}" class="group text-red-500 hover:underline">Débannir</a>
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="4">Aucune demande trouvé.</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+
+{% endblock %}

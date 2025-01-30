@@ -31,6 +31,10 @@ class Challenge
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'participations')]
     private Collection $users;
 
+    #[ORM\ManyToOne(inversedBy: 'challenges')]
+    #[ORM\JoinColumn(name:'USR_ID',referencedColumnName:'USR_ID')]
+    private ?User $author = null;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -65,18 +69,6 @@ class Challenge
         return $this;
     }
 
-    public function getSupervisor(): ?User
-    {
-        return $this->supervisor;
-    }
-
-    public function setSupervisor(?User $supervisor): static
-    {
-        $this->supervisor = $supervisor;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, User>
      */
@@ -100,6 +92,18 @@ class Challenge
         if ($this->users->removeElement($user)) {
             $user->removeParticipation($this);
         }
+
+        return $this;
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): static
+    {
+        $this->author = $author;
 
         return $this;
     }

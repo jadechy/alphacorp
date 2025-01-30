@@ -1,0 +1,26 @@
+{% extends 'emails/base.html.twig' %}
+
+{% block body %}
+
+
+	<br>
+	Bonjour
+	<b>{{ user.username }}</b>,
+	<br>
+	<br>
+	Vous avez demandé la réinitialisation de votre mot de passe sur Alphacorp.
+	<br>
+	Pour réinitialiser votre mot de passe, veuillez cliquer sur le lien suivant :
+	<a href="{{ resetLink }}" style="font-weight: bold">Réinitialiser mon mot de passe</a>
+	<br>
+
+	<br>
+	L'équipe
+	<span style="color: #ff4d4d;">Alphacorp</span>.
+	<br>
+	<br>
+	<div style="font-size: 0.8rem; color: #999;">
+		Si vous n'arrivez pas à cliquer sur le lien, copiez-collez l'URL suivante dans votre navigateur :
+		<a href="{{ resetLink }}">{{ resetLink }}</a>
+	</div>
+{% endblock %}

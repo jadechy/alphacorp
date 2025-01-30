@@ -20,7 +20,7 @@ class Rank
     #[ORM\Column(name:'RAN_MINIMUM_XP')]
     private int $minimum;
 
-    #[ORM\Column(length: 50, name:'RAN_DESCRIPTION')]
+    #[ORM\Column(length: 150, name:'RAN_DESCRIPTION')]
     private string $description;
 
     public function getId(): int

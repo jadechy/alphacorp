@@ -1,0 +1,58 @@
+{% extends 'admin/base_admin.html.twig' %}
+
+{% import 'macro/response.html.twig' as macros %}
+
+{% block admin_title %}
+	Respnde id:{{response.id}}
+{% endblock %}
+{% set return_path = 'admin_response_homepage' %}
+
+{% block admin_content %}
+	<section>
+
+		<table>
+			<thead>
+				<tr>
+					<th>Catégorie</th>
+					<th>Valeur</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Id</td>
+					<td>{{response.id}}</td>
+				</tr>
+				<tr>
+					<td>Content</td>
+					<td>{{response.content}}</td>
+				</tr>
+				<tr>
+					<td>Status</td>
+					<td>{{response.status.value}}</td>
+				</tr>
+				<tr>
+					<td>Auteur</td>
+					<td>
+						<a href={{path("admin_user_show", {id: response.author.id} )}} class="badge">{{response.author.id}}
+							-
+							{{response.author.username}}{{ ux_icon('tabler:arrow-bar-right', {class: 'w-6 h-6'}) }}</a>
+					</td>
+				</tr>
+				<tr>
+					<td>Topic</td>
+					<td>
+						<a href={{path("admin_topic_show", {id: response.topic.id} )}} class="badge">{{response.topic.id}}
+							-
+							{{response.topic.title}}{{ ux_icon('tabler:arrow-bar-right', {class: 'w-6 h-6'}) }}</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="flex justify-center items-center gap-8">
+			<a href="{{ path('admin_response_edit', {'id': response.id}) }}" class="btn">
+				Modifier
+			</a>
+			{{ include('admin/response/_delete_form.html.twig') }}
+		</div>
+	</section>
+{% endblock %}

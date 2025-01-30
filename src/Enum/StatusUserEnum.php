@@ -4,7 +4,7 @@ namespace App\Enum;
 
 enum StatusUserEnum: string 
 {
-    case BLOCKED = 'bloqué';
+    case BANNED = 'banni';
     case DELETE = 'supprimé';
     case ACTIVE = 'actif';
 }
