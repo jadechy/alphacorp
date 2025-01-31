@@ -16,6 +16,13 @@
 		{% endblock %}
 	</head>
 	<body class="dark:bg-neutral-800 dark:text-white">
+		{% for label, messages in app.flashes %}
+			<div class="alert alert-{{ label }}">
+				{% for message in messages %}
+					<p>{{ message }}</p>
+				{% endfor %}
+			</div>
+		{% endfor %}
 		{% include('parts/layouts/header_layout.html.twig' ) %}
 
 		<main class="container mx-auto">

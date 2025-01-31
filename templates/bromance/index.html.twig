@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bromance
+{% endblock %}
+
+{% block body %}
+	<section>
+		<h2 class="text-xl mb-8">Mes bromances</h2>
+		{% if bromancesAlpha is not empty %}
+			<div class="grid grid-cols-2 gap-y-5 sm:grid-cols-4 gap-x-5">
+				{% for bromance in bromancesAlpha %}
+					<a href={{path("app_user_show", {id:bromance.follower.id} )}}>
+						{% include "parts/components/card_col.html.twig" with {"title": bromance.follower.username, "height": 25} %}
+					</a>
+				{% endfor %}
+			</div>
+		{% else %}
+			<p class="text-neutral-500">Pas de bromance</p>
+		{% endif %}
+	</section>
+	<section class="border-t mt-16 pt-8">
+		{% if bromancesFollower is not empty %}
+			<h2 class="italic text-xl mb-8">Gestion des demandes</h2>
+			<div class="flex justify-between">
+				<ul class="w-3/4">
+					{% for bromance in bromancesFollower %}
+						<li class="flex justify-between">
+							{{ bromance.alpha.username }}
+							<form method="post" action={{ path('app_bromance_reponse', {id: bromance.id} ) }}>
+								<button type="submit" name="reponse" value="accept" class="border-2 border-green-700 rounded-full transition group hover:bg-green-700 hover:scale-110">
+									{{ ux_icon('tabler:check', {class: 'w-6 h-6 text-green-700 group-hover:text-white transition'}) }}
+								</button>
+								<button type="submit" name="reponse" value="reject" class="border-2 border-red-700 rounded-full transition hover:bg-red-700 group ml-4 hover:scale-110">
+									{{ ux_icon('tabler:x', {class: 'w-6 h-6 text-red-700 group-hover:text-white transition'}) }}
+								</button>
+							</form>
+						</li>
+					{% endfor %}
+				</ul>
+			{% endif %}
+			<a href="{{ path('app_bromance_request_send') }}" class="btn-secondary">
+				Demandes envoyés
+			</a>
+		</div>
+
+	</section>
+
+
+{% endblock %}

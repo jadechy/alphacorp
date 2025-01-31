@@ -17,27 +17,42 @@ use App\Form\ResponseType;
 use App\Enum\ResponseStatusEnum;
 use App\Enum\TopicStatusEnum;
 use App\Form\TopicType;
+use App\Repository\CategoryRepository;
 use App\Repository\TopicRepository;
+use App\Service\CategoryColorService;
 
 #[Route('/forum', name: "app_forum_")]
 class TopicController extends AbstractController
 {
-
     #[Route('/', name: 'homepage', methods: ['GET'])]
-    public function search(Request $request, TopicRepository $topicRepository): HttpResponse
-    {
+    public function search(
+        Request $request,
+        TopicRepository $topicRepository,
+        CategoryRepository $categoryRepository,
+        CategoryColorService $categoryColorService
+    ): HttpResponse {
         $keyword = $request->query->get('q', '');
-        $topics = [];
+        $categoryLabel = $request->query->get('category', '');
+        $categories = $categoryRepository->findAll();
 
-        if (!empty($keyword)) {
-            $topics = $topicRepository->searchByKeyword($keyword);
+        $topics = [];
+        if ($keyword || $categoryLabel) {
+            $topics = $topicRepository->searchByFilters($keyword, $categoryLabel);
         } else {
             $topics = $topicRepository->findAll();
         }
+        $selectedCategory = $categoryLabel
+            ? $categoryRepository->findOneBy(["label" => $categoryLabel])
+            : null;
+        $colorsCategories = $categoryColorService->getCategoryColors();
 
         return $this->render('forum/index.html.twig', [
             'topics' => $topics,
             'keyword' => $keyword,
+            'categories' => $categories,
+            'category_selected' => $selectedCategory,
+            'colorsCategories' => $colorsCategories,
+
         ]);
     }
     #[Route('/show/{id}', name: 'show')]
@@ -142,8 +157,8 @@ class TopicController extends AbstractController
     }
 
     #[IsGranted('ROLE_ALPHA')]
-    #[Route('/user', name: 'user')]
-    public function userTopic(TopicRepository $topicRepository): HttpResponse
+    #[Route('/user', name: 'author')]
+    public function userTopic(TopicRepository $topicRepository, CategoryColorService $categoryColorService): HttpResponse
     {
         $user = $this->getUser();
 
@@ -152,9 +167,10 @@ class TopicController extends AbstractController
         }
 
         $topics = $topicRepository->findBy(['author' => $user]);
-
+        $colorsCategories = $categoryColorService->getCategoryColors();
         return $this->render('forum/author.html.twig', [
             'topics' => $topics,
+            "colorsCategories" => $colorsCategories
         ]);
     }
 }

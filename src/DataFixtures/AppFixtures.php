@@ -6,7 +6,6 @@ use App\Entity\Bromance;
 use App\Entity\User;
 use App\Entity\Answer;
 use App\Entity\Category;
-use App\Entity\Challenge;
 use App\Entity\Event;
 use App\Entity\Language;
 use App\Entity\Question;
@@ -24,6 +23,7 @@ use App\Enum\ResponseStatusEnum;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Faker\Factory;
 
 class AppFixtures extends Fixture
 {
@@ -40,8 +40,11 @@ class AppFixtures extends Fixture
     public const MAX_EVENTS = 12;
 
     public const MAX_CHALLENGES = 15;
-
-    public function __construct(protected UserPasswordHasherInterface $passwordHasher) {}
+    protected $faker;
+    public function __construct(protected UserPasswordHasherInterface $passwordHasher)
+    {
+        $this->faker = Factory::create('fr_FR');
+    }
 
     public function load(ObjectManager $manager): void
     {
@@ -49,23 +52,25 @@ class AppFixtures extends Fixture
         $categories = [];
         $languages = [];
         $topics = [];
-        $responses = [];
         $ranks = [];
         $events = [];
         $challenges = [];
         $questions = [];
 
         $this->createActiveUsers($manager, $users);
+        $this->createUser($manager, $users);
         $this->createAdminUsers($manager, $users);
         $this->createBannedUsers($manager, $users);
         $this->createDeleteUsers($manager, $users);
 
         $this->createCategories($manager, $categories);
+
         $this->createLanguages($manager, $languages);
-        $this->createTopics($manager, $topics);
+        $this->createTopics($manager, $topics, $categories, $languages, $users);
+
         $this->createResponses($manager, $topics, $users);
 
-        $this->linkTopicsToCategoriesAndLanguages($topics, $categories, $languages, $users);
+        // $this->linkTopicsToCategoriesAndLanguages($topics, $categories, $languages, $users);
 
         $this->createBromance($manager, $users);
         $this->createRank($manager, $ranks);
@@ -84,13 +89,14 @@ class AppFixtures extends Fixture
      */
     protected function createActiveUsers(ObjectManager $manager, array &$users): void
     {
+
         $roles = ['ROLE_SUPERVISOR', 'ROLE_ALPHA'];
         $roleCount = count($roles);
 
         for ($i = 0; $i < self::MAX_ACTIVE_USERS; $i++) {
             $user = new User();
-            $user->setEmail(email: "user_$i@example.com");
-            $user->setUsername(username: "user_$i");
+            $user->setEmail($this->faker->email());
+            $user->setUsername($this->faker->userName());
 
             $user->setPlainPassword('coucou');
 
@@ -110,12 +116,57 @@ class AppFixtures extends Fixture
      * @param ObjectManager $manager
      * @param User[] $users Tableau d'objets User.
      */
+    protected function createUser(ObjectManager $manager, array &$users): void
+    {
+
+        $roles = ['ROLE_SUPERVISOR', 'ROLE_ALPHA'];
+        $roleCount = count($roles);
+
+        for ($i = 0; $i < 2; $i++) {
+            $user = new User();
+            $user->setEmail("user_$i@example.com");
+            $user->setUsername("user_$i@example.com");
+
+            $user->setPlainPassword('user');
+
+            $roleIndex = $i % $roleCount;
+            $user->setRoles([$roles[$roleIndex]]);
+
+            $user->setStatus(StatusUserEnum::ACTIVE);
+            $users[] = $user;
+
+            $manager->persist(object: $user);
+        }
+    }
+    /**
+     * @return User[] 
+     */
+    protected function createAdminUser(ObjectManager $manager, array &$users): void
+    {
+        $user = new User();
+        $user->setEmail("admin_0@example.com");
+        $user->setUsername($this->faker->userName());
+
+        $user->setPlainPassword('admin');
+
+        $user->setRoles(['ROLE_ADMIN']);
+
+        $user->setStatus(StatusUserEnum::ACTIVE);
+
+        $users[] = $user;
+
+        $manager->persist(object: $user);
+    }
+
+    /**
+     * @return User[] 
+     */
     protected function createAdminUsers(ObjectManager $manager, array &$users): void
     {
         for ($i = self::MAX_ACTIVE_USERS; $i < self::MAX_ACTIVE_USERS + self::MAX_ADMIN_USERS; $i++) {
             $user = new User();
-            $user->setEmail(email: "admin_$i@example.com");
-            $user->setUsername(username: "admin_$i");
+            $user->setEmail($this->faker->email());
+            $user->setUsername($this->faker->userName());
 
             $user->setPlainPassword('admin');
 
@@ -141,8 +192,8 @@ class AppFixtures extends Fixture
 
         for ($i = self::MAX_ACTIVE_USERS + self::MAX_ADMIN_USERS; $i < self::MAX_ACTIVE_USERS + self::MAX_ADMIN_USERS + self::MAX_BLOCKED_USERS; $i++) {
             $user = new User();
-            $user->setEmail(email: "user_$i@example.com");
-            $user->setUsername(username: "user_$i");
+            $user->setEmail($this->faker->email());
+            $user->setUsername($this->faker->userName());
 
             $user->setPlainPassword('banned');
 
@@ -169,8 +220,8 @@ class AppFixtures extends Fixture
 
         for ($i = self::MAX_ACTIVE_USERS + self::MAX_ADMIN_USERS + self::MAX_BLOCKED_USERS; $i < self::MAX_ACTIVE_USERS + self::MAX_ADMIN_USERS + self::MAX_BLOCKED_USERS + self::MAX_DELETE_USERS; $i++) {
             $user = new User();
-            $user->setEmail(email: "user_$i@example.com");
-            $user->setUsername(username: "user_$i");
+            $user->setEmail($this->faker->email());
+            $user->setUsername($this->faker->userName());
 
             $user->setPlainPassword('delete');
 
@@ -241,17 +292,22 @@ class AppFixtures extends Fixture
      *
      * @param ObjectManager $manager
      * @param Topic[] $topics Tableau d'objets Topic.
+     * @param Category[] $categories Tableau d'objets Category.
+     * @param Language[] $languages Tableau d'objets de Language.
+     * @param User[] $users Tableau d'objets d'User.
      */
-    protected function createTopics(ObjectManager $manager, array &$topics): void
+    protected function createTopics(ObjectManager $manager, array $topics, array $categories, array $languages, array $users)
     {
         for ($j = 0; $j < self::MAX_TOPICS; $j++) {
             $topic = new Topic();
-
-            $topic->setTitle(title: "Topic n°$j");
+            $topic->setTitle(title: $this->faker->word);
             $topic->setShortDescription(shortDescription: "Short description $j");
             $topic->setLongDescription(longDescription: "Long description $j");
             $topic->setCreatedAt(createdAt: new \DateTimeImmutable());
             $topic->setStatus(random_int(0, 1) === 1 ? TopicStatusEnum::OPEN : TopicStatusEnum::WAITING);
+            $topic->setCategory($categories[$j % count($categories)]);
+            $topic->setLanguage($languages[$j % count($languages)]);
+            $topic->setAuthor($users[$j % count($users)]);
             $manager->persist(object: $topic);
             $topics[] = $topic;
         }
@@ -403,13 +459,13 @@ class AppFixtures extends Fixture
     {
         for ($i = 0; $i < self::MAX_EVENTS; $i++) {
             $event = new Event();
-            $event->setTitle(title: "Event n°$i");
+            $event->setTitle($this->faker->word);
             $event->setShortDescription(shortDescription: "Short description n°$i");
             $event->setLongDescription(longDescription: "Long description n°$i");
 
             $event->setImage(image: "image n°$i");
 
-            $event->setLocation(location: "Location n°$i");
+            $event->setLocation($this->faker->city());
 
             $event->setStartAt(startAt: new \DateTimeImmutable());
             $event->setEndAt(new \DateTimeImmutable('+1 day'));
@@ -452,7 +508,7 @@ class AppFixtures extends Fixture
             $title = $challenge instanceof Test ? 'Test' : 'Quiz';
             $description = $challenge instanceof Test ? 'Un test pour évaluer vos compétences.' : 'Un quiz pour tester vos connaissances.';
 
-            $challenge->setTitle(title: "$title n°$j");
+            $challenge->setTitle($this->faker->word());
             $challenge->setDescription(description: "$description");
 
             $supervisors = array_filter($users, function ($user) {
