@@ -505,21 +505,26 @@ class AppFixtures extends Fixture
     {
         for ($k = 0; $k < random_int(3, 10); $k++) {
             $question = new Question();
-            $question->setQuestion("Question n°$k pour le quiz '{$quiz->getTitle()}'");
-            $question->setCorrectAnswer(random_int(0, 3));
+            $question->setContent("Question n°$k pour le quiz '{$quiz->getTitle()}'");
             $question->setXp(2);
 
             $question->setQuiz($quiz);
             $quiz->getQuestions()->add($question);
 
+            $answers = [];
+
             for ($l = 0; $l < 4; $l++) {
                 $answer = new Answer();
-                $answer->setAnswer("Réponse $l pour question n°$k");
+                $answer->setContent("Réponse $l pour question n°$k");
                 $answer->setQuestion($question);
 
                 $manager->persist($answer);
                 $question->getAnswers()->add($answer);
+                $answers[] = $answer;
             }
+
+            $correctAnswer = $answers[array_rand($answers)];
+            $question->setCorrectAnswer($correctAnswer);
 
             $manager->persist(object: $question);
             $questions[] = $question;

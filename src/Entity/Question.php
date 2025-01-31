@@ -17,10 +17,7 @@ class Question
     private int $id;
 
     #[ORM\Column(length: 100, name: 'QST_QUESTION')]
-    private string $question;
-
-    #[ORM\Column(name: 'QST_CORRECT_ANSWER')]
-    private int $correctAnswer;
+    private string $content;
 
     #[ORM\ManyToOne(inversedBy: 'questions')]
     #[ORM\JoinColumn(name:'CHG_ID',referencedColumnName:'CHG_ID')]
@@ -29,7 +26,7 @@ class Question
     /**
      * @var Collection<int, Answer>
      */
-    #[ORM\OneToMany(targetEntity: Answer::class, mappedBy: 'question')]
+    #[ORM\OneToMany(targetEntity: Answer::class, mappedBy: 'question', cascade: ['persist', 'remove'])]
     private Collection $answers;
 
     /**
@@ -40,6 +37,10 @@ class Question
 
     #[ORM\Column(nullable: true, name: 'QST_XP')]
     private ?int $xp = null;
+
+    #[ORM\OneToOne(targetEntity: Answer::class, cascade: ['persist', 'remove'], inversedBy: 'correctForQuestion')]
+    #[ORM\JoinColumn(name: 'ANS_ID', referencedColumnName: 'ANS_ID', nullable: false)]
+    private ?Answer $correctAnswer = null;
 
     public function __construct()
     {
@@ -52,26 +53,14 @@ class Question
         return $this->id;
     }
 
-    public function getQuestion(): ?string
+    public function getContent(): ?string
     {
-        return $this->question;
+        return $this->content;
     }
 
-    public function setQuestion(string $question): static
+    public function setContent(string $content): static
     {
-        $this->question = $question;
-
-        return $this;
-    }
-
-    public function getCorrectAnswer(): ?int
-    {
-        return $this->correctAnswer;
-    }
-
-    public function setCorrectAnswer(int $correctAnswer): static
-    {
-        $this->correctAnswer = $correctAnswer;
+        $this->content = $content;
 
         return $this;
     }
@@ -155,6 +144,18 @@ class Question
     public function setXp(?int $xp): static
     {
         $this->xp = $xp;
+
+        return $this;
+    }
+
+    public function getCorrectAnswer(): ?Answer
+    {
+        return $this->correctAnswer;
+    }
+
+    public function setCorrectAnswer(?Answer $correctAnswer): static
+    {
+        $this->correctAnswer = $correctAnswer;
 
         return $this;
     }

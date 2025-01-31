@@ -1,0 +1,15 @@
+<div class="question">
+    <h3>Nouvelle Question</h3>
+
+    {{ form_row(form.content) }}
+    {{ form_row(form.xp) }} 
+
+    <h4>Réponses :</h4>
+    <div class="reponses-container" data-prototype="{{ form_widget(form.answers.vars.prototype)|e('html_attr') }}">
+        {% for answer in form.answers %}
+            {{ form_widget(answer) }}
+        {% endfor %}
+    </div>
+
+    <button type="button" class="btn btn-primary add-answer">Ajouter une réponse</button>
+</div>

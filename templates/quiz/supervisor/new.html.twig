@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau Quiz{% endblock %}
+
+{% block body %}
+    <h1>Créer un nouveau Quiz</h1>
+
+    {{ include('quiz/supervisor/_form.html.twig') }}
+
+    <a href="{{ path('app_quiz_supervisor_index') }}">back to list</a>
+    
+{% endblock %}
