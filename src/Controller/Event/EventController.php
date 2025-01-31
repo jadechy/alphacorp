@@ -14,7 +14,9 @@ use App\Entity\Event;
 use App\Repository\EventRepository;
 use App\Form\EventType;
 use App\Service\FileUploader;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[IsGranted('ROLE_USER')]
 #[Route('/event', name: "app_event_")]
 class EventController extends AbstractController
 {
@@ -27,6 +29,7 @@ class EventController extends AbstractController
 
         return $this->render('event/index.html.twig', [
             'events' => $events,
+            "user" => $user
         ]);
     }
 

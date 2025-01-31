@@ -6,8 +6,8 @@
 
 {% block body %}
 	<section class="flex gap-10 justify-start">
+		<img src={{ asset('img/uploads/' ~ event.image) }} alt="Event Image" class="w-80 h-100 rounded-lg object-cover "/>
 
-		<img src={{ asset('img/1.png') }} alt="Event Image" class="w-80 object-cover "/>
 		<div class="w-full flex flex-col gap-5">
 			<div>
 				{% if event.isInFuture() %}
@@ -62,7 +62,6 @@
 				{% endif %}
 			</div>
 			<a href="{{ path('app_user_show', {'id': event.author.id}) }}" class="border-t mt-2 pt-2 hover:underline">
-
 				Auteur :
 				{{event.author.username}}
 			</a>
