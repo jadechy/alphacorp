@@ -85,7 +85,7 @@ class BromanceController extends AbstractController
         $entityManager->persist($bromance);
         $entityManager->flush();
 
-        return $this->redirectToRoute('app_user_alpha_show', ["id" => $id], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_user_show', ["id" => $id], Response::HTTP_SEE_OTHER);
     }
 
 
@@ -151,6 +151,6 @@ class BromanceController extends AbstractController
         $entityManager->flush();
 
         $this->addFlash('success', 'Bromance supprimée.');
-        return $this->redirectToRoute('app_user_alpha_show', ['id' => $id]);
+        return $this->redirectToRoute('app_user_show', ['id' => $id]);
     }
 }

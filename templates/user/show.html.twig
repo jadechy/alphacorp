@@ -18,15 +18,23 @@
 					{% if user == app.user %}
 						<a href="{{ path('app_user_edit' ) }}" class="btn">Modifier</a>
 					{% endif %}
+					{% if is_granted('ROLE_ALPHA') and "ROLE_ALPHA" in user.roles and user != app.user  %}
+						{% if not bromance_user %}
+							<form method="POST" action={{ path('app_bromance_request', {id:user.id} ) }}>
+								<button type="submit" class="btn">Demander la bromance</button>
+							</form>
+						{% endif %}
+					{% endif  %}
 				</div>
-				<div class="rounded-full bg-fuchsia-500 h-fit px-3 py-1">
+				<div class="rounded-full bg-fuchsia-500 h-fit px-3 py-1 w-fit">
 					<p>{{user.xp ? user.xp: 0}}
 						XP</p>
 				</div>
 			</div>
 
 		</section>
-		{% if user.xp %}
+		{% if user.xp and is_granted('ROLE_ALPHA') %}
+
 			<section class="my-20">
 				<div class="flex justify-between mb-4">
 					<p>{{currentRank.title}}</p>
@@ -44,10 +52,28 @@
 				</div>
 			</section>
 		{% endif %}
+		{% if is_granted('ROLE_ALPHA') and app.user == user %}
 
-		{% include 'parts/layouts/user/bromance_layout.html.twig' with {"path_bromance": "app_bromance_homepage"}  %}
+			{% include 'parts/layouts/user/bromance_layout.html.twig' with {"path_bromance": "app_bromance_homepage"}  %}
+		{% endif %}
+		{% if bromance_user %}
+			<section class="mx-auto shadow-xl shadow-neutral-900 rounded text-center w-fit p-10 mt-20">
+				{{ ux_icon('tabler:heart-handshake', {class: 'w-30 h-30 mx-auto'}) }}
+				<h2 class="text-xl">Notre bromance
+				</h2>
+				{% if  bromance_user.request.name =="ACCEPTED" %}
+					<p class="text-3xl text-fuchsia-500 mb-8 mt-4">{{bromance_user.status.value}}</p>
+				{% else %}
+					<p class="text-3xl text-fuchsia-500 mb-8 mt-4">Demande en cours...</p>
 
 
+				{% endif %}
+				<form method="POST" action={{ path('app_bromance_delete', {id:user.id} ) }}>
+					<button type="submit" class="hover:underline">Supprimer la bromance</button>
+				</form>
+
+			</section>
+		{% endif %}
 		<!-- Section Events Author -->
 		{% include 'parts/layouts/user/event_author_layout.html.twig' with {"path_event_author": "app_event_author"}  %}
 

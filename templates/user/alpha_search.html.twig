@@ -5,7 +5,6 @@
 
 {% block body %}
 	<section>
-
 		<form method="get" action="{{ path('app_user_alpha') }}" class="flex items-center gap-6 mb-8">
 			<input type="text" name="q" value="{{ keyword|default('') }}" placeholder="Tapez un mot-clé..." class="input">
 			<button type="submit" class="btn-secondary">
@@ -15,7 +14,7 @@
 		{% if users is not empty %}
 			<div class="grid grid-cols-2 gap-y-5 sm:grid-cols-4 gap-x-5">
 				{% for user in users %}
-					<a href={{ path('app_user_homepage', {id: user.id} ) }}>
+					<a href={{ path('app_user_show', {id: user.id} ) }}>
 						{% include "parts/components/card_col.html.twig" with {"title": user.username, "height": 25} %}
 					</a>
 				{% endfor %}

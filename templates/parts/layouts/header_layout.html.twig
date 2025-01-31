@@ -13,11 +13,12 @@
 				{% if app.user %}
 					{% if not is_granted('ROLE_BANNED') %}
 						{% include "parts/components/nav_link.html.twig" with {"pathName": "app_event_homepage", "label": "Event"} %}
-						{% include "parts/components/nav_link.html.twig" with {"pathName": "app_user_alpha", "label": "Alpha"} %}
-
+						{% if is_granted('ROLE_ALPHA') %}
+							{% include "parts/components/nav_link.html.twig" with {"pathName": "app_user_alpha", "label": "Alpha"} %}
+						{% endif %}
 
 						{% include "parts/components/nav_link.html.twig" with {"pathName": "app_forum_homepage", "label": "Forum"} %}
-						{% include "parts/components/nav_link.html.twig" with {"pathName": "app_user_homepage", "parameters":{"id": app.user.id}, "label": "Profil"} %}
+						{% include "parts/components/nav_link.html.twig" with {"pathName": "app_user_show", "parameters":{"id": app.user.id}, "label": "Profil"} %}
 
 						{% if is_granted('ROLE_ADMIN') %}
 							{% include "parts/components/nav_link.html.twig" with {"pathName": "admin_homepage", "label": "Admin"} %}

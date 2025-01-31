@@ -14,6 +14,7 @@ use App\Entity\Rank;
 use App\Form\BanRequestType;
 use App\Enum\StatusUserEnum;
 use App\Form\UserEditType;
+use App\Repository\BromanceRepository;
 use App\Repository\RankRepository;
 use App\Repository\UserRepository;
 use App\Service\CategoryColorService;
@@ -21,8 +22,8 @@ use App\Service\CategoryColorService;
 #[Route('/user', name: "app_user_")]
 class UserController extends AbstractController
 {
-    #[Route('/show/{id}', name: 'homepage')]
-    public function myProfil(User $user, RankRepository $rankRepository, CategoryColorService $categoryColorService): Response
+    #[Route('/show/{id}', name: 'show')]
+    public function myProfil(User $user, RankRepository $rankRepository, CategoryColorService $categoryColorService, BromanceRepository $bromanceRepository): Response
     {
         $currentRank = new Rank();
         $nextRank = new Rank();
@@ -35,12 +36,28 @@ class UserController extends AbstractController
         }
         $colorsCategories = $categoryColorService->getCategoryColors();
 
+        if ($this->getUser() != $user) {
+            $bromance_user = $bromanceRepository->findOneBy([
+                'alpha' => $this->getUser(),
+                'follower' => $user
+            ]);
+
+            if (!$bromance_user) {
+                $bromance_user = $bromanceRepository->findOneBy([
+                    'alpha' => $user,
+                    'follower' => $this->getUser()
+                ]);
+            }
+        } else {
+            $bromance_user = [];
+        }
         return $this->render('user/show.html.twig', [
             'user' => $user,
             "currentRank" => $currentRank,
             "nextRank" => $nextRank,
             "pourcentage" => $pourcentage,
-            "colorsCategories" => $colorsCategories
+            "colorsCategories" => $colorsCategories,
+            "bromance_user" => $bromance_user
         ]);
     }
     #[Route('/edit', name: 'edit')]
@@ -59,7 +76,7 @@ class UserController extends AbstractController
                 $user->setRoles(['ROLE_SUPERVISOR']);
             }
             $entityManager->flush();
-            return $this->redirectToRoute('app_user_homepage', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_user_show', [], Response::HTTP_SEE_OTHER);
         }
         return $this->render('user/edit.html.twig', [
             'user' => $user,
@@ -90,7 +107,7 @@ class UserController extends AbstractController
 
                 $this->addFlash('success', 'Votre demande de débannissement a été envoyée avec succès.');
 
-                return $this->redirectToRoute('app_user_homepage');
+                return $this->redirectToRoute('app_user_show');
             }
 
             return $this->render('user/banned.html.twig', [
@@ -99,7 +116,7 @@ class UserController extends AbstractController
             ]);
         }
 
-        return $this->redirectToRoute('app_user_homepage');
+        return $this->redirectToRoute('app_user_show');
     }
 
     #[Route('/alpha', name: 'alpha')]
@@ -107,8 +124,7 @@ class UserController extends AbstractController
     {
         $keyword = $request->query->get('q', '');
         $users = [];
-
-        $users = $keyword ? $userRepository->searchAlphaByKeyword($keyword, $entityManager) : $userRepository->findAll();
+        $users = strlen($keyword) > 1 ? $userRepository->searchAlphaByKeyword($keyword, $entityManager) : $userRepository->findAllAlpha();
         return $this->render('user/alpha_search.html.twig', [
             'users' => $users,
             'keyword' => $keyword,

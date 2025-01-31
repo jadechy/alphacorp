@@ -9,7 +9,7 @@
 		{% if bromancesAlpha is not empty %}
 			<div class="grid grid-cols-2 gap-y-5 sm:grid-cols-4 gap-x-5">
 				{% for bromance in bromancesAlpha %}
-					<a href={{path("app_user_alpha_show", {id:bromance.follower.id} )}}>
+					<a href={{path("app_user_show", {id:bromance.follower.id} )}}>
 						{% include "parts/components/card_col.html.twig" with {"title": bromance.follower.username, "height": 25} %}
 					</a>
 				{% endfor %}

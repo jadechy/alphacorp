@@ -18,38 +18,29 @@ class UserRepository extends ServiceEntityRepository
     }
 
     /** @return array<User> */
-    public function searchByKeyword(string $keyword): array
+    public function findAllAlpha(): array
     {
-        $conn = $this->getEntityManager()->getConnection();
+        $users = $this->createQueryBuilder('u')
+            ->andWhere('u.roles LIKE :role')
+            ->setParameter('role', '%ROLE_ALPHA%')
+            ->getQuery()
+            ->getResult();
+        return $users;
+    }
 
-        $sql = "SELECT * FROM ALP_USER WHERE MATCH(USR_USERNAME) AGAINST(:keyword)";
+    /** @return array<User> */
+    public function searchAlphaByKeyword(string $keyword): array
+    {
 
-        $stmt = $conn->prepare($sql);
-        $stmt->bindValue("keyword", $keyword);
-
-        $result = $stmt->execute();
-
-        $ids = array_column($result->fetchAllAssociative(), 'USR_ID');
-
-        if (empty($ids)) {
-            return [];
-        }
+        $users = $this->createQueryBuilder('u')
+            ->where('u.username LIKE :search')
+            ->andWhere('u.roles LIKE :role')
+            ->setParameter('search', '%' . $keyword . '%')
+            ->setParameter('role', '%ROLE_ALPHA%')
+            ->getQuery()
+            ->getResult();
 
         /** @var array<User> */
-        return $this->createQueryBuilder('t')
-            ->where('t.id IN (:ids)')
-            ->setParameter('ids', $ids)
-            ->getQuery()
-            ->getResult();
-    }
-    public function searchAlphaByKeyword(string $keyword, EntityManagerInterface $entityManager): array
-    {
-        $users = $entityManager->getRepository(User::class)
-            ->createQueryBuilder('u')
-            ->where('u.username LIKE :search')
-            ->setParameter('search', '%' . $keyword . '%')
-            ->getQuery()
-            ->getResult();
         return $users;
     }
     //    /**
