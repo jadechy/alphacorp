@@ -27,8 +27,11 @@ class EventRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    /** @return array<Event> */
     public function findEventsByParticipant(User $user): array
     {
+        /** @var array<Event> */
         return $this->createQueryBuilder('e')
             ->innerJoin('e.participants', 'p')
             ->where('p = :user')

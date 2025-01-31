@@ -2,6 +2,8 @@
 
 namespace App\DataFixtures;
 
+use App\DataFixtures\Data\EventData;
+use App\DataFixtures\Data\TopicData;
 use App\Entity\Bromance;
 use App\Entity\User;
 use App\Entity\Answer;
@@ -27,17 +29,14 @@ use Faker\Factory;
 
 class AppFixtures extends Fixture
 {
-    public const MAX_ACTIVE_USERS = 5;
+    public const MAX_ACTIVE_USERS = 9;
     public const MAX_ADMIN_USERS = 2;
     public const MAX_BLOCKED_USERS = 3;
     public const MAX_DELETE_USERS = 1;
-
-    public const MAX_TOPICS = 20;
     public const MAX_RESPONSES_PER_TOPICS = 5;
 
     public const MAX_BROMANCE = 7;
 
-    public const MAX_EVENTS = 12;
 
     public const MAX_CHALLENGES = 15;
     protected $faker;
@@ -59,6 +58,7 @@ class AppFixtures extends Fixture
 
         $this->createActiveUsers($manager, $users);
         $this->createUser($manager, $users);
+        $this->createAdminUser($manager, $users);
         $this->createAdminUsers($manager, $users);
         $this->createBannedUsers($manager, $users);
         $this->createDeleteUsers($manager, $users);
@@ -68,7 +68,6 @@ class AppFixtures extends Fixture
         $this->createLanguages($manager, $languages);
         $this->createTopics($manager, $topics, $categories, $languages, $users);
 
-        $this->createResponses($manager, $topics, $users);
 
         // $this->linkTopicsToCategoriesAndLanguages($topics, $categories, $languages, $users);
 
@@ -90,9 +89,6 @@ class AppFixtures extends Fixture
     protected function createActiveUsers(ObjectManager $manager, array &$users): void
     {
 
-        $roles = ['ROLE_SUPERVISOR', 'ROLE_ALPHA'];
-        $roleCount = count($roles);
-
         for ($i = 0; $i < self::MAX_ACTIVE_USERS; $i++) {
             $user = new User();
             $user->setEmail($this->faker->email());
@@ -100,8 +96,23 @@ class AppFixtures extends Fixture
 
             $user->setPlainPassword('coucou');
 
-            $roleIndex = $i % $roleCount;
-            $user->setRoles([$roles[$roleIndex]]);
+            $user->setRoles(['ROLE_SUPERVISOR']);
+            $user->setImage("supervisor-$i");
+
+            $user->setStatus(StatusUserEnum::ACTIVE);
+            $users[] = $user;
+
+            $manager->persist(object: $user);
+        }
+        for ($i = 0; $i < self::MAX_ACTIVE_USERS; $i++) {
+            $user = new User();
+            $user->setEmail($this->faker->email());
+            $user->setUsername($this->faker->userName());
+
+            $user->setPlainPassword('coucou');
+
+            $user->setRoles(['ROLE_ALPHA']);
+            $user->setImage("alpha-$i");
 
             $user->setStatus(StatusUserEnum::ACTIVE);
             $users[] = $user;
@@ -120,6 +131,7 @@ class AppFixtures extends Fixture
     {
 
         $roles = ['ROLE_SUPERVISOR', 'ROLE_ALPHA'];
+        $images = ["supervisor-0", "alpha-0"];
         $roleCount = count($roles);
 
         for ($i = 0; $i < 2; $i++) {
@@ -131,6 +143,7 @@ class AppFixtures extends Fixture
 
             $roleIndex = $i % $roleCount;
             $user->setRoles([$roles[$roleIndex]]);
+            $user->setImage($images[$roleIndex]);
 
             $user->setStatus(StatusUserEnum::ACTIVE);
             $users[] = $user;
@@ -146,6 +159,7 @@ class AppFixtures extends Fixture
         $user = new User();
         $user->setEmail("admin_0@example.com");
         $user->setUsername($this->faker->userName());
+        $user->setImage("admin-0");
 
         $user->setPlainPassword('admin');
 
@@ -171,6 +185,7 @@ class AppFixtures extends Fixture
             $user->setPlainPassword('admin');
 
             $user->setRoles(['ROLE_ADMIN']);
+            $user->setImage("admin-$i");
 
             $user->setStatus(StatusUserEnum::ACTIVE);
 
@@ -199,6 +214,7 @@ class AppFixtures extends Fixture
 
             $randomRole = $roles[array_rand($roles)];
             $user->setRoles([$randomRole]);
+            $user->setImage("alpha-$i");
 
             $user->setStatus(StatusUserEnum::BANNED);
 
@@ -227,6 +243,7 @@ class AppFixtures extends Fixture
 
             $randomRole = $roles[array_rand($roles)];
             $user->setRoles([$randomRole]);
+            $user->setImage("supervisor-$i");
 
             $user->setStatus(StatusUserEnum::DELETE);
 
@@ -245,12 +262,12 @@ class AppFixtures extends Fixture
     protected function createCategories(ObjectManager $manager, array &$categories): void
     {
         $array = [
-            ['nom' => 'Fitness ', 'label' => 'fitness'],
-            ['nom' => 'Alimentation ', 'label' => 'alimentation'],
-            ['nom' => 'Séduction', 'label' => 'seduction'],
-            ['nom' => 'Travail', 'label' => 'travail'],
-            ['nom' => 'Fashion', 'label' => 'fashion'],
-            ['nom' => 'Débat', 'label' => 'débat'],
+            ['nom' => 'Débat', 'label' => 'debat'],
+            ['nom' => 'Mentalité', 'label' => 'mentalite'],
+            ['nom' => 'Carrière', 'label' => 'carriere'],
+            ['nom' => 'Bien-être', 'label' => 'bien etre'],
+            ['nom' => 'Compétence', 'label' => 'competence'],
+            ['nom' => 'Leadership', 'label' => 'leadership'],
         ];
 
         foreach ($array as $element) {
@@ -259,6 +276,7 @@ class AppFixtures extends Fixture
             $category->setLabel($element['label']);
             $manager->persist($category);
             $categories[] = $category;
+            $categories[$element['nom']] = $category;
         }
     }
 
@@ -284,6 +302,7 @@ class AppFixtures extends Fixture
             $language->setName($element['nom']);
             $manager->persist($language);
             $languages[] = $language;
+            $languages[$element['code']] = $language;
         }
     }
 
@@ -298,69 +317,33 @@ class AppFixtures extends Fixture
      */
     protected function createTopics(ObjectManager $manager, array $topics, array $categories, array $languages, array $users)
     {
-        for ($j = 0; $j < self::MAX_TOPICS; $j++) {
+        $topicsData = TopicData::getTopics();
+
+        foreach ($topicsData as $index => $topicData) {
             $topic = new Topic();
-            $topic->setTitle(title: $this->faker->word);
-            $topic->setShortDescription(shortDescription: "Short description $j");
-            $topic->setLongDescription(longDescription: "Long description $j");
-            $topic->setCreatedAt(createdAt: new \DateTimeImmutable());
-            $topic->setStatus(random_int(0, 1) === 1 ? TopicStatusEnum::OPEN : TopicStatusEnum::WAITING);
-            $topic->setCategory($categories[$j % count($categories)]);
-            $topic->setLanguage($languages[$j % count($languages)]);
-            $topic->setAuthor($users[$j % count($users)]);
+            $topic->setTitle($topicData["title"]);
+            $topic->setShortDescription($topicData["shortDescription"]);
+            $topic->setLongDescription($topicData["longDescription"]);
+            $topic->setCategory($categories[$topicData["category"]]);
+            $topic->setLanguage($languages[$topicData["language"]]);
+            $topic->setStatus(TopicStatusEnum::OPEN);
+            foreach ($topicData["responses"] as $responseData) {
+                $response = new Response();
+                $response->setContent($responseData["content"]);
+                $response->setCreatedAt(new \DateTimeImmutable());
+                $response->setStatus(ResponseStatusEnum::VALIDATED);
+                $response->setAuthor($users[$index % count($users)]);
+                $topic->addResponse($response);
+                $manager->persist($response);
+            }
+            $topic->setCreatedAt(new \DateTimeImmutable());
+            $topic->setAuthor($users[$index % count($users)]);
             $manager->persist(object: $topic);
             $topics[] = $topic;
         }
     }
 
-    /**
-     * Crée des réponses au topic.
-     *
-     * @param ObjectManager $manager
-     * @param Topic[] $topics Tableau d'objets Topic.
-     * @param User[] $users Tableau d'objets User.
-     */
-    protected function createResponses(ObjectManager $manager, array $topics, array $users): void
-    {
-        /** @var Topic $topic */
-        foreach ($topics as $topic) {
-            for ($i = 0; $i < random_int(1, self::MAX_RESPONSES_PER_TOPICS); $i++) {
-                $response = new Response();
-                $response->setAuthor($users[array_rand($users)]);
-                $response->setContent("Réponse $i");
-                $response->setCreatedAt(createdAt: new \DateTimeImmutable());
-                $response->setStatus(random_int(0, 1) === 1 ? ResponseStatusEnum::VALIDATED : ResponseStatusEnum::WAITING);
-                $response->setTopic($topic);
 
-                $manager->persist($response);
-            }
-        }
-    }
-
-    /**
-     * Lie les topics à une catégorie et une langue.
-     *
-     * @param Topic[] $topics Tableau d'objets Topic.
-     * @param Category[] $categories Tableau d'objets Category.
-     * @param Language[] $languages Tableau d'objets Language.
-     * @param User[] $users Tableau d'objets User.
-     */
-    protected function linkTopicsToCategoriesAndLanguages(array $topics, array $categories, array $languages, array $users): void
-    {
-        /** @var Topic $topic */
-        foreach ($topics as $topic) {
-            $topic->setCategory($categories[array_rand($categories)]);
-            $topic->setLanguage($languages[array_rand($languages)]);
-
-            $AlphaUsers = array_filter($users, function ($user) {
-                return in_array('ROLE_ALPHA', $user->getRoles());
-            });
-
-            if (count($AlphaUsers) > 0) {
-                $topic->setAuthor($AlphaUsers[array_rand($AlphaUsers)]);
-            }
-        }
-    }
 
     /**
      * Crée des bromances netre User avec le role ALPHA.
@@ -457,25 +440,23 @@ class AppFixtures extends Fixture
      */
     protected function createEvents(ObjectManager $manager, array &$events, array $users): void
     {
-        for ($i = 0; $i < self::MAX_EVENTS; $i++) {
+        $eventsData = EventData::getEvents();
+        foreach ($eventsData as $eventData) {
             $event = new Event();
-            $event->setTitle($this->faker->word);
-            $event->setShortDescription(shortDescription: "Short description n°$i");
-            $event->setLongDescription(longDescription: "Long description n°$i");
+            $event->setTitle($eventData["title"]);
+            $event->setShortDescription($eventData["shortDescription"]);
+            $event->setLongDescription($eventData["longDescription"]);
+            $event->setImage($eventData["image"]);
+            $event->setLocation($eventData["location"]);
+            $event->setStartAt($eventData["startAt"]);
+            $event->setEndAt($eventData["endAt"]);
 
-            $event->setImage(image: "image n°$i");
-
-            $event->setLocation($this->faker->city());
-
-            $event->setStartAt(startAt: new \DateTimeImmutable());
-            $event->setEndAt(new \DateTimeImmutable('+1 day'));
-
+            // Associer l'auteur et les participants
             $alphaUsers = array_filter($users, function ($user) {
                 return in_array('ROLE_ALPHA', $user->getRoles(), true);
             });
 
             $alphaUsers = array_values($alphaUsers);
-
             $authorIndex = array_rand($alphaUsers);
             $author = $alphaUsers[$authorIndex];
             $event->setAuthor($author);
@@ -488,8 +469,7 @@ class AppFixtures extends Fixture
             }
 
             $events[] = $event;
-
-            $manager->persist(object: $event);
+            $manager->persist($event);
         }
     }
 
