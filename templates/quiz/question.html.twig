@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Quiz{% endblock %}
+
+{% block body %}
+    <section>
+        <h1>{{quiz.title}}</h1>
+        <p>{{quiz.description}}</p>
+
+        <h2>{{question.content}}</h2>
+
+        <form method="post" action="{{ path('app_quiz_answer', {id: quiz.id, questionId: question.id}) }}">
+            {% for reponse in reponses %}
+                <div>
+                    <input type="radio" id="reponse_{{ reponse.id }}" name="reponse" value="{{ reponse.id }}">
+                    <label for="reponse_{{ reponse.id }}">{{ reponse.content }}</label>
+                </div>
+            {% endfor %}
+            <button type="submit">Valider</button>
+        </form>
+    </section>
+{% endblock %}

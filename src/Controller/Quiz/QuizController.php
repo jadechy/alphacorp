@@ -1,0 +1,178 @@
+<?php
+
+namespace App\Controller\Quiz;
+
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\Request;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+
+use App\Entity\Challenge;
+use App\Repository\ChallengeRepository;
+use App\Entity\Quiz;
+use App\Repository\QuizRepository;
+use App\Entity\Question;
+use App\Repository\QuestionRepository;
+use App\Entity\Answer;
+use App\Repository\AnswerRepository;
+use App\Entity\UserAnswer;
+use App\Repository\UserAnswerRepository;
+
+#[Route('/quiz', name: "app_quiz_")]
+#[IsGranted('ROLE_ALPHA')]
+final class QuizController extends AbstractController
+{
+    #[Route('/', name: 'all')]
+    public function listQuiz(QuizRepository $quizRepository): Response
+    {
+        $quizs = $quizRepository->findAll();
+
+        return $this->render('quiz/all.html.twig', [
+            'quizs' => $quizs,
+        ]);
+    }
+
+    #[Route('/{id}', name: 'start')]
+    public function startQuiz(Quiz $quiz, QuestionRepository $questionRepository): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        if ($user->hasAnsweredQuiz($quiz)) {
+            return $this->redirectToRoute('app_quiz_results', ['id' => $quiz->getId()]);
+        }
+
+        $firstQuestion = $questionRepository->findFirstQuestionByQuiz($quiz);
+
+        if (!$firstQuestion) {
+            throw $this->createNotFoundException('No questions found for this quiz.');
+        }
+
+        return $this->redirectToRoute('app_quiz_question', [
+            'id' => $quiz->getId(),
+            'questionId' => $firstQuestion->getId(),
+        ]);
+    }
+
+
+    #[Route('/{id}/question/{questionId}', name: 'question')]
+    public function showQuestion(Quiz $quiz, int $questionId, EntityManagerInterface $entityManager, QuestionRepository $questionRepository): Response
+    {
+        $question = $questionRepository->find($questionId);
+
+        if (!$question || $question->getQuiz() !== $quiz) {
+            throw $this->createNotFoundException('Question not found or does not belong to the quiz.');
+        }
+
+        return $this->render('quiz/question.html.twig', [
+            'quiz' => $quiz,
+            'question' => $question,
+            'reponses' => $question->getAnswers(),
+        ]);
+    }
+
+    #[Route('/{id}/question/{questionId}/answer', name: 'answer', methods: ['POST'])]
+    public function submitAnswer(
+        Request $request, 
+        Quiz $quiz, 
+        int $questionId, 
+        EntityManagerInterface $entityManager,
+        QuestionRepository $questionRepository,
+        AnswerRepository $answerRepository
+    ): Response {
+        $question = $questionRepository->find($questionId);
+
+        /** @var User $user */
+        $user = $this->getUser();
+
+        if (!$question || $question->getQuiz() !== $quiz) {
+            throw $this->createNotFoundException('Question not found or does not belong to the quiz.');
+        }
+
+        $reponseId = $request->request->get('reponse');
+        $reponse = $answerRepository->find($reponseId);
+
+        if (!$reponse || $reponse->getQuestion() !== $question) {
+            throw $this->createNotFoundException('Invalid response.');
+        }
+
+        $userReponse = new UserAnswer();
+        $userReponse->setUser($user);
+        $userReponse->setQuestion($question);
+        $userReponse->setAnswer($reponse);
+
+        $entityManager->persist($userReponse);
+        $entityManager->flush();
+
+        $nextQuestion = $questionRepository->findOneBy([
+            'quiz' => $quiz,
+            'id' => $questionId + 1
+        ]);
+
+        if ($nextQuestion) {
+            return $this->redirectToRoute('app_quiz_question', [
+                'id' => $quiz->getId(),
+                'questionId' => $nextQuestion->getId(),
+            ]);
+        }
+
+        return $this->redirectToRoute('app_quiz_finish', ['id' => $quiz->getId()]);
+    }
+
+    #[Route('/{id}/finish', name: 'finish')]
+    public function finishQuiz(Quiz $quiz): Response
+    {
+        return $this->render('quiz/finish.html.twig', [
+            'quiz' => $quiz,
+        ]);
+    }
+
+    #[Route('/{id}/results', name: 'results')]
+    public function results(
+        Quiz $quiz,
+        UserAnswerRepository $userAnswerRepository,
+        EntityManagerInterface $entityManager,
+        SessionInterface $session
+    ): Response {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $userResponses = $userAnswerRepository->findAllAnswerByUserAndQuiz($user, $quiz);
+
+        $quizKey = 'quiz_' . $quiz->getId() . '_xp_added';
+
+        $totalXpEarned = 0;
+
+        foreach ($userResponses as $userResponse) {
+            $correctAnswer = $userResponse->getQuestion()->getCorrectAnswer();
+
+            if ($userResponse->getAnswer()->getId() === $correctAnswer->getId()) {
+                $totalXpEarned += $userResponse->getQuestion()->getXp();
+            }
+        }
+
+        if (!$session->get($quizKey, false)){
+            $user->setXp($user->getXp() + $totalXpEarned);
+
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            $session->set($quizKey, true);
+        }
+
+        $correctAnswersCount = count(array_filter($userResponses, function($userResponse) {
+            return $userResponse->getAnswer()->getId() === $userResponse->getQuestion()->getCorrectAnswer()->getId();
+        }));
+
+        return $this->render('quiz/results.html.twig', [
+            'quiz' => $quiz,
+            'userResponses' => $userResponses,
+            'correctAnswersCount' => $correctAnswersCount,
+            'totalXpEarned' => $totalXpEarned
+        ]);
+    }
+
+}

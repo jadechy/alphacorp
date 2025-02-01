@@ -531,6 +531,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function hasAnsweredQuiz(Quiz $quiz): bool
+    {
+        $answersForQuiz = $this->getUserAnswers()->filter(function(UserAnswer $userAnswer) use ($quiz) {
+            return $userAnswer->getQuestion()->getQuiz() === $quiz;
+        });
+
+        return count($answersForQuiz) === count($quiz->getQuestions());
+
+    }
+
     /**
      * @return Collection<int, BanRequest>
      */

@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Quiz;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -14,6 +15,15 @@ class QuizRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Quiz::class);
+    }
+
+    public function findByAuthor(User $user)
+    {
+        return $this->createQueryBuilder('q')
+            ->where('q.author = :author')
+            ->setParameter('author', $user)
+            ->getQuery()
+            ->getResult();
     }
 
     //    /**

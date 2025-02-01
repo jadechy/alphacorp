@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\UserAnswer;
+use App\Entity\User;
+use App\Entity\Quiz;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -14,6 +16,17 @@ class UserAnswerRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, UserAnswer::class);
+    }
+
+    public function findAllAnswerByUserAndQuiz(User $user, Quiz $quiz){
+        return $this->createQueryBuilder('ur')
+        ->join('ur.question', 'q')
+        ->where('q.quiz = :quiz')
+        ->andWhere('ur.user = :user')
+        ->setParameter('quiz', $quiz)
+        ->setParameter('user', $user)
+        ->getQuery()
+        ->getResult();
     }
 
     //    /**

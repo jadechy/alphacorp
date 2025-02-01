@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Question;
+use App\Entity\Quiz;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -14,6 +15,17 @@ class QuestionRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Question::class);
+    }
+
+    public function findFirstQuestionByQuiz(Quiz $quiz): ?Question
+    {
+        return $this->createQueryBuilder('q')
+            ->andWhere('q.quiz = :quiz')
+            ->setParameter('quiz', $quiz)
+            ->orderBy('q.id', 'ASC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 
     //    /**

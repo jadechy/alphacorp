@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tous nos quiz !{% endblock %}
+
+{% import 'macro/quiz/quiz_card.html.twig' as macros %}
+
+{% block body %}
+    <section class="flex flex-col gap-10 mt-10">
+		{% for quiz in quizs %}
+			{{ macros.AfficheQuizCard(quiz) }}
+		{% endfor %}
+	</section>
+{% endblock %}

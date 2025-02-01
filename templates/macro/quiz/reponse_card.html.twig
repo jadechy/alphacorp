@@ -1,0 +1,11 @@
+{% macro AfficheReponseQuizCard(userReponse) %}
+    <div>
+        <h1>{{userReponse.question.content}}</h1>
+        {% if userReponse.answer.id == userReponse.question.correctAnswer.id %}
+            <p class="bg-green-700/80">{{userReponse.answer.content}}</p>
+        {% else %}
+            <p class="bg-red-700/80">{{userReponse.answer.content}}</p>
+            <p class="bg-green-700/80">La bonne réponse est : {{userReponse.question.correctAnswer.content}}</p>
+        {% endif %}
+    </div>
+{% endmacro %}

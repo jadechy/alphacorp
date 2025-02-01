@@ -1,0 +1,13 @@
+{% macro AfficheQuizCard(quiz) %}
+    <div>
+        <h1>{{quiz.title}}</h1>
+        <p>Par la superviseuse : {{quiz.author.username}}</p>
+        <p>Nombre de question : {{quiz.questions|length}}</p>
+        {% if app.user.hasAnsweredQuiz(quiz)%}
+            <p>Vous avez déjà répondu à ce quiz.</p>
+            <a href="{{ path('app_quiz_start', {id: quiz.id}) }}">Voir mon score.</a>
+        {% else %}
+            <a href="{{ path('app_quiz_start', {id: quiz.id}) }}">Commencer le quiz.</a>
+        {% endif %}
+    </div>
+{% endmacro %}

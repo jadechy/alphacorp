@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Quiz{% endblock %}
+
+{% block body %}
+    <section>
+        <h1>Vous avez fini le quiz: {{quiz.title}}</h1>
+        <a href="{{ path('app_quiz_results', {id: quiz.id}) }}">Calculer mon score</a>
+
+        <a href="{{ path('app_quiz_all') }}">Faire un nouveau quiz</a>
+    </section>
+{% endblock %}

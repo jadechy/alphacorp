@@ -21,13 +21,17 @@ class Answer
     private ?Question $question = null;
 
     #[ORM\Column(length: 50, name: 'ANS_ANSWER')]
-    private string $answer;
+    private string $content;
 
     /**
      * @var Collection<int, UserAnswer>
      */
     #[ORM\OneToMany(targetEntity: UserAnswer::class, mappedBy: 'answer')]
+    #[ORM\JoinColumn(onDelete: 'CASCADE')] 
     private Collection $userAnswers;
+
+    #[ORM\OneToOne(targetEntity: Question::class, mappedBy: 'correctAnswer')]
+    private ?Question $correctForQuestion = null;
 
     public function __construct()
     {
@@ -51,14 +55,14 @@ class Answer
         return $this;
     }
 
-    public function getAnswer(): ?string
+    public function getContent(): ?string
     {
-        return $this->answer;
+        return $this->content;
     }
 
-    public function setAnswer(string $answer): static
+    public function setContent(string $content): static
     {
-        $this->answer = $answer;
+        $this->content = $content;
 
         return $this;
     }
@@ -90,6 +94,17 @@ class Answer
             }
         }
 
+        return $this;
+    }
+
+    public function getCorrectForQuestion(): ?Question
+    {
+        return $this->correctForQuestion;
+    }
+
+    public function setCorrectForQuestion(?Question $correctForQuestion): self
+    {
+        $this->correctForQuestion = $correctForQuestion;
         return $this;
     }
 }

@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Quiz{% endblock %}
+
+{% block body %}
+	<section>
+		<table>
+			<thead>
+				<tr>
+					<th>Catégorie</th>
+					<th>Valeur</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Id</td>
+					<td>{{ quiz.id }}</td>
+				</tr>
+				<tr>
+					<td>Title</td>
+					<td>{{ quiz.title }}</td>
+				</tr>
+				<tr>
+					<td>Description</td>
+					<td>{{ quiz.description }}</td>
+				</tr>
+				{% for question in quiz.questions %}
+                    <tr>
+                        <td>Id</td>
+                        <td>{{ question.id }}</td>
+                    </tr>
+                    <tr>
+                        <td>Question</td>
+                        <td>{{ question.content }}</td>
+                    </tr>
+                    {% for answer in question.answers %}
+                        <tr>
+                            <td>Id</td>
+                            <td>{{ answer.id }}</td>
+                        </tr>
+                        <tr>
+                            <td>Réponse</td>
+                            <td>{{ answer.content }}</td>
+                        </tr>
+                    {% endfor %}
+                    <tr class="flex justify-center items-center gap-8">
+                        <td></td>
+                        <td>
+                            <a href="{{ path('app_question_supervisor_edit', {'id': question.id}) }}">
+                                Modifier la question
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}			
+			</tbody>
+		</table>
+
+		<div class="flex justify-center items-center gap-8">
+			<a href="{{ path('app_quiz_supervisor_edit', {'id': quiz.id}) }}">
+                Modifier
+            </a>
+			{{ include('quiz/supervisor/_delete_form.html.twig') }}
+		</div>
+
+	</section>
+{% endblock %}
+
