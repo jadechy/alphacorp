@@ -6,6 +6,7 @@ use App\Entity\Event;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -63,7 +64,19 @@ class EventType extends AbstractType
                 'attr' => [
                     'class' => 'dashboard-select',
                 ]
-            ]);
+            ])
+                ->add('participants', EntityType::class, [
+                    'class' => User::class,
+                    'choices' => $options['participants'],
+                    'multiple' => true,
+                    'expanded' => false,
+                    'choice_label' => 'email',
+                    'label' => 'Sélectionner des participants',
+                    'attr' => [
+                        'class' => 'dashboard-select w-60 rounded',
+                    ]
+
+                ]);
         }
     }
 
@@ -72,6 +85,7 @@ class EventType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Event::class,
             'is_admin' => false,
+            "participants" => []
         ]);
     }
 }

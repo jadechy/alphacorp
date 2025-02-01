@@ -8,9 +8,9 @@
 	</thead>
 	<tbody>
 		{# <tr>
-																									<td>Id</td>
-																									<td>{{event.id}}</td>
-																								</tr> #}
+																																																															<td>Id</td>
+																																																															<td>{{event.id}}</td>
+																																																														</tr> #}
 		<tr>
 			<td>Title</td>
 			<td>{{ form_widget(form.title) }}</td>
@@ -44,7 +44,8 @@
 				{% if event and event.image %}
 					<div class="border-r pr-2">
 						<p>Image actuelle :</p>
-						<img src="{{ asset(event.image) }}" alt="Event Image" style="max-width: 200px;">
+						<img src={{ asset('img/uploads/' ~ event.image) }} alt="Event Image" class="w-80 h-40 object-cover">
+
 					</div>
 					{{ form_row(form.imageFile, { 'label': 'Nouvelle image' },  ) }}
 				{% else %}
@@ -69,14 +70,12 @@
 			</td>
 			<td>
 				{% for participant in event.participants %}
-					{# au click de dessus ça enlève le user de la liste #}
-					<a href={{path("admin_user_show", {id: participant.id} )}}>
+					<button type="button" class="text-red-500 hover:text-red-700 remove-participant" data-participant-id="{{ participant.id }}" data-event-id="{{ event.id }}">
 						{{participant.id}}
 						{{participant.username}}
-						{# icon croix #}
-					</a>
+					</button>
 				{% endfor %}
-				{# bouton + qui ouvre un select avec l'ensemble des users non présent dans la liste #}
+				{{form_widget(form.participants)}}
 			</td>
 		</tr>
 	</tbody>

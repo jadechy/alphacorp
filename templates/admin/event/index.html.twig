@@ -17,12 +17,6 @@
 						Titre
 					</th>
 					<th scope="col">
-						Description
-					</th>
-					<th scope="col">
-						Image
-					</th>
-					<th scope="col">
 						Début
 					</th>
 					<th scope="col">
@@ -43,8 +37,6 @@
 					<tr>
 						<td>{{ event.id }}</td>
 						<td>{{ event.title }}</td>
-						<td>{{ event.shortDescription }}</td>
-						<td>{{ event.image }}</td>
 						<td>{{ event.startAt ? event.startAt|date('Y-m-d H:i:s') : '' }}</td>
 						<td>{{ event.endAt ? event.endAt|date('Y-m-d H:i:s') : '' }}</td>
 						<td>{{ event.location }}</td>
