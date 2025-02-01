@@ -9,4 +9,5 @@ import "./bootstrap.js";
 import "./styles/app.css";
 import "./js/filterResponses.js";
 import "./js/filterTopics.js";
+import "./js/deleteParticipantEvent.js";
 console.log("This log comes from assets/app.js - welcome to AssetMapper! 🎉");
