@@ -11,9 +11,12 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 use App\Repository\EventRepository;
 use App\Entity\Event;
+use App\Entity\User;
 use App\Form\EventType;
+use App\Repository\UserRepository;
 use App\Service\FileUploader;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('ROLE_ADMIN')]
@@ -96,12 +99,13 @@ class EventAdminController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
-    public function edit(string $id, Request $request, Event $event, EntityManagerInterface $entityManager, FileUploader $fileUploader): Response
+    public function edit(string $id, Request $request, Event $event, EntityManagerInterface $entityManager, FileUploader $fileUploader, UserRepository $userRepository): Response
     {
+        $users = $userRepository->findAllAlpha();
         $form = $this->createForm(
             EventType::class,
             $event,
-            ['is_admin' => true]
+            ['is_admin' => true, 'participants' => $userRepository->findAllAlpha()]
         );
         $form->handleRequest($request);
 
@@ -118,7 +122,10 @@ class EventAdminController extends AbstractController
                 $fileName = $fileUploader->upload($imageFile);
                 $event->setImage($fileName);
             }
-
+            $selectedParticipants = $form->get('participants')->getData();
+            foreach ($selectedParticipants as $participant) {
+                $event->addParticipant($participant);
+            }
             $entityManager->flush();
 
             return $this->redirectToRoute('admin_event_show', ["id" => $id], Response::HTTP_SEE_OTHER);
@@ -127,6 +134,7 @@ class EventAdminController extends AbstractController
         return $this->render('admin/event/edit.html.twig', [
             'event' => $event,
             'form' => $form,
+            "users" => $users
         ]);
     }
 
@@ -145,5 +153,27 @@ class EventAdminController extends AbstractController
         }
 
         return $this->redirectToRoute('admin_event_homepage', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/{eventId}/remove-participant/{participantId}', name: 'remove_participant', methods: ['DELETE'])]
+    public function removeParticipant(string $eventId, string $participantId, EntityManagerInterface $entityManager, Request $request)
+    {
+        // Récupérer l'événement et le participant
+        $event = $entityManager->getRepository(Event::class)->find($eventId);
+        $participant = $entityManager->getRepository(User::class)->find($participantId);
+
+        if ($event && $participant) {
+            // Retirer le participant de l'événement
+            $event->removeParticipant($participant); // Méthode dans l'entité Event
+            $entityManager->flush();
+
+            // Si c'est une requête AJAX, renvoyer une réponse JSON
+            if ($request->isXmlHttpRequest()) {
+                return new JsonResponse(['status' => 'success']);
+            }
+        }
+
+        // Rediriger pour les requêtes classiques
+        return $this->redirectToRoute('app_event_show', ['id' => $eventId]);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -17,31 +18,31 @@ class UserRepository extends ServiceEntityRepository
     }
 
     /** @return array<User> */
-    public function searchByKeyword(string $keyword): array
+    public function findAllAlpha(): array
     {
-        $conn = $this->getEntityManager()->getConnection();
-        
-        $sql = "SELECT * FROM ALP_USER WHERE MATCH(USR_USERNAME) AGAINST(:keyword)";
-        
-        $stmt = $conn->prepare($sql);
-        $stmt->bindValue("keyword", $keyword);
-
-        $result = $stmt->execute();
-
-        $ids = array_column($result->fetchAllAssociative(), 'USR_ID');
-
-        if (empty($ids)) {
-            return [];
-        }
-
-        /** @var array<User> */
-        return $this->createQueryBuilder('t')
-            ->where('t.id IN (:ids)')
-            ->setParameter('ids', $ids)
+        $users = $this->createQueryBuilder('u')
+            ->andWhere('u.roles LIKE :role')
+            ->setParameter('role', '%ROLE_ALPHA%')
             ->getQuery()
             ->getResult();
+        return $users;
     }
 
+    /** @return array<User> */
+    public function searchAlphaByKeyword(string $keyword): array
+    {
+
+        $users = $this->createQueryBuilder('u')
+            ->where('u.username LIKE :search')
+            ->andWhere('u.roles LIKE :role')
+            ->setParameter('search', '%' . $keyword . '%')
+            ->setParameter('role', '%ROLE_ALPHA%')
+            ->getQuery()
+            ->getResult();
+
+        /** @var array<User> */
+        return $users;
+    }
     //    /**
     //     * @return User[] Returns an array of User objects
     //     */

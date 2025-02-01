@@ -15,7 +15,27 @@ class RankRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Rank::class);
     }
+    public function findCurrentRank(int $userXp): ?Rank
+    {
+        return $this->createQueryBuilder('r')
+            ->where('r.minimum <= :userRank') // Trouver le rang le plus élevé que l'utilisateur possède
+            ->orderBy('r.minimum', 'DESC') // Trier par niveau décroissant
+            ->setParameter('userRank', $userXp)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 
+    public function findNextRank(int $userXp): ?Rank
+    {
+        return $this->createQueryBuilder('r')
+            ->where('r.minimum > :userRank') // Trouver le premier rang supérieur
+            ->orderBy('r.minimum', 'ASC') // Trier par niveau croissant
+            ->setParameter('userRank', $userXp)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
     //    /**
     //     * @return Rank[] Returns an array of Rank objects
     //     */

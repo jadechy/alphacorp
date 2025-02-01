@@ -3,7 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Topic;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -17,29 +19,24 @@ class TopicRepository extends ServiceEntityRepository
     }
 
     /** @return array<Topic> */
-    public function searchByKeyword(string $keyword): array
+    public function searchByFilters(string $keyword = '', string $categoryLabel = ''): array
     {
-        $conn = $this->getEntityManager()->getConnection();
-        
-        $sql = "SELECT * FROM ALP_TOPIC WHERE MATCH(TPC_TITLE, TPC_SHORT_DESCRIPTION, TPC_LONG_DESCRIPTION) AGAINST(:keyword)";
-        
-        $stmt = $conn->prepare($sql);
-        $stmt->bindValue("keyword", $keyword);
+        $queryBuilder = $this->createQueryBuilder('t');
 
-        $result = $stmt->execute();
-
-        $ids = array_column($result->fetchAllAssociative(), 'TPC_ID');
-
-        if (empty($ids)) {
-            return [];
+        // Filtre par mot-clé
+        if (!empty($keyword)) {
+            $queryBuilder->andWhere('t.title LIKE :keyword OR t.shortDescription LIKE :keyword OR t.longDescription LIKE :keyword')
+                ->setParameter('keyword', '%' . $keyword . '%');
         }
 
+        // Filtre par catégorie
+        if (!empty($categoryLabel) && $categoryLabel != "all") {
+            $queryBuilder->join('t.category', 'c')
+                ->andWhere('c.label = :categoryLabel')
+                ->setParameter('categoryLabel', $categoryLabel);
+        }
         /** @var array<Topic> */
-        return $this->createQueryBuilder('t')
-            ->where('t.id IN (:ids)')
-            ->setParameter('ids', $ids)
-            ->getQuery()
-            ->getResult();
+        return $queryBuilder->getQuery()->getResult();
     }
 
     //    /**

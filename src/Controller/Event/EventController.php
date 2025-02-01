@@ -14,7 +14,9 @@ use App\Entity\Event;
 use App\Repository\EventRepository;
 use App\Form\EventType;
 use App\Service\FileUploader;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[IsGranted('ROLE_USER')]
 #[Route('/event', name: "app_event_")]
 class EventController extends AbstractController
 {
@@ -27,6 +29,7 @@ class EventController extends AbstractController
 
         return $this->render('event/index.html.twig', [
             'events' => $events,
+            "user" => $user
         ]);
     }
 
@@ -47,6 +50,21 @@ class EventController extends AbstractController
         }
 
         $events = $eventRepository->findBy(['author' => $user]);
+
+        return $this->render('event/author.html.twig', [
+            'events' => $events,
+        ]);
+    }
+
+    #[Route('/user_participate', name: 'user_participate')]
+    public function userParticipateEvent(EventRepository $eventRepository): Response
+    {
+        $user = $this->getUser();
+        if (!$user) {
+            throw $this->createAccessDeniedException('Vous devez être connecté pour effectuer cette action.');
+        }
+
+        $events = $eventRepository->findEventsByParticipant($user);
 
         return $this->render('event/author.html.twig', [
             'events' => $events,

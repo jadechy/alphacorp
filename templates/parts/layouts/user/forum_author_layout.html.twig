@@ -1,0 +1,20 @@
+<section class="mt-20 ">
+	<h2 class="text-xl font-semibold">Les articles
+		<span class="text-sm text-neutral-400">-
+			{{ user.topics|length }}</span>
+	</h2>
+	<div class="flex gap-8 mt-8 flex-wrap">
+		{% for topic in user.topics|slice(0, 5) %}
+
+			{% include "macro/topic_card.html.twig" with {"title": topic.title, "height": 50} %}
+		{% else %}
+			<p>Aucun article trouvé.</p>
+		{% endfor %}
+		{% if user.topics|length > 5 %}
+			<a href={{path(path_forum_author)}} class="w-40 border border-neutral-300 rounded-md p-3 flex items-center hover:scale-105 transition font-bold text-center">
+				<p>Voir tous les articles</p>
+			</a>
+		{% endif %}
+
+	</div>
+</section>

@@ -16,16 +16,16 @@ class Event
     #[ORM\Column(name: 'EVT_ID')]
     private int $id;
 
-    #[ORM\Column(length: 50, name: 'EVT_TITLE')]
+    #[ORM\Column(length: 70, name: 'EVT_TITLE')]
     private string $title;
 
-    #[ORM\Column(length: 50, name: 'EVT_SHORT_DESCRIPTION', nullable:true)]
+    #[ORM\Column(length: 90, name: 'EVT_SHORT_DESCRIPTION', nullable: true)]
     private ?string $shortDescription = null;
 
-    #[ORM\Column(length: 255, name: 'EVT_LONG_DESCRIPTION', nullable:true)]
+    #[ORM\Column(length: 1500, name: 'EVT_LONG_DESCRIPTION', nullable: true)]
     private ?string $longDescription = null;
 
-    #[ORM\Column(length: 100, name: 'EVT_IMAGE', nullable:true)]
+    #[ORM\Column(length: 100, name: 'EVT_IMAGE', nullable: true)]
     private ?string $image = null;
 
     #[ORM\Column(name: 'EVT_START_DATE')]
@@ -41,10 +41,10 @@ class Event
     private Collection $participants;
 
     #[ORM\ManyToOne(inversedBy: 'authorEvents')]
-    #[ORM\JoinColumn(name:'USR_ID',referencedColumnName:'USR_ID')]
+    #[ORM\JoinColumn(name: 'USR_ID', referencedColumnName: 'USR_ID')]
     private ?User $author = null;
 
-    #[ORM\Column(length: 255,name: 'EVT_LOCATION')]
+    #[ORM\Column(length: 255, name: 'EVT_LOCATION')]
     private string $location;
 
     public function __construct()
@@ -186,7 +186,7 @@ class Event
         if (!$user) {
             return false;
         }
-        
+
         return $this->getParticipants()->contains($user);
     }
 
