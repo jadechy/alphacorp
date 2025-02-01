@@ -115,9 +115,22 @@ final class QuestionController extends AbstractController
     public function delete(Request $request, Question $question, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$question->getId(), $request->getPayload()->getString('_token'))) {
+            if ($question->getCorrectAnswer()) {
+                $correctAnswer = $question->getCorrectAnswer();
+                $question->setCorrectAnswer(null); 
+                $entityManager->flush();
+
+                $entityManager->remove($correctAnswer);
+            }
+
             foreach ($question->getAnswers() as $answer) {
                 $entityManager->remove($answer);
             }
+
+            foreach ($question->getUserAnswers() as $userAnswer) {
+                $entityManager->remove($userAnswer);
+            }
+            $entityManager->flush();
             
             $entityManager->remove($question);
             $entityManager->flush();

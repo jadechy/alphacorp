@@ -78,6 +78,30 @@ final class QuizAdminController extends AbstractController
     public function delete(Request $request, Quiz $quiz, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$quiz->getId(), $request->getPayload()->getString('_token'))) {
+            foreach ($quiz->getQuestions() as $question) {
+
+                if ($question->getCorrectAnswer()) {
+                    $correctAnswer = $question->getCorrectAnswer();
+                    $question->setCorrectAnswer(null);
+                    $entityManager->flush(); 
+    
+                    $entityManager->remove($correctAnswer);
+                }
+    
+                foreach ($question->getAnswers() as $answer) {
+                    $entityManager->remove($answer);
+                }
+
+                foreach ($question->getUserAnswers() as $userAnswer) {
+                    $entityManager->remove($userAnswer);
+                }
+                
+                $entityManager->flush();
+
+                $entityManager->remove($question);
+            }
+            $entityManager->flush();
+
             $entityManager->remove($quiz);
             $entityManager->flush();
         }

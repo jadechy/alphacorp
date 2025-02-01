@@ -39,7 +39,7 @@ class Question
     private ?int $xp = null;
 
     #[ORM\OneToOne(targetEntity: Answer::class, cascade: ['persist', 'remove'], inversedBy: 'correctForQuestion')]
-    #[ORM\JoinColumn(name: 'ANS_ID', referencedColumnName: 'ANS_ID', nullable: false)]
+    #[ORM\JoinColumn(name: 'ANS_ID', referencedColumnName: 'ANS_ID')]
     private ?Answer $correctAnswer = null;
 
     public function __construct()
