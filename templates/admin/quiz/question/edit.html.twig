@@ -1,12 +1,13 @@
 {% extends 'admin/base_admin.html.twig' %}
 
-{% block title %}Modifier la question{% endblock %}
+{% block title %}Modifier la question :
+	{{question.content}}
+{% endblock %}
 
 {% block admin_content %}
-    <h1>Modifier la question</h1>
 
-    {{ include('admin/quiz/question/_form.html.twig') }}
+	{{ include('admin/quiz/question/_form.html.twig') }}
 
-    {{ include('admin/quiz/question/_delete_form.html.twig') }}
+	{{ include('admin/quiz/question/_delete_form.html.twig') }}
 
 {% endblock %}

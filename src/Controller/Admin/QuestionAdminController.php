@@ -13,10 +13,17 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route('/admin/question', name: "app_question_admin_")]
+#[Route('/admin/question', name: "admin_question_")]
 #[IsGranted('ROLE_ADMIN')]
 final class QuestionAdminController extends AbstractController
 {
+    #[Route('/{id}', name: 'show', methods: ['GET'])]
+    public function show(Question $question): Response
+    {
+        return $this->render('admin/quiz/question/show.html.twig', [
+            'question' => $question,
+        ]);
+    }
     #[Route('/new/{quiz}', name: 'new')]
     public function createQuestion(Request $request, EntityManagerInterface $entityManager, Quiz $quiz): Response
     {
@@ -39,7 +46,7 @@ final class QuestionAdminController extends AbstractController
 
                 if ($isCorrect) {
                     $correctAnswer = $answer;
-                    break; 
+                    break;
                 }
             }
 
@@ -51,13 +58,13 @@ final class QuestionAdminController extends AbstractController
             $entityManager->flush();
 
             if ($request->get('add_new_question')) {
-                return $this->redirectToRoute('app_question_admin_new', [
+                return $this->redirectToRoute('admin_question_new', [
                     'quiz' => $quiz->getId(),
                     'question' => $questionNumber + 1
                 ]);
             }
 
-            return $this->redirectToRoute('app_quiz_admin_index'); 
+            return $this->redirectToRoute('admin_quiz_index');
         }
 
         return $this->render('admin/quiz/question/new.html.twig', [
@@ -77,7 +84,7 @@ final class QuestionAdminController extends AbstractController
             $answer = $answerField->getData();
 
             if ($correctAnswer && $answer === $correctAnswer) {
-                $answerField->get('isCorrect')->setData(true); 
+                $answerField->get('isCorrect')->setData(true);
             }
         }
 
@@ -90,7 +97,7 @@ final class QuestionAdminController extends AbstractController
 
                 if ($isCorrect) {
                     $correctAnswer = $answer;
-                    break; 
+                    break;
                 }
             }
 
@@ -102,7 +109,7 @@ final class QuestionAdminController extends AbstractController
 
             $quiz = $question->getQuiz();
 
-            return $this->redirectToRoute('app_quiz_admin_show', ['id' => $quiz->getId()], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('admin_quiz_show', ['id' => $quiz->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('admin/quiz/question/edit.html.twig', [
@@ -114,10 +121,10 @@ final class QuestionAdminController extends AbstractController
     #[Route('/{id}', name: 'delete', methods: ['POST'])]
     public function delete(Request $request, Question $question, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$question->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $question->getId(), $request->getPayload()->getString('_token'))) {
             if ($question->getCorrectAnswer()) {
                 $correctAnswer = $question->getCorrectAnswer();
-                $question->setCorrectAnswer(null); 
+                $question->setCorrectAnswer(null);
                 $entityManager->flush();
 
                 $entityManager->remove($correctAnswer);
@@ -130,15 +137,15 @@ final class QuestionAdminController extends AbstractController
             foreach ($question->getUserAnswers() as $userAnswer) {
                 $entityManager->remove($userAnswer);
             }
-            
+
             $entityManager->flush();
-            
+
             $entityManager->remove($question);
             $entityManager->flush();
         }
 
         $quiz = $question->getQuiz();
 
-        return $this->redirectToRoute('app_quiz_admin_show', ['id' => $quiz->getId()], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('admin_quiz_show', ['id' => $quiz->getId()], Response::HTTP_SEE_OTHER);
     }
 }

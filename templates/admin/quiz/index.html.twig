@@ -1,39 +1,40 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/base_admin.html.twig' %}
 
-{% block title %}Quiz index{% endblock %}
 
-{% block body %}
-    <h1>Quiz index</h1>
+{% block title %}Quiz
+{% endblock %}
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Description</th>
-                <th>Auteur</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for quiz in quizzes %}
-            <tr>
-                <td>{{ quiz.id }}</td>
-                <td>{{ quiz.title }}</td>
-                <td>{{ quiz.description }}</td>
-                <td>{{ quiz.author.username }}</td>
-                <td>
-                    <a href="{{ path('app_quiz_admin_show', {'id': quiz.id}) }}">show</a>
-                    <a href="{{ path('app_quiz_admin_edit', {'id': quiz.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+{% block admin_content %}
 
-    <a href="{{ path('app_quiz_supervisor_new') }}">Créer un nouveau quiz</a>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Title</th>
+				<th>Description</th>
+				<th>Auteur</th>
+				<th>actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for quiz in quizzes %}
+				<tr>
+					<td>{{ quiz.id }}</td>
+					<td>{{ quiz.title }}</td>
+					<td>{{ quiz.description }}</td>
+					<td>{{ quiz.author.username }}</td>
+					<td>
+						<a href="{{ path('admin_quiz_show', {'id': quiz.id}) }}">show</a>
+						<a href="{{ path('admin_quiz_edit', {'id': quiz.id}) }}">edit</a>
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="4">no records found</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+	<a href="{{ path('app_quiz_supervisor_new') }}">Créer un nouveau quiz</a>
 {% endblock %}
