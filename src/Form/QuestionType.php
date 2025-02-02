@@ -34,14 +34,18 @@ class QuestionType extends AbstractType
             ])
             ->add('answers', CollectionType::class, [
                 'entry_type' => AnswerType::class,
-                'entry_options' => ['label' => false],
+                'entry_options' => [
+                    'label' => false,
+                    // "class" => "testCLass"
+                ],
+
                 'allow_add' => true,
                 'allow_delete' => true,
                 'block_name' => 'answers',
                 'by_reference' => false,
                 'prototype' => true,
                 'block_name' => 'answers',
-                "attr" => []
+                // "attr" => ['class' => 'answer-collection', "label" => false]
             ])
         ;
     }

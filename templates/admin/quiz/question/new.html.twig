@@ -1,23 +1,14 @@
 {% extends 'admin/base_admin.html.twig' %}
 
 
-{% block title %}Nouveau Quiz
+{% block title %}Nouvelle question - n°{{questionNumber}}
+
 {% endblock %}
 
-{# {% form_theme form 'admin/quiz/form/reponse.html.twig' %} #}
 
 {% block admin_content %}
-	<h1>Créer une nouvelle question</h1>
-
-	<h2>Question
-		{{questionNumber}}</h2>
 
 	{{ include('admin/quiz/question/_form.html.twig') }}
 
-	<a href="{{ path('admin_quiz_index') }}">back to list</a>
 
-{% endblock %}
-{% block javascripts %}
-	{{ parent() }}
-	<script src="{{ asset('js/quizNew.js') }}"></script>
 {% endblock %}

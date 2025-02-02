@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Quiz;
+use App\Entity\User;
 use App\Form\QuizType;
 use App\Repository\QuizRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -16,7 +17,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_ADMIN')]
 final class QuizAdminController extends AbstractController
 {
-    #[Route(name: 'index', methods: ['GET'])]
+    #[Route(name: 'homepage', methods: ['GET'])]
     public function index(QuizRepository $quizRepository): Response
     {
         return $this->render('admin/quiz/index.html.twig', [
@@ -27,6 +28,7 @@ final class QuizAdminController extends AbstractController
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
+        $user = new User();
         /** @var User $user */
         $user = $this->getUser();
 
@@ -107,6 +109,6 @@ final class QuizAdminController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('admin_quiz_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('admin_quiz_homepage', [], Response::HTTP_SEE_OTHER);
     }
 }

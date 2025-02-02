@@ -15,20 +15,30 @@
 						{% include "parts/components/nav_link.html.twig" with {"pathName": "app_event_homepage", "label": "Event"} %}
 						{% if is_granted('ROLE_ALPHA') %}
 							{% include "parts/components/nav_link.html.twig" with {"pathName": "app_user_alpha", "label": "Alpha"} %}
-						{% endif %}
-						{% if is_granted('ROLE_ALPHA') %}
 							{% include "parts/components/nav_link.html.twig" with {"pathName": "app_quiz_homepage", "label": "Quiz"} %}
-
 						{% endif %}
 
 
 						{% include "parts/components/nav_link.html.twig" with {"pathName": "app_forum_homepage", "label": "Forum"} %}
-						{% include "parts/components/nav_link.html.twig" with {"pathName": "app_user_show", "parameters":{"id": app.user.id}, "label": "Profil"} %}
+
+						{% if is_granted('ROLE_SUPERVISOR') %}
+							{% include "parts/components/nav_link.html.twig" with {"pathName": "app_quiz_supervisor_homepage", "label": "Quiz"} %}
+						{% endif %}
 
 						{% if is_granted('ROLE_ADMIN') %}
 							{% include "parts/components/nav_link.html.twig" with {"pathName": "admin_homepage", "label": "Admin"} %}
 						{% endif %}
-						{% include "parts/components/nav_link.html.twig" with {"pathName": "app_logout", "label": "Se déconnecter"} %}
+						{% include "parts/components/nav_link.html.twig" with {
+							"pathName": "app_user_show",
+							"parameters": {"id": app.user.id},
+							"label": ux_icon('tabler:user-filled', {class: 'w-6 h-6'})|raw
+						} %}
+
+						{% include "parts/components/nav_link.html.twig" with {
+							"pathName": "app_logout", 
+							"label": ux_icon('tabler:door-exit', {class: 'w-6 h-6'})|raw
+							} 
+						%}
 
 
 					{% else %}

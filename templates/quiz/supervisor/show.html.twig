@@ -1,8 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Quiz{% endblock %}
+{% block title %}Quiz
+{% endblock %}
 
 {% block body %}
+	<a href={{ path("app_quiz_supervisor_homepage") }} class="flex hover:outline outline-neutral-300 w-fit rounded-3xl px-3 py-2 mb-4">
+		{{ ux_icon('tabler:chevron-left', {class: 'w-6 h-6'}) }}
+		Retour à la liste
+	</a>
 	<section>
 		<table>
 			<thead>
@@ -24,44 +29,50 @@
 					<td>Description</td>
 					<td>{{ quiz.description }}</td>
 				</tr>
-				{% for question in quiz.questions %}
-                    <tr>
-                        <td>Id</td>
-                        <td>{{ question.id }}</td>
-                    </tr>
-                    <tr>
-                        <td>Question</td>
-                        <td>{{ question.content }}</td>
-                    </tr>
-                    {% for answer in question.answers %}
-                        <tr>
-                            <td>Id</td>
-                            <td>{{ answer.id }}</td>
-                        </tr>
-                        <tr>
-                            <td>Réponse</td>
-                            <td>{{ answer.content }}</td>
-                        </tr>
-                    {% endfor %}
-                    <tr class="flex justify-center items-center gap-8">
-                        <td></td>
-                        <td>
-                            <a href="{{ path('app_question_supervisor_edit', {'id': question.id}) }}">
-                                Modifier la question
-                            </a>
-                        </td>
-                    </tr>
-                {% endfor %}			
+				<tr>
+					<td>Questions</td>
+					<td>
+						<ul class="flex flex-wrap gap-3">
+							{% for question in quiz.questions %}
+								<li class="shadow shadow-neutral-900 p-4 hover:border rounded">
+									<div>
+										<p>Id :
+											{{ question.id }}</p>
+									</div>
+									<div>
+										<p>Question :
+											{{ question.content }}</p>
+									</div>
+									<div class="border-t flex flex-col gap-3 pt-3">
+										{% for answer in question.answers %}
+											<div class="bg-neutral-700 p-2 rounded">
+												<div>
+													<p>Id :
+														{{ answer.id }}</p>
+												</div>
+												<div>
+													<p>Réponse :
+														{{ answer.content }}</p>
+												</div>
+											</div>
+										{% endfor %}
+									</div>
+									<a href="{{ path('app_question_supervisor_edit', {'id': question.id}) }}" class="mt-3 btn">
+										{{ ux_icon('tabler:edit', {class: 'w-6 h-6'}) }}</a>
+								</li>
+							{% endfor %}
+							<li>
+								<a href={{path("app_question_supervisor_new", {"quiz": quiz.id} )}}class="btn-secondary">
+									{{ ux_icon('tabler:plus', {class: 'w-6 h-6'}) }}</a>
+							</li>
+						</ul>
+					</td>
+				</tr>
 			</tbody>
 		</table>
-
 		<div class="flex justify-center items-center gap-8">
-			<a href="{{ path('app_quiz_supervisor_edit', {'id': quiz.id}) }}">
-                Modifier
-            </a>
-			{{ include('quiz/supervisor/_delete_form.html.twig') }}
+			<a href={{ path('app_quiz_supervisor_edit', {'id': quiz.id} ) }} class="btn">Modifier</a>
 		</div>
-
+		{{ include('quiz/supervisor/_delete_form.html.twig') }}
 	</section>
 {% endblock %}
-

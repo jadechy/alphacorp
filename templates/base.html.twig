@@ -4,7 +4,7 @@
 <html class="dark">
 	<head>
 		<meta charset="UTF-8">
-		<title>{{title}}</title>
+		<title>{{title|raw}}</title>
 		<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
 
 		{% block stylesheets %}
@@ -15,7 +15,7 @@
 			{{ encore_entry_script_tags('app') }}
 		{% endblock %}
 	</head>
-	<body class="dark:bg-neutral-800 dark:text-white">
+	<body class="dark:bg-neutral-800 dark:text-white relative">
 		{% for label, messages in app.flashes %}
 			<div class="alert alert-{{ label }}">
 				{% for message in messages %}
@@ -26,7 +26,8 @@
 		{% include('parts/layouts/header_layout.html.twig' ) %}
 
 		<main class="container mx-auto pb-20">
-			<h1 class="font-bold text-fuchsia-300 text-center text-2xl mb-8">{{title}}</h1>
+			<h1 class="font-bold text-fuchsia-300 text-center text-2xl mb-8">{{title|raw}}</h1>
+
 			{% block body %}{% endblock %}
 		</main>
 	</body>

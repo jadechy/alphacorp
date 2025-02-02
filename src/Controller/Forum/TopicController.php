@@ -82,6 +82,7 @@ class TopicController extends AbstractController
 
             $entityManager->persist($response);
             $entityManager->flush();
+            $this->addFlash('success', 'Réponse ajoutée, en attente de validation');
 
             return $this->redirectToRoute('app_forum_show', ['id' => $id], HttpResponse::HTTP_SEE_OTHER);
         }

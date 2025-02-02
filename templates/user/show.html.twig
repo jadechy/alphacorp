@@ -75,16 +75,19 @@
 				</form>
 			</section>
 		{% endif %}
-		<!-- Section Events Author -->
-		{% include 'parts/layouts/user/event_author_layout.html.twig' with {"path_event_author": "app_event_author"}  %}
+
+		{% if not is_granted("ROLE_SUPERVISOR")%}
+			<!-- Section Events Author -->
+			{% include 'parts/layouts/user/event_author_layout.html.twig' with {"path_event_author": "app_event_author"}  %}
 
 
-		<!-- Section Events Participation -->
-		{% include 'parts/layouts/user/event_participate_layout.html.twig' with {"path_event_participate": "app_event_user_participate"}  %}
+			<!-- Section Events Participation -->
+			{% include 'parts/layouts/user/event_participate_layout.html.twig' with {"path_event_participate": "app_event_user_participate"}  %}
 
+			<!-- Section Forum -->
+			{% include 'parts/layouts/user/forum_author_layout.html.twig' with {"path_forum_author": "app_forum_author"}  %}
+		{% endif %}
 
-		<!-- Section Forum -->
-		{% include 'parts/layouts/user/forum_author_layout.html.twig' with {"path_forum_author": "app_forum_author"}  %}
 
 	</div>
 {% endblock %}

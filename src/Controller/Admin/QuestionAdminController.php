@@ -5,7 +5,6 @@ namespace App\Controller\Admin;
 use App\Entity\Quiz;
 use App\Entity\Question;
 use App\Form\QuestionType;
-use App\Repository\QuestionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route('/admin/question', name: "admin_question_")]
+#[Route('/admin/quiz/question', name: "admin_question_")]
 #[IsGranted('ROLE_ADMIN')]
 final class QuestionAdminController extends AbstractController
 {
@@ -57,14 +56,14 @@ final class QuestionAdminController extends AbstractController
             $entityManager->persist($question);
             $entityManager->flush();
 
-            if ($request->get('add_new_question')) {
+            if ($request->get('admin_question_new')) {
                 return $this->redirectToRoute('admin_question_new', [
                     'quiz' => $quiz->getId(),
                     'question' => $questionNumber + 1
                 ]);
             }
 
-            return $this->redirectToRoute('admin_quiz_index');
+            return $this->redirectToRoute('admin_quiz_homepage');
         }
 
         return $this->render('admin/quiz/question/new.html.twig', [

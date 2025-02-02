@@ -3,6 +3,8 @@
 
 {% block title %}Question
 {% endblock %}
+{% set return_path = 'admin_quiz_show' %}
+{% set return_params = { id: question.quiz.id } %}
 
 
 {% block admin_content %}
@@ -45,12 +47,12 @@
 
 			</tbody>
 		</table>
-		<div class="flex justify-center items-center gap-8">
+		<div class="flex justify-center items-center">
 			<a href="{{ path('admin_question_edit', {'id': question.id}) }}" class="btn">
 				Modifier
 			</a>
-			{{ include('admin/quiz/question/_delete_form.html.twig') }}
 		</div>
+		{{ include('admin/quiz/question/_delete_form.html.twig') }}
 
 	</section>
 {% endblock %}

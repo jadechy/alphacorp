@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Quiz;
+namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,8 +19,7 @@ use App\Entity\UserAnswer;
 use App\Repository\UserAnswerRepository;
 
 #[Route('/quiz', name: "app_quiz_")]
-#[IsGranted('ROLE_ALPHA')]
-final class QuizController extends AbstractController
+class QuizController extends AbstractController
 {
     #[Route('/', name: 'homepage')]
     public function listQuiz(QuizRepository $quizRepository): Response
@@ -31,7 +30,6 @@ final class QuizController extends AbstractController
             'quizs' => $quizs,
         ]);
     }
-
     #[Route('/{id}', name: 'start')]
     public function startQuiz(Quiz $quiz, QuestionRepository $questionRepository): Response
     {

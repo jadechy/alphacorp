@@ -24,8 +24,14 @@
 					<td>{{ quiz.description }}</td>
 					<td>{{ quiz.author.username }}</td>
 					<td>
-						<a href="{{ path('admin_quiz_show', {'id': quiz.id}) }}">show</a>
-						<a href="{{ path('admin_quiz_edit', {'id': quiz.id}) }}">edit</a>
+						<a href="{{ path('admin_quiz_show', {'id': quiz.id}) }}">
+							{{ ux_icon('tabler:eye', {class: 'w-6 h-6'}) }}
+
+						</a>
+						<a href="{{ path('admin_quiz_edit', {'id': quiz.id}) }}">
+							{{ ux_icon('tabler:edit', {class: 'w-6 h-6'}) }}
+
+						</a>
 					</td>
 				</tr>
 			{% else %}
@@ -35,6 +41,8 @@
 			{% endfor %}
 		</tbody>
 	</table>
+	<div class="w-fit mx-auto">
 
-	<a href="{{ path('app_quiz_supervisor_new') }}">Créer un nouveau quiz</a>
+		<a href="{{ path('admin_quiz_new') }}" class=" btn">Créer un nouveau quiz</a>
+	</div>
 {% endblock %}

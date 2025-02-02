@@ -3,6 +3,8 @@
 {% block title %}Modifier la question :
 	{{question.content}}
 {% endblock %}
+{% set return_path = 'admin_question_show' %}
+{% set return_params = { id: question.id } %}
 
 {% block admin_content %}
 

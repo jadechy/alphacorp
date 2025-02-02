@@ -1,12 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nouveau Quiz{% endblock %}
+{% block title %}Nouveau Quiz
+{% endblock %}
 
 {% block body %}
-    <h1>Créer un nouveau Quiz</h1>
+	<a href={{ path("app_quiz_supervisor_homepage") }} class="flex hover:outline outline-neutral-300 w-fit rounded-3xl px-3 py-2 mb-4">
+		{{ ux_icon('tabler:chevron-left', {class: 'w-6 h-6'}) }}
+		Retour à la liste
+	</a>
 
-    {{ include('quiz/supervisor/_form.html.twig') }}
+	{{ include('quiz/supervisor/_form.html.twig') }}
 
-    <a href="{{ path('app_quiz_supervisor_index') }}">back to list</a>
-    
+
 {% endblock %}
