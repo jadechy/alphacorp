@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Bromance;
+namespace App\Controller;
 
 use App\Entity\User;
 use App\Entity\Bromance;

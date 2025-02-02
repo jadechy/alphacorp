@@ -18,8 +18,8 @@ class RankRepository extends ServiceEntityRepository
     public function findCurrentRank(int $userXp): ?Rank
     {
         return $this->createQueryBuilder('r')
-            ->where('r.minimum <= :userRank') // Trouver le rang le plus élevé que l'utilisateur possède
-            ->orderBy('r.minimum', 'DESC') // Trier par niveau décroissant
+            ->where('r.minimum <= :userRank')
+            ->orderBy('r.minimum', 'DESC')
             ->setParameter('userRank', $userXp)
             ->setMaxResults(1)
             ->getQuery()
@@ -29,8 +29,8 @@ class RankRepository extends ServiceEntityRepository
     public function findNextRank(int $userXp): ?Rank
     {
         return $this->createQueryBuilder('r')
-            ->where('r.minimum > :userRank') // Trouver le premier rang supérieur
-            ->orderBy('r.minimum', 'ASC') // Trier par niveau croissant
+            ->where('r.minimum > :userRank')
+            ->orderBy('r.minimum', 'ASC')
             ->setParameter('userRank', $userXp)
             ->setMaxResults(1)
             ->getQuery()

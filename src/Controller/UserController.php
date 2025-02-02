@@ -29,10 +29,14 @@ class UserController extends AbstractController
         $nextRank = new Rank();
         $pourcentage = 0;
         $userXp = $user->getXp();
-        if ($userXp) {
+        if ($userXp != null) {
             $currentRank = $rankRepository->findCurrentRank($userXp);
             $nextRank = $rankRepository->findNextRank($userXp);
-            $pourcentage =  (($userXp - $currentRank->getMinimum()) / ($nextRank->getMinimum() - $currentRank->getMinimum())) * 100;
+            if ($currentRank && $nextRank) {
+                $pourcentage =  (($userXp - $currentRank->getMinimum()) / ($nextRank->getMinimum() - $currentRank->getMinimum())) * 100;
+            } else {
+                $pourcentage = 100;
+            }
         }
         $colorsCategories = $categoryColorService->getCategoryColors();
 
@@ -76,7 +80,7 @@ class UserController extends AbstractController
                 $user->setRoles(['ROLE_SUPERVISOR']);
             }
             $entityManager->flush();
-            return $this->redirectToRoute('app_user_show', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_user_show', ["id" => $user->getId()], Response::HTTP_SEE_OTHER);
         }
         return $this->render('user/edit.html.twig', [
             'user' => $user,

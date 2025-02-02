@@ -26,20 +26,26 @@ class QuestionType extends AbstractType
                     'placeholder' => 'Question'
                 ]
             ])
-            ->add('xp',IntegerType::class, [
+            ->add('xp', IntegerType::class, [
                 'attr' => [
                     'class' => 'input',
                     'placeholder' => 'Nombre d\'XP'
                 ]
             ])
-            ->add('answers', CollectionType::class, ['entry_type' => AnswerType::class,
-                'entry_options' => ['label' => false],
+            ->add('answers', CollectionType::class, [
+                'entry_type' => AnswerType::class,
+                'entry_options' => [
+                    'label' => false,
+                    // "class" => "testCLass"
+                ],
+
                 'allow_add' => true,
                 'allow_delete' => true,
                 'block_name' => 'answers',
-                'by_reference' => false, 
+                'by_reference' => false,
                 'prototype' => true,
-                'block_name' => 'answers'
+                'block_name' => 'answers',
+                // "attr" => ['class' => 'answer-collection', "label" => false]
             ])
         ;
     }

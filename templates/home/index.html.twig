@@ -1,13 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!
-{% endblock %}
+{% block title %}{% endblock %}
 
 {% block body %}
-	<div class="flex justify-center items-center h-48 mt-">
-		<div>
-			<h1>Hello welcome on AlphaCorp ! ✅</h1>
-			<p class="text-red-500">lala</p>
+	<div class="flex flex-col justify-center items-center h-full">
+		<img src="{{asset("/img/logo/all.svg")}}" class="h-60"/>
+		<div class="flex flex-col items-center gap-2">
+			<p>Devenez un homme alpha, un vrai</p>
+			<a href={{path("app_register")}} class="btn">S'inscrire</a>
 		</div>
 	</div>
 {% endblock %}

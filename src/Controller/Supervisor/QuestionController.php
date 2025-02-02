@@ -5,7 +5,6 @@ namespace App\Controller\Supervisor;
 use App\Entity\Quiz;
 use App\Entity\Question;
 use App\Form\QuestionType;
-use App\Repository\QuestionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,7 +38,7 @@ final class QuestionController extends AbstractController
 
                 if ($isCorrect) {
                     $correctAnswer = $answer;
-                    break; 
+                    break;
                 }
             }
 
@@ -57,7 +56,7 @@ final class QuestionController extends AbstractController
                 ]);
             }
 
-            return $this->redirectToRoute('app_quiz_supervisor_index'); 
+            return $this->redirectToRoute('app_quiz_supervisor_homepage');
         }
 
         return $this->render('quiz/supervisor/question/new.html.twig', [
@@ -77,7 +76,7 @@ final class QuestionController extends AbstractController
             $answer = $answerField->getData();
 
             if ($correctAnswer && $answer === $correctAnswer) {
-                $answerField->get('isCorrect')->setData(true); 
+                $answerField->get('isCorrect')->setData(true);
             }
         }
 
@@ -90,7 +89,7 @@ final class QuestionController extends AbstractController
 
                 if ($isCorrect) {
                     $correctAnswer = $answer;
-                    break; 
+                    break;
                 }
             }
 
@@ -114,10 +113,10 @@ final class QuestionController extends AbstractController
     #[Route('/{id}', name: 'delete', methods: ['POST'])]
     public function delete(Request $request, Question $question, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$question->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $question->getId(), $request->getPayload()->getString('_token'))) {
             if ($question->getCorrectAnswer()) {
                 $correctAnswer = $question->getCorrectAnswer();
-                $question->setCorrectAnswer(null); 
+                $question->setCorrectAnswer(null);
                 $entityManager->flush();
 
                 $entityManager->remove($correctAnswer);
@@ -131,7 +130,7 @@ final class QuestionController extends AbstractController
                 $entityManager->remove($userAnswer);
             }
             $entityManager->flush();
-            
+
             $entityManager->remove($question);
             $entityManager->flush();
         }

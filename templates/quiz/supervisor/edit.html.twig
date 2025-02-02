@@ -1,13 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Quiz{% endblock %}
+{% block title %}Edit Quiz
+{% endblock %}
 
 {% block body %}
-    <h1>Edit Quiz</h1>
+	<a href={{ path("app_quiz_supervisor_show", {"id": quiz.id} ) }} class="flex hover:outline outline-neutral-300 w-fit rounded-3xl px-3 py-2 mb-4">
+		{{ ux_icon('tabler:chevron-left', {class: 'w-6 h-6'}) }}
+		Retour au quiz
+	</a>
 
-    {{ include('quiz/supervisor/_form.html.twig', {'button_label': 'Update'}) }}
+	{{ include('quiz/supervisor/_form.html.twig', {'button_label': 'Modifier'}) }}
 
-    <a href="{{ path('app_quiz_supervisor_index') }}">back to list</a>
 
-    {{ include('quiz/supervisor/_delete_form.html.twig') }}
+	{{ include('quiz/supervisor/_delete_form.html.twig') }}
 {% endblock %}

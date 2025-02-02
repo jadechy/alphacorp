@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Quiz;
+use App\Entity\User;
 use App\Form\QuizType;
 use App\Repository\QuizRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -12,11 +13,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route('/admin/quiz', name: "app_quiz_admin_")]
+#[Route('/admin/quiz', name: "admin_quiz_")]
 #[IsGranted('ROLE_ADMIN')]
 final class QuizAdminController extends AbstractController
 {
-    #[Route(name: 'index', methods: ['GET'])]
+    #[Route(name: 'homepage', methods: ['GET'])]
     public function index(QuizRepository $quizRepository): Response
     {
         return $this->render('admin/quiz/index.html.twig', [
@@ -26,7 +27,9 @@ final class QuizAdminController extends AbstractController
 
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {/** @var User $user */
+    {
+        $user = new User();
+        /** @var User $user */
         $user = $this->getUser();
 
         $quiz = new Quiz();
@@ -39,7 +42,7 @@ final class QuizAdminController extends AbstractController
             $entityManager->persist($quiz);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_question_admin_new', ['quiz' => $quiz->getId()]);
+            return $this->redirectToRoute('admin_question_new', ['quiz' => $quiz->getId()]);
         }
 
         return $this->render('admin/quiz/new.html.twig', [
@@ -65,7 +68,7 @@ final class QuizAdminController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_quiz_admin_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('admin_quiz_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('admin/quiz/edit.html.twig', [
@@ -77,17 +80,17 @@ final class QuizAdminController extends AbstractController
     #[Route('/{id}', name: 'delete', methods: ['POST'])]
     public function delete(Request $request, Quiz $quiz, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$quiz->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $quiz->getId(), $request->getPayload()->getString('_token'))) {
             foreach ($quiz->getQuestions() as $question) {
 
                 if ($question->getCorrectAnswer()) {
                     $correctAnswer = $question->getCorrectAnswer();
                     $question->setCorrectAnswer(null);
-                    $entityManager->flush(); 
-    
+                    $entityManager->flush();
+
                     $entityManager->remove($correctAnswer);
                 }
-    
+
                 foreach ($question->getAnswers() as $answer) {
                     $entityManager->remove($answer);
                 }
@@ -95,7 +98,7 @@ final class QuizAdminController extends AbstractController
                 foreach ($question->getUserAnswers() as $userAnswer) {
                     $entityManager->remove($userAnswer);
                 }
-                
+
                 $entityManager->flush();
 
                 $entityManager->remove($question);
@@ -106,6 +109,6 @@ final class QuizAdminController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_quiz_admin_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('admin_quiz_homepage', [], Response::HTTP_SEE_OTHER);
     }
 }
