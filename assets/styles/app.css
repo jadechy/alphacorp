@@ -8,8 +8,16 @@
   --shadow-xl: 0 20px 25px -5px rgb(F F F / 0.1), 0 8px 10px -6px rgb(F F F / 0.1);
   --shadow-2xl: 0 25px 50px -12px rgb(F F F / 0.25);
 }
-
+@font-face {
+  font-family: 'Enixe';
+  src: url("../fonts/Enixe.ttf") format('truetype'); /* Utilise "truetype" au lieu de "ttf" */
+  font-weight: normal;
+  font-style: normal;
+}
 @layer components {
+    h1, h2{
+          font-family: 'Enixe', sans-serif;
+    }
     table {
         width: 100%;
         border-collapse: collapse; 
