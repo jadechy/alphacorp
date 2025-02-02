@@ -2,35 +2,41 @@
 
 {% block title %}Rechercher un topic
 {% endblock %}
-{% block h1 %}Rechercher un topic
-{% endblock %}
-
-
 {% block body %}
 	<section>
 		<form method="get" action="{{ path('app_forum_homepage') }}" class="flex items-center gap-5 mb-6 mt-4">
 			<input type="text" name="q" value="{{ keyword|default('') }}" placeholder="Tapez un mot-clé..." class="input">
+			<select class="dashboard-select w-60" id="category" name="category">
+				<option value="all">Filtrer par catégorie</option>
+				{% for category in categories %}
+					<option value="{{ category.label }}" {% if category == category_selected %} selected {% endif %}>{{ category.name }}</option>
+
+				{% endfor %}
+			</select>
 			<button type="submit" class="btn">
 				Rechercher
 			</button>
 		</form>
+		{% if topics is not empty %}
+			<div class="grid grid-cols-2 gap-y-5 sm:grid-cols-4 gap-x-5">
 
-		{% if keyword %}
-			<h2 class="text-md font-medium text-neutral-400">Résultats pour "{{ keyword }}"</h2>
-			{% if topics is not empty %}
-				<div class="flex gap-6 flex-wrap">
-					{% for topic in topics %}
-						{% if topic.status.value == 'open' or topic.status.value == 'close' %}
-							{% include 'macro/topic_card.html.twig' %}
-						{% endif %}
-					{% endfor %}
-				</div>
-			{% else %}
-				<p class="text-gray-500">Aucun topic trouvé pour "{{ keyword }}".</p>
-			{% endif %}
+				{% for topic in topics %}
+					{% if topic.status.value == 'open' or topic.status.value == 'close' %}
+						{% include 'macro/topic_card.html.twig' %}
+					{% endif %}
+				{% endfor %}
+			</div>
+		{% else %}
+			<p class="text-gray-500">Aucun topic trouvé pour "{{ keyword }}"
+				{% if category_selected != null %}
+					dans la catégorie
+					{{category_selected.label}}
+				{% endif %}.</p>
+		{% endif %}
+		{% if is_granted('ROLE_ALPHA') %}
+			<div class="mt-8">
+				<a href={{path("app_forum_new")}} class="btn">Créer un nouveau topic</a>
+			</div>
 		{% endif %}
 	</section>
-	{% if is_granted('ROLE_ALPHA') %}
-		<a href={{path("app_forum_new")}} class="btn">Créer un nouveau topic</a>
-	{% endif %}
 {% endblock %}

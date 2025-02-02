@@ -34,8 +34,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(name: 'USR_ROLES')]
     private array $roles = [];
 
-    #[ORM\Column(type: 'guid', unique: true, name:'USR_RESET_TOKEN', nullable: true)]
+    #[ORM\Column(type: 'guid', unique: true, name: 'USR_RESET_TOKEN', nullable: true)]
     private ?string $resetToken = null;
+
+    #[ORM\Column(name: "USR_IMAGE", length: 100,  nullable: true)]
+    private ?string $image = null;
 
     /**
      * @var Collection<int, Response>
@@ -66,7 +69,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\ManyToMany(targetEntity: Challenge::class, inversedBy: 'users')]
     #[ORM\JoinTable(name: 'ALP_USER_CHALLENGE')]
-    #[ORM\JoinColumn(name: 'USR_ID', referencedColumnName: 'USR_ID',nullable: false)]
+    #[ORM\JoinColumn(name: 'USR_ID', referencedColumnName: 'USR_ID', nullable: false)]
     #[ORM\InverseJoinColumn(name: 'CHG_ID', referencedColumnName: 'CHG_ID')]
     private Collection $participations;
 
@@ -75,7 +78,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\ManyToMany(targetEntity: Event::class, inversedBy: 'participants')]
     #[ORM\JoinTable(name: 'ALP_USER_EVENT')]
-    #[ORM\JoinColumn(name: 'USR_ID', referencedColumnName: 'USR_ID',nullable: false)]
+    #[ORM\JoinColumn(name: 'USR_ID', referencedColumnName: 'USR_ID', nullable: false)]
     #[ORM\InverseJoinColumn(name: 'EVT_ID', referencedColumnName: 'EVT_ID')]
     private Collection $events;
 
@@ -108,6 +111,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\OneToMany(targetEntity: BanRequest::class, mappedBy: 'user')]
     private Collection $banRequests;
+
+
 
     public function __construct()
     {
@@ -153,8 +158,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-    * @return string the hashed password for this user
-    */
+     * @return string the hashed password for this user
+     */
     public function getPassword(): string
     {
         return $this->password;
@@ -205,6 +210,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(string $image): static
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
     /**
      * The public representation of the user (e.g. a username, an email address, etc.)
      *
@@ -215,17 +232,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         if (empty($this->email)) {
             throw new \LogicException('User identifier cannot be empty.');
         }
-    
+
         return $this->email;
     }
 
     /**
      * @see UserInterface
      */
-    public function eraseCredentials(): void
-    {
-
-    }
+    public function eraseCredentials(): void {}
 
     /**
      * @return Collection<int, Response>
@@ -517,6 +531,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function hasAnsweredQuiz(Quiz $quiz): bool
+    {
+        $answersForQuiz = $this->getUserAnswers()->filter(function(UserAnswer $userAnswer) use ($quiz) {
+            return $userAnswer->getQuestion()->getQuiz() === $quiz;
+        });
+
+        return count($answersForQuiz) === count($quiz->getQuestions());
+
+    }
+
     /**
      * @return Collection<int, BanRequest>
      */
@@ -546,5 +570,4 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-
 }

@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Quiz
+	{{quiz.title}}
+
+{% endblock %}
+
+{% block body %}
+	<section>
+		<div class="flex justify-center items-center gap-5  mb-12 text-fuchsia-500">
+
+
+			{{ ux_icon('tabler:north-star', {class: 'w-10 h-10'}) }}
+
+			<h2 class="text-2xl  font-bold text-center">
+				Vous avez fini le quiz !
+			</h2>
+		</div>
+		<div class="flex justify-center gap-5">
+			<a href="{{ path('app_quiz_homepage') }}" class="btn-secondary">Faire un nouveau quiz</a>
+			<a href="{{ path('app_quiz_results', {id: quiz.id}) }}" class="btn">Calculer mon score</a>
+		</div>
+	</section>
+{% endblock %}

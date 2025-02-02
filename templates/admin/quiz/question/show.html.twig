@@ -1,0 +1,58 @@
+{% extends 'admin/base_admin.html.twig' %}
+
+
+{% block title %}Question
+{% endblock %}
+{% set return_path = 'admin_quiz_show' %}
+{% set return_params = { id: question.quiz.id } %}
+
+
+{% block admin_content %}
+	<section>
+		<table>
+			<thead>
+				<tr>
+					<th>Catégorie</th>
+					<th>Valeur</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Id</td>
+					<td>{{ question.id }}</td>
+				</tr>
+				<tr>
+					<td>Content</td>
+					<td>{{ question.content }}</td>
+				</tr>
+				<tr>
+					<td>Good Answer</td>
+					<td>{{ question.correctAnswer.content }}</td>
+				</tr>
+				<tr>
+					<td>Gain XP</td>
+					<td>{{ question.xp }}</td>
+				</tr>
+				<tr>
+					<td>Answers</td>
+					<td class="flex flex-col items-end">
+						{% for answer in question.answers %}
+							<p class="w-fit">
+								{{ answer.content }}
+							</p>
+						{% endfor %}
+					</td>
+				</tr>
+
+
+			</tbody>
+		</table>
+		<div class="flex justify-center items-center">
+			<a href="{{ path('admin_question_edit', {'id': question.id}) }}" class="btn">
+				Modifier
+			</a>
+		</div>
+		{{ include('admin/quiz/question/_delete_form.html.twig') }}
+
+	</section>
+{% endblock %}

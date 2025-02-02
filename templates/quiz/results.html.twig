@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Résultat :
+	{{quiz.title}}
+
+{% endblock %}
+
+{% import 'macro/quiz/reponse_card.html.twig' as macros %}
+{% set percentage = (correctAnswersCount / quiz.questions|length) * 100 %}
+
+
+{% block body %}
+	<section>
+		<div class="h-6 w-full border border-neutral-500 rounded-full overflow-hidden">
+			<div class="h-full bg-green-300" style="width: {{ percentage }}%;"></div>
+		</div>
+		<p class="bg-fuchsia-300/70 rounded-xs w-fit p-3 mx-auto mt-8">{{correctAnswersCount}}/{{quiz.questions|length}}
+			bonnes réponses</p>
+
+
+		<div class="max-w-3/4 mx-auto my-8">
+			{% for userResponse in userResponses %}
+				{{ macros.AfficheReponseQuizCard(userResponse) }}
+			{% endfor %}
+		</div>
+
+
+		<section class="mx-auto shadow-xl shadow-neutral-900 rounded text-center w-fit p-10">
+			{{ ux_icon('tabler:flask', {class: 'w-30 h-20 mx-auto'}) }}
+			<h2 class="text-xl">Vous avez gagné
+			</h2>
+			<p class="text-3xl text-fuchsia-500 mt-4">{{totalXpEarned}}
+				XP</p>
+		</section>
+		<div class="flex justify-center mt-12">
+			<a href="{{ path('app_quiz_homepage') }}" class="btn">Faire un nouveau quiz</a>
+		</div>
+	</section>
+{% endblock %}

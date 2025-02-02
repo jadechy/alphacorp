@@ -17,13 +17,13 @@ class Topic
     #[ORM\Column(name: 'TPC_ID')]
     private int $id;
 
-    #[ORM\Column(length: 50, name: 'TPC_TITLE')]
+    #[ORM\Column(length: 70, name: 'TPC_TITLE')]
     private string $title;
 
     #[ORM\Column(length: 150, name: 'TPC_SHORT_DESCRIPTION')]
     private string $shortDescription;
 
-    #[ORM\Column(length: 255, name: 'TPC_LONG_DESCRIPTION')]
+    #[ORM\Column(length: 1300, name: 'TPC_LONG_DESCRIPTION')]
     private string $longDescription;
 
     #[ORM\Column(enumType: TopicStatusEnum::class, name: 'TPC_STATUS')]
@@ -33,11 +33,11 @@ class Topic
     private \DateTimeImmutable $createdAt;
 
     #[ORM\ManyToOne(inversedBy: 'topics')]
-    #[ORM\JoinColumn(name:'CAT_ID',referencedColumnName:'CAT_ID')]
+    #[ORM\JoinColumn(name: 'CAT_ID', referencedColumnName: 'CAT_ID')]
     private ?Category $category = null;
 
     #[ORM\ManyToOne(inversedBy: 'topics')]
-    #[ORM\JoinColumn(name:'LNG_ID',referencedColumnName:'LNG_ID')]
+    #[ORM\JoinColumn(name: 'LNG_ID', referencedColumnName: 'LNG_ID')]
     private ?Language $language = null;
 
     /**
@@ -47,7 +47,7 @@ class Topic
     private Collection $responses;
 
     #[ORM\ManyToOne(inversedBy: 'topics')]
-    #[ORM\JoinColumn(name:'USR_ID',referencedColumnName:'USR_ID')]
+    #[ORM\JoinColumn(name: 'USR_ID', referencedColumnName: 'USR_ID')]
     private ?User $author = null;
 
     public function __construct()
@@ -185,5 +185,4 @@ class Topic
 
         return $this;
     }
-
 }

@@ -1,0 +1,14 @@
+{% extends 'admin/base_admin.html.twig' %}
+
+
+{% block title %}Nouvelle question - n°{{questionNumber}}
+
+{% endblock %}
+
+
+{% block admin_content %}
+
+	{{ include('admin/quiz/question/_form.html.twig') }}
+
+
+{% endblock %}

@@ -1,0 +1,29 @@
+{% macro AfficheReponseQuizCard(userReponse) %}
+	<!-- Accordion Item 1 -->
+	<div class="border-b border-neutral-300">
+		<button class="accordion-btn flex justify-between w-full py-4 text-lg font-semibold text-left focus:outline-none">
+			<span>{{userReponse.question.content}}
+				-
+				{% if userReponse.answer.id == userReponse.question.correctAnswer.id %}
+					<span class="text-green-300">Correct</span>
+				{% else %}
+					<span class="text-red-300">Fail</span>
+				{% endif %}
+			</span>
+			<span class="icon transition-transform duration-300">▼</span>
+		</button>
+		<div class="accordion-content max-h-0 overflow-hidden transition-[max-height] duration-300 ease-in-out ">
+			<div class="mb-4">
+				<p>Votre réponse :
+					{{userReponse.answer.content}}</p>
+				{% if userReponse.answer.id != userReponse.question.correctAnswer.id %}
+					<p>La bonne réponse était :
+						{{userReponse.question.correctAnswer.content}}</p>
+				{% endif %}
+
+
+			</div>
+		</div>
+	</div>
+
+{% endmacro %}

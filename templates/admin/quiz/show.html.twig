@@ -1,0 +1,70 @@
+{% extends 'admin/base_admin.html.twig' %}
+
+{% block title %}Quiz
+{% endblock %}
+{% set return_path = 'admin_quiz_homepage' %}
+
+
+{% block admin_content %}
+	<section>
+		<table>
+			<thead>
+				<tr>
+					<th>Catégorie</th>
+					<th>Valeur</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Id</td>
+					<td>{{ quiz.id }}</td>
+				</tr>
+				<tr>
+					<td>Title</td>
+					<td>{{ quiz.title }}</td>
+				</tr>
+				<tr>
+					<td>Description</td>
+					<td>{{ quiz.description }}</td>
+				</tr>
+				<tr>
+					<td>Auteur</td>
+					<td>
+						<a href={{path("admin_user_show", {id: quiz.author.id} )}}>{{quiz.author.username}}{{ ux_icon('tabler:arrow-bar-right', {class: 'w-6 h-6'}) }}</a>
+					</td>
+
+				</tr>
+				<tr>
+					<td>Question</td>
+					<td class="flex flex-wrap">
+						{% for question in quiz.questions %}
+							<a href={{path("admin_question_show", {id: question.id} )}}>
+								{{ question.id }}
+								-
+								{{ question.content }}
+								{{ ux_icon('tabler:arrow-bar-right', {class: 'w-6 h-6'}) }}
+
+							</a>
+
+						{% endfor %}
+					</td>
+
+				</tr>
+
+
+			</tbody>
+		</table>
+
+		<div class="flex justify-center items-center gap-8">
+			<a href="{{ path('admin_quiz_edit', {'id': quiz.id}) }}" class="btn">
+				Modifier
+			</a>
+			<a href={{ path('admin_question_new', {'quiz': quiz.id} ) }} class="btn-secondary">
+				Ajouter une question
+			</a>
+		</div>
+		{{ include('admin/quiz/_delete_form.html.twig') }}
+
+
+	</section>
+{% endblock %}

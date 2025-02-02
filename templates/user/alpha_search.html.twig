@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Rechercher un utilisateur
+{% endblock %}
+
+{% block body %}
+	<section>
+		<form method="get" action="{{ path('app_user_alpha') }}" class="flex items-center gap-6 mb-8">
+			<input type="text" name="q" value="{{ keyword|default('') }}" placeholder="Tapez un mot-clé..." class="input">
+			<button type="submit" class="btn-secondary">
+				Rechercher
+			</button>
+		</form>
+		{% if users is not empty %}
+			<div class="grid grid-cols-2 gap-y-5 sm:grid-cols-4 gap-x-5">
+				{% for user in users %}
+					<a href={{ path('app_user_show', {id: user.id} ) }}>
+						{% include "parts/components/card_col.html.twig" with {"title": user.username, "height": 40, "img": user.image ~ ".jpg"} %}
+
+
+					</a>
+				{% endfor %}
+			</div>
+		{% else %}
+			<p class="text-gray-500">Aucun utilisateur trouvé pour "{{ keyword }}".</p>
+		{% endif %}
+	</section>
+{% endblock %}

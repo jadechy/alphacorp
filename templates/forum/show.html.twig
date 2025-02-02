@@ -63,13 +63,13 @@
 		{% endif %}
 		{% if topic.status.value == 'open' %}
 			{{ form_start(form) }}
-			<div class="mt-9  p-4 rounded-lg">
+			<div class="mt-9  rounded-lg">
 				<h3 class="text-md font-bold my-4">Souhaitez-vous apporter une réponse ?</h3>
 				{{ form_widget(form.content, {'attr': {'class': 'input'}}) }}
 
 				<p class="opacity-50 text-xs italic mt-4 block">* Votre réponse sera publié et visible par tous après avoir été analysé par notre système.</p>
 
-				<div class="flex items-center justify-center mt-2">
+				<div class="flex items-center justify-center mt-6">
 					<button type="submit" class="btn">
 						{{ button_label|default('Ajouter votre réponse') }}
 					</button>

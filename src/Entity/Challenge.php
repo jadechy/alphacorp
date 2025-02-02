@@ -107,4 +107,19 @@ class Challenge
 
         return $this;
     }
+
+    public function isQuiz(): bool
+    {
+        return $this instanceof Quiz;
+    }
+
+    public function isTest(): bool
+    {
+        return $this instanceof Test;
+    }
+
+    public function getChallengeType(): string
+    {
+        return $this->isQuiz() ? 'quiz' : ($this->isTest() ? 'test' : 'unknown');
+    }
 }
