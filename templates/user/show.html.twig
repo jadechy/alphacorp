@@ -7,7 +7,8 @@
 	<div>
 		<!-- Section Profil -->
 		<section class="flex gap-6">
-			<img src={{ asset('img/1.png') }} class="w-80 object-cover rounded-sm" alt="Profile Picture"/>
+			<img src={{ asset('img/uploads/' ~ user.image ~ ".jpg") }} class="w-80 object-cover rounded-sm h-60" alt="Profile Picture"/>
+
 			<div class="flex justify-between w-full">
 				<div class="flex flex-col justify-between">
 					<div>
@@ -38,8 +39,9 @@
 			<section class="my-20">
 				<div class="flex justify-between mb-4">
 					<p>{{currentRank.title}}</p>
-					<p>{{nextRank.title}}</p>
-
+					{% if nextRank %}
+						<p>{{nextRank.title}}</p>
+					{% endif %}
 				</div>
 				<div class="w-full h-6 border overflow-hidden rounded-full">
 					<div class="h-8 bg-white" style="width: {{ pourcentage }}%;"></div>
