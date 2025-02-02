@@ -10,13 +10,10 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-use App\Entity\Challenge;
-use App\Repository\ChallengeRepository;
 use App\Entity\Quiz;
+use App\Entity\User;
 use App\Repository\QuizRepository;
-use App\Entity\Question;
 use App\Repository\QuestionRepository;
-use App\Entity\Answer;
 use App\Repository\AnswerRepository;
 use App\Entity\UserAnswer;
 use App\Repository\UserAnswerRepository;
@@ -25,12 +22,12 @@ use App\Repository\UserAnswerRepository;
 #[IsGranted('ROLE_ALPHA')]
 final class QuizController extends AbstractController
 {
-    #[Route('/', name: 'all')]
+    #[Route('/', name: 'homepage')]
     public function listQuiz(QuizRepository $quizRepository): Response
     {
         $quizs = $quizRepository->findAll();
 
-        return $this->render('quiz/all.html.twig', [
+        return $this->render('quiz/index.html.twig', [
             'quizs' => $quizs,
         ]);
     }
@@ -76,9 +73,9 @@ final class QuizController extends AbstractController
 
     #[Route('/{id}/question/{questionId}/answer', name: 'answer', methods: ['POST'])]
     public function submitAnswer(
-        Request $request, 
-        Quiz $quiz, 
-        int $questionId, 
+        Request $request,
+        Quiz $quiz,
+        int $questionId,
         EntityManagerInterface $entityManager,
         QuestionRepository $questionRepository,
         AnswerRepository $answerRepository
@@ -93,6 +90,14 @@ final class QuizController extends AbstractController
         }
 
         $reponseId = $request->request->get('reponse');
+
+        if (!$reponseId) {
+            $this->addFlash('error', 'Une réponse est obligatoire');
+            $this->redirectToRoute('app_quiz_question', [
+                'id' => $quiz->getId(),
+                'questionId' => $questionId,
+            ]);
+        }
         $reponse = $answerRepository->find($reponseId);
 
         if (!$reponse || $reponse->getQuestion() !== $question) {
@@ -137,6 +142,8 @@ final class QuizController extends AbstractController
         EntityManagerInterface $entityManager,
         SessionInterface $session
     ): Response {
+        $user = new User();
+
         /** @var User $user */
         $user = $this->getUser();
 
@@ -154,7 +161,7 @@ final class QuizController extends AbstractController
             }
         }
 
-        if (!$session->get($quizKey, false)){
+        if (!$session->get($quizKey, false)) {
             $user->setXp($user->getXp() + $totalXpEarned);
 
             $entityManager->persist($user);
@@ -163,7 +170,7 @@ final class QuizController extends AbstractController
             $session->set($quizKey, true);
         }
 
-        $correctAnswersCount = count(array_filter($userResponses, function($userResponse) {
+        $correctAnswersCount = count(array_filter($userResponses, function ($userResponse) {
             return $userResponse->getAnswer()->getId() === $userResponse->getQuestion()->getCorrectAnswer()->getId();
         }));
 
@@ -174,5 +181,4 @@ final class QuizController extends AbstractController
             'totalXpEarned' => $totalXpEarned
         ]);
     }
-
 }
