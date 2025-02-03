@@ -19,9 +19,22 @@ jobs:
 
     - name: Set up Docker
       run: |
-        # Installer Docker et Docker Compose à l'intérieur du conteneur
+        # Mettre à jour les packages
         sudo apt-get update
-        sudo apt-get install -y docker.io docker-compose
+
+        # Ajouter le dépôt Docker
+        sudo apt-get install -y \
+          apt-transport-https \
+          ca-certificates \
+          curl \
+          gnupg \
+          lsb-release
+
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+        echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+        # Mettre à jour encore les sources après l'ajout du dépôt Docker
+        sudo apt-get update
 
     - name: Build and run Symfony container
       run: |
