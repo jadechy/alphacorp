@@ -51,20 +51,19 @@ jobs:
       run: |
         echo "DATABASE_URL=mysql://symfony_user:symfony_password@mysql:3306/symfony_test_db" >> .env.test.local
 
-    - name: Install Dependencies
-      run: docker exec -it symfony-php-1 composer install --no-dev
-
     - name: Wait for MySQL to be ready
       run: |
-        # Attendre que MySQL soit prêt
-        until docker exec -T mysql mysqladmin ping -h"127.0.0.1" --silent; do
+        until docker exec -T $(docker ps -qf "name=mysql") mysqladmin ping -h"127.0.0.1" --silent; do
           echo "Waiting for MySQL to be ready..."
           sleep 2
         done
+        
+    - name: Install Dependencies
+      run: docker exec -it $(docker ps -qf "name=php") composer install --no-dev
 
     - name: Migrations
-      run: docker exec -it symfony-php-1 php bin/console doctrine:migrations:migrate --no-interaction
+      run: docker exec -it $(docker ps -qf "name=php") php bin/console doctrine:migrations:migrate --no-interaction
 
     - name: Fixtures
-      run: docker exec -it symfony-php-1 php bin/console doctrine:fixtures:load --no-interaction
+      run: docker exec -it $(docker ps -qf "name=php") php bin/console doctrine:fixtures:load --no-interaction
 
