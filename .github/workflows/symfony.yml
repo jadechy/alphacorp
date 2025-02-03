@@ -50,13 +50,19 @@ jobs:
     - name: Set up environment variables for Symfony
       run: |
         echo "DATABASE_URL=mysql://symfony_user:symfony_password@mysql:3306/symfony_test_db" >> .env.test.local
-        
+      
+    - name: Add Git Safe Directory Exception
+      run: docker exec -i symfony_php_1 git config --global --add safe.directory /var/www/symfony
+
+    - name: Fix Permissions
+      run: docker exec -i symfony_php_1 chown -R www-data:www-data /var/www/symfony
+
     - name: Install Dependencies
-      run: docker exec -i symfony_php_1 composer install --no-dev
+      run: docker exec -i --user www-data symfony_php_1 composer install --no-dev --prefer-dist --no-progress --no-interaction
 
     - name: Migrations
       run: docker exec -i symfony_php_1 php bin/console doctrine:migrations:migrate --no-interaction
 
-    - name: Fixtures
-      run: docker exec -i symfony_php_1 php bin/console doctrine:fixtures:load --no-interaction
+    #- name: Fixtures
+   #   run: docker exec -i symfony_php_1 php bin/console doctrine:fixtures:load --no-interaction
 
