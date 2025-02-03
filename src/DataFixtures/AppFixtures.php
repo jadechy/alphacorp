@@ -11,6 +11,7 @@ use App\Entity\Category;
 use App\Entity\Event;
 use App\Entity\Language;
 use App\Entity\Question;
+use App\Entity\Challenge;
 use App\Entity\Quiz;
 use App\Entity\Rank;
 use App\Entity\Response;
@@ -25,6 +26,7 @@ use App\Enum\ResponseStatusEnum;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Faker\Generator;
 use Faker\Factory;
 
 class AppFixtures extends Fixture
@@ -39,7 +41,9 @@ class AppFixtures extends Fixture
 
 
     public const MAX_CHALLENGES = 15;
+
     protected $faker;
+
     public function __construct(protected UserPasswordHasherInterface $passwordHasher)
     {
         $this->faker = Factory::create('fr_FR');
@@ -151,8 +155,12 @@ class AppFixtures extends Fixture
             $manager->persist(object: $user);
         }
     }
+
     /**
-     * @return User[] 
+     * Crée des utilisateurs admin.
+     *
+     * @param ObjectManager $manager
+     * @param User[] $users Tableau d'objets User.
      */
     protected function createAdminUser(ObjectManager $manager, array &$users): void
     {
@@ -173,7 +181,10 @@ class AppFixtures extends Fixture
     }
 
     /**
-     * @return User[] 
+     * Crée des utilisateurs admin.
+     *
+     * @param ObjectManager $manager
+     * @param User[] $users Tableau d'objets User.
      */
     protected function createAdminUsers(ObjectManager $manager, array &$users): void
     {
@@ -315,20 +326,24 @@ class AppFixtures extends Fixture
      * @param Language[] $languages Tableau d'objets de Language.
      * @param User[] $users Tableau d'objets d'User.
      */
-    protected function createTopics(ObjectManager $manager, array $topics, array $categories, array $languages, array $users)
+    protected function createTopics(ObjectManager $manager, array $topics, array $categories, array $languages, array $users): void
     {
         $topicsData = TopicData::getTopics();
 
         foreach ($topicsData as $index => $topicData) {
             $topic = new Topic();
+            /** @var array<string,string> $topicData */
             $topic->setTitle($topicData["title"]);
             $topic->setShortDescription($topicData["shortDescription"]);
             $topic->setLongDescription($topicData["longDescription"]);
             $topic->setCategory($categories[$topicData["category"]]);
             $topic->setLanguage($languages[$topicData["language"]]);
             $topic->setStatus(TopicStatusEnum::OPEN);
-            foreach ($topicData["responses"] as $responseData) {
+            /** @var array<string, string> $responses */
+            $responses = $topicData["responses"];
+            foreach ($responses as $responseData) {
                 $response = new Response();
+                /** @var array<string, string> $responseData*/
                 $response->setContent($responseData["content"]);
                 $response->setCreatedAt(new \DateTimeImmutable());
                 $response->setStatus(ResponseStatusEnum::VALIDATED);
@@ -443,11 +458,13 @@ class AppFixtures extends Fixture
         $eventsData = EventData::getEvents();
         foreach ($eventsData as $eventData) {
             $event = new Event();
+            /** @var array<string, string> $eventData */
             $event->setTitle($eventData["title"]);
             $event->setShortDescription($eventData["shortDescription"]);
             $event->setLongDescription($eventData["longDescription"]);
             $event->setImage($eventData["image"]);
             $event->setLocation($eventData["location"]);
+            /** @var array<string,\DateTimeImmutable> $eventData */
             $event->setStartAt($eventData["startAt"]);
             $event->setEndAt($eventData["endAt"]);
 
@@ -488,7 +505,7 @@ class AppFixtures extends Fixture
             $title = $challenge instanceof Test ? 'Test' : 'Quiz';
             $description = $challenge instanceof Test ? 'Un test pour évaluer vos compétences.' : 'Un quiz pour tester vos connaissances.';
 
-            $challenge->setTitle($this->faker->word());
+            $challenge->setTitle($title);
             $challenge->setDescription(description: "$description");
 
             $supervisors = array_filter($users, function ($user) {

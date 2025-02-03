@@ -44,7 +44,6 @@ class QuestionType extends AbstractType
                 'block_name' => 'answers',
                 'by_reference' => false,
                 'prototype' => true,
-                'block_name' => 'answers',
                 // "attr" => ['class' => 'answer-collection', "label" => false]
             ])
         ;

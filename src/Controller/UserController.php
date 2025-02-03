@@ -129,7 +129,7 @@ class UserController extends AbstractController
     {
         $keyword = $request->query->get('q', '');
         $users = [];
-        $users = strlen($keyword) > 1 ? $userRepository->searchAlphaByKeyword($keyword, $entityManager) : $userRepository->findAllAlpha();
+        $users = strlen($keyword) > 1 ? $userRepository->searchAlphaByKeyword($keyword) : $userRepository->findAllAlpha();
         return $this->render('user/alpha_search.html.twig', [
             'users' => $users,
             'keyword' => $keyword,

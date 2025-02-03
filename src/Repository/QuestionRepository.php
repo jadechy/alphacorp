@@ -17,8 +17,10 @@ class QuestionRepository extends ServiceEntityRepository
         parent::__construct($registry, Question::class);
     }
 
-    public function findFirstQuestionByQuiz(Quiz $quiz): ?Question
+    /** @return Question */
+    public function findFirstQuestionByQuiz(Quiz $quiz)
     {
+        /** @var Question */
         return $this->createQueryBuilder('q')
             ->andWhere('q.quiz = :quiz')
             ->setParameter('quiz', $quiz)
