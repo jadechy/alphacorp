@@ -3,6 +3,8 @@
 
 {% block title %}Rank
 {% endblock %}
+{% set return_path = 'admin_homepage' %}
+
 
 {% block admin_content %}
 	<div class="wrapper-table">
@@ -42,5 +44,5 @@
 			</tbody>
 		</table>
 	</div>
-	<a href="{{ path('admin_rank_new') }}">Create new</a>
+	<a href="{{ path('admin_rank_new') }}" class="btn">Créer un nouveau rank</a>
 {% endblock %}

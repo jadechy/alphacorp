@@ -30,7 +30,7 @@ class RankType extends AbstractType
                 NumberType::class,
                 [
                     'attr' => [
-                        'class' => 'input my-8',
+                        'class' => 'input',
                         'placeholder' => 'Nom d\'utilisateur'
                     ]
                 ]
