@@ -1,13 +1,13 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/base_admin.html.twig' %}
 
-{% block title %}Edit Rank{% endblock %}
+{% block title %}Edit Rank
+{% endblock %}
 
-{% block body %}
-    <h1>Edit Rank</h1>
+{% block admin_content %}
 
-    {{ include('admin/rank/_form.html.twig', {'button_label': 'Update'}) }}
+	{{ include('admin/rank/_form.html.twig') }}
 
-    <a href="{{ path('admin_rank_index') }}">back to list</a>
-
-    {{ include('admin/rank/_delete_form.html.twig') }}
+	<div class="mt-4 mx-auto w-fit">
+		{{ include('admin/rank/_delete_form.html.twig') }}
+	</div>
 {% endblock %}

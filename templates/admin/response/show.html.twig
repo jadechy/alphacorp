@@ -9,45 +9,48 @@
 
 {% block admin_content %}
 	<section>
+		<div class="wrapper-table">
 
-		<table>
-			<thead>
-				<tr>
-					<th>Catégorie</th>
-					<th>Valeur</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td>Id</td>
-					<td>{{response.id}}</td>
-				</tr>
-				<tr>
-					<td>Content</td>
-					<td>{{response.content}}</td>
-				</tr>
-				<tr>
-					<td>Status</td>
-					<td>{{response.status.value}}</td>
-				</tr>
-				<tr>
-					<td>Auteur</td>
-					<td>
-						<a href={{path("admin_user_show", {id: response.author.id} )}} class="badge">{{response.author.id}}
-							-
-							{{response.author.username}}{{ ux_icon('tabler:arrow-bar-right', {class: 'w-6 h-6'}) }}</a>
-					</td>
-				</tr>
-				<tr>
-					<td>Topic</td>
-					<td>
-						<a href={{path("admin_topic_show", {id: response.topic.id} )}} class="badge">{{response.topic.id}}
-							-
-							{{response.topic.title}}{{ ux_icon('tabler:arrow-bar-right', {class: 'w-6 h-6'}) }}</a>
-					</td>
-				</tr>
-			</tbody>
-		</table>
+
+			<table>
+				<thead>
+					<tr>
+						<th>Catégorie</th>
+						<th>Valeur</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Id</td>
+						<td>{{response.id}}</td>
+					</tr>
+					<tr>
+						<td>Content</td>
+						<td>{{response.content}}</td>
+					</tr>
+					<tr>
+						<td>Status</td>
+						<td>{{response.status.value}}</td>
+					</tr>
+					<tr>
+						<td>Auteur</td>
+						<td>
+							<a href={{path("admin_user_show", {id: response.author.id} )}} class="badge">{{response.author.id}}
+								-
+								{{response.author.username}}{{ ux_icon('tabler:arrow-bar-right', {class: 'w-6 h-6'}) }}</a>
+						</td>
+					</tr>
+					<tr>
+						<td>Topic</td>
+						<td>
+							<a href={{path("admin_topic_show", {id: response.topic.id} )}} class="badge">{{response.topic.id}}
+								-
+								{{response.topic.title}}{{ ux_icon('tabler:arrow-bar-right', {class: 'w-6 h-6'}) }}</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 		<div class="flex justify-center items-center gap-8">
 			<a href="{{ path('admin_response_edit', {'id': response.id}) }}" class="btn">
 				Modifier

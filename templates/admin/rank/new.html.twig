@@ -1,11 +1,10 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/base_admin.html.twig' %}
 
-{% block title %}New Rank{% endblock %}
 
-{% block body %}
-    <h1>Create new Rank</h1>
+{% block title %}New Rank
+{% endblock %}
 
-    {{ include('admin/rank/_form.html.twig') }}
+{% block admin_content %}
 
-    <a href="{{ path('admin_rank_index') }}">back to list</a>
+	{{ include('admin/rank/_form.html.twig') }}
 {% endblock %}

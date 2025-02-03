@@ -1,34 +1,41 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/base_admin.html.twig' %}
 
-{% block title %}Rank{% endblock %}
 
-{% block body %}
-    <h1>Rank</h1>
+{% block title %}Rank
+{% endblock %}
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ rank.id }}</td>
-            </tr>
-            <tr>
-                <th>Title</th>
-                <td>{{ rank.title }}</td>
-            </tr>
-            <tr>
-                <th>Minimum</th>
-                <td>{{ rank.minimum }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ rank.description }}</td>
-            </tr>
-        </tbody>
-    </table>
+{% block admin_content %}
+	<div class="wrapper-table">
+		<table>
+			<thead>
+				<tr>
+					<th>Catégorie</th>
+					<th>Valeur</th>
+				</tr>
+			</thead>
 
-    <a href="{{ path('admin_rank_index') }}">back to list</a>
-
-    <a href="{{ path('admin_rank_edit', {'id': rank.id}) }}">edit</a>
-
-    {{ include('admin/rank/_delete_form.html.twig') }}
+			<tbody>
+				<tr>
+					<td>Id</td>
+					<td>{{ rank.id }}</td>
+				</tr>
+				<tr>
+					<td>Title</td>
+					<td>{{ rank.title }}</td>
+				</tr>
+				<tr>
+					<td>Minimum</td>
+					<td>{{ rank.minimum }}</td>
+				</tr>
+				<tr>
+					<td>Description</td>
+					<td>{{ rank.description }}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="flex flex-col items-center gap-5">
+		<a href="{{ path('admin_rank_edit', {'id': rank.id}) }}" class="btn">Modifier</a>
+		{{ include('admin/rank/_delete_form.html.twig') }}
+	</div>
 {% endblock %}

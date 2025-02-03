@@ -37,73 +37,64 @@
 		</select>
 
 	</div>
-
-	<table class="mt-9">
-		<thead>
-			<tr>
-				<th scope="col">
-					ID</th>
-				<th scope="col">
-					Titre</th>
-				<th scope="col">
-					Création</th>
-				{# <th scope="col"> Modification</th>  #}
-				<th scope="col">
-					Auteur</th>
-				<th scope="col">
-					Catégorie</th>
-				<th scope="col">
-					Langue</th>
-
-				<th scope="col">
-					Status</th>
-
-				<th scope="col">
-					Actions</th>
-			</tr>
-		</thead>
-		<tbody class="divide-y divide-gray-300 ">
-			{% for topic in pagination.items %}
-				<tr data-langue="{{topic.language.code}}" data-category="{{topic.category.name}}" data-status="{{topic.status.name}}">
-					<td>{{ topic.id }}</td>
-					<td>{{ topic.title}}</td>
-					<td>{{ topic.createdAt|format_datetime('short', 'none', locale: 'fr') }}</td>
-					{# <td >{{ topic.modifiedAt}}</td>  #}
-					<td>{{ topic.author.username }}</td>
-					<td>{{ topic.category.name }}</td>
-					<td>{{ topic.language.name }}</td>
-
-					<td>
-						<form method="POST" action="{{ path('admin_topic_change_status', { id: topic.id }) }}" class="inline">
-							<input type="hidden" name="status" value="{{ topic.status.value }}">
-
-							<select name="status" onchange="this.form.submit()">
-								<option value="open" {% if topic.status.value == 'open' %} selected {% endif %}>Ouvert</option>
-								<option value="close" {% if topic.status.value == 'close' %} selected {% endif %}>Fermé</option>
-								<option value="waiting" {% if topic.status.value == 'waiting' %} selected {% endif %}>En attente</option>
-							</select>
-
-
-						</form>
-					</td>
-
-
-					<td>
-						<a href="{{ path('admin_topic_show', {'id': topic.id}) }}">
-							{{ ux_icon('tabler:eye', {class: 'w-6 h-6'}) }}
-						</a>
-						<a href="{{ path('admin_topic_edit', {'id': topic.id}) }}">
-							{{ ux_icon('tabler:edit', {class: 'w-6 h-6'}) }}
-						</a>
-					</td>
-				</tr>
-			{% else %}
+	<div class="wrapper-table mt-9">
+		<table>
+			<thead>
 				<tr>
-					<td colspan="4">Aucun topic trouvé.</td>
+					<th thscope="col">ID</th>
+					<th thscope="col">Titre</th>
+					<th thscope="col">Création</th>
+					{#<th thscope="col">Modification</th>#}
+					<th thscope="col">Auteur</th>
+					<th thscope="col">Catégorie</th>
+					<th thscope="col">Langue</th>
+					<th thscope="col">Status</th>
+					<th thscope="col">Actions</th>
 				</tr>
-			{% endfor %}
-		</tbody>
-	</table>
+			</thead>
+			<tbody>
+				{% for topic in pagination.items %}
+					<tr data-langue="{{topic.language.code}}" data-category="{{topic.category.name}}" data-status="{{topic.status.name}}">
+						<td>{{ topic.id }}</td>
+						<td>{{ topic.title}}</td>
+						<td>{{ topic.createdAt|format_datetime('short', 'none', locale: 'fr') }}</td>
+						{# <td >{{ topic.modifiedAt}}</td>  #}
+						<td>{{ topic.author.username }}</td>
+						<td>{{ topic.category.name }}</td>
+						<td>{{ topic.language.name }}</td>
+
+						<td>
+							<form method="POST" action="{{ path('admin_topic_change_status', { id: topic.id }) }}" class="inline">
+								<input type="hidden" name="status" value="{{ topic.status.value }}">
+
+								<select name="status" onchange="this.form.submit()">
+									<option value="open" {% if topic.status.value == 'open' %} selected {% endif %}>Ouvert</option>
+									<option value="close" {% if topic.status.value == 'close' %} selected {% endif %}>Fermé</option>
+									<option value="waiting" {% if topic.status.value == 'waiting' %} selected {% endif %}>En attente</option>
+								</select>
+
+
+							</form>
+						</td>
+
+
+						<td>
+							<a href="{{ path('admin_topic_show', {'id': topic.id}) }}">
+								{{ ux_icon('tabler:eye', {class: 'w-6 h-6'}) }}
+							</a>
+							<a href="{{ path('admin_topic_edit', {'id': topic.id}) }}">
+								{{ ux_icon('tabler:edit', {class: 'w-6 h-6'}) }}
+							</a>
+						</td>
+					</tr>
+				{% else %}
+					<tr>
+						<td colspan="4">Aucun topic trouvé.</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
 	{{ knp_pagination_render(pagination) }}
 
 	<div class="flex">

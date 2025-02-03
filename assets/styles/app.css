@@ -18,68 +18,73 @@
     h1, h2{
           font-family: 'Enixe', sans-serif;
     }
-    table {
+    .wrapper-table{
+        overflow-x: scroll;
         width: 100%;
-        border-collapse: collapse; 
-        font-size: var(--text-sm, 0.875rem); 
-        margin-bottom: calc(var(--spacing) * 10);
-        thead { 
-            text-align: left;
-            th {
-                padding: calc(var(--spacing, 0.5rem) * 3); 
-                font-weight: bold;
-                border-bottom: 2px solid var(--color-neutral-300);
-                &:last-child {
-                    text-align: end;
+        table {
+            width: 100%;
+            border-collapse: collapse; 
+            font-size: var(--text-sm, 0.875rem); 
+            margin-bottom: calc(var(--spacing) * 10);
+            overflow-x: scroll;
+            thead { 
+                text-align: left;
+                th {
+                    padding: calc(var(--spacing, 0.5rem) * 3); 
+                    font-weight: bold;
+                    border-bottom: 2px solid var(--color-neutral-300);
+                    &:last-child {
+                        text-align: end;
+                    }
                 }
             }
-        }
-        .badge, a{
-             @apply rounded-2xl shadow shadow-neutral-900 p-2 flex gap-3 transition;
-            &:hover{
-                @apply scale-110 bg-neutral-800               
+            .badge, a{
+                 @apply rounded-2xl shadow shadow-neutral-900 p-2 flex gap-3 transition;
+                &:hover{
+                    @apply scale-110 bg-neutral-800               
+                }
             }
-        }
-        tbody {
-            tr {
-                transition: background-color 0.2s ease;  
+            tbody {
+                tr {
+                    transition: background-color 0.2s ease;  
+                    &:hover {
+                        background-color: var(--color-neutral-900);
+                    }
+                }
+    
+                td {
+                    padding: calc(var(--spacing, 0.5rem) * 3); 
+    min-width:calc(var(--spacing, 0.5rem) * 15);
+                    &:last-child {
+                        display: flex;
+                        justify-content: end;
+                        align-items: center;
+                        gap: calc(var(--spacing, 0.5rem) * 5);
+                        height: 100%;
+                    }
+                }
+            }
+    
+            svg {
+                width: 20px;
+                height: 20px;
+                color: var(--color-fuchsia-300, #d946ef);
+                cursor: pointer;
+                transition: color 0.2s ease;
+    
                 &:hover {
-                    background-color: var(--color-neutral-900);
+                color: var(--color-fuchsia-500, #c026d3);
                 }
             }
-
-            td {
-                padding: calc(var(--spacing, 0.5rem) * 3); 
-
-                &:last-child {
-                    display: flex;
-                    justify-content: end;
-                    align-items: center;
-                    gap: calc(var(--spacing, 0.5rem) * 5);
-                    height: 100%;
-                }
-            }
+    
+            caption {
+                caption-side: bottom;
+                text-align: center;
+                padding: calc(var(--spacing, 0.5rem) * 2);
+                font-size: var(--text-xs, 0.75rem);
+                color: var(--color-neutral-500, #6b7280);
+            } 
         }
-
-        svg {
-            width: 20px;
-            height: 20px;
-            color: var(--color-fuchsia-300, #d946ef);
-            cursor: pointer;
-            transition: color 0.2s ease;
-
-            &:hover {
-            color: var(--color-fuchsia-500, #c026d3);
-            }
-        }
-
-        caption {
-            caption-side: bottom;
-            text-align: center;
-            padding: calc(var(--spacing, 0.5rem) * 2);
-            font-size: var(--text-xs, 0.75rem);
-            color: var(--color-neutral-500, #6b7280);
-        } 
     }
 
     .pagination{
@@ -90,7 +95,7 @@
     }
     .dashboard-select{
         display: block; 
-        width: 100%;
+        width: fit-content; 
         border: 1px solid var(--color-neutral-300);
         border-radius: 100px;
         padding-block:calc(var(--spacing ) * 2) ;

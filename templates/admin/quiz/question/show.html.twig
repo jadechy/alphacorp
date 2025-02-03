@@ -9,44 +9,47 @@
 
 {% block admin_content %}
 	<section>
-		<table>
-			<thead>
-				<tr>
-					<th>Catégorie</th>
-					<th>Valeur</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td>Id</td>
-					<td>{{ question.id }}</td>
-				</tr>
-				<tr>
-					<td>Content</td>
-					<td>{{ question.content }}</td>
-				</tr>
-				<tr>
-					<td>Good Answer</td>
-					<td>{{ question.correctAnswer.content }}</td>
-				</tr>
-				<tr>
-					<td>Gain XP</td>
-					<td>{{ question.xp }}</td>
-				</tr>
-				<tr>
-					<td>Answers</td>
-					<td class="flex flex-col items-end">
-						{% for answer in question.answers %}
-							<p class="w-fit">
-								{{ answer.content }}
-							</p>
-						{% endfor %}
-					</td>
-				</tr>
+		<div class="wrapper-table">
+
+			<table>
+				<thead>
+					<tr>
+						<th>Catégorie</th>
+						<th>Valeur</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Id</td>
+						<td>{{ question.id }}</td>
+					</tr>
+					<tr>
+						<td>Content</td>
+						<td>{{ question.content }}</td>
+					</tr>
+					<tr>
+						<td>Good Answer</td>
+						<td>{{ question.correctAnswer.content }}</td>
+					</tr>
+					<tr>
+						<td>Gain XP</td>
+						<td>{{ question.xp }}</td>
+					</tr>
+					<tr>
+						<td>Answers</td>
+						<td class="flex flex-col items-end">
+							{% for answer in question.answers %}
+								<p class="w-fit">
+									{{ answer.content }}
+								</p>
+							{% endfor %}
+						</td>
+					</tr>
 
 
-			</tbody>
-		</table>
+				</tbody>
+			</table>
+		</div>
 		<div class="flex justify-center items-center">
 			<a href="{{ path('admin_question_edit', {'id': question.id}) }}" class="btn">
 				Modifier

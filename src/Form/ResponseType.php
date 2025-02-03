@@ -3,11 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Response;
-use App\Entity\User;
-use App\Enum\ResponseStatusEnum;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 

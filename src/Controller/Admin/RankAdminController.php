@@ -17,7 +17,7 @@ use App\Repository\RankRepository;
 #[IsGranted('ROLE_ADMIN')]
 class RankAdminController extends AbstractController
 {
-    #[Route(name: 'index', methods: ['GET'])]
+    #[Route(name: 'homepage', methods: ['GET'])]
     public function index(RankRepository $rankRepository): Response
     {
         return $this->render('admin/rank/index.html.twig', [
@@ -36,7 +36,7 @@ class RankAdminController extends AbstractController
             $entityManager->persist($rank);
             $entityManager->flush();
 
-            return $this->redirectToRoute('admin_rank_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('admin_rank_homepage', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('admin/rank/new.html.twig', [
@@ -62,7 +62,7 @@ class RankAdminController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('admin_rank_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('admin_rank_homepage', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('admin/rank/edit.html.twig', [
@@ -74,11 +74,11 @@ class RankAdminController extends AbstractController
     #[Route('/{id}', name: 'delete', methods: ['POST'])]
     public function delete(Request $request, Rank $rank, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$rank->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $rank->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($rank);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('admin_rank_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('admin_rank_homepage', [], Response::HTTP_SEE_OTHER);
     }
 }
