@@ -32,6 +32,7 @@ class QuizController extends AbstractController
             'quizs' => $quizs,
         ]);
     }
+
     #[Route('/{id}', name: 'start')]
     public function startQuiz(Quiz $quiz, QuestionRepository $questionRepository): Response
     {
@@ -49,7 +50,6 @@ class QuizController extends AbstractController
             'questionId' => $firstQuestion->getId(),
         ]);
     }
-
 
     #[Route('/{id}/question/{questionId}', name: 'question')]
     public function showQuestion(Quiz $quiz, int $questionId, EntityManagerInterface $entityManager, QuestionRepository $questionRepository): Response

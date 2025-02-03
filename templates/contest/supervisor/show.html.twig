@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Défi{% endblock %}
+
+{% block body %}
+    <h1>Défi</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ contest.id }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ contest.title }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ contest.description }}</td>
+            </tr>
+            <tr>
+                <th>StartOn</th>
+                <td>{{ contest.startOn ? contest.startOn|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>EndOn</th>
+                <td>{{ contest.endOn ? contest.endOn|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Xp</th>
+                <td>{{ contest.xp }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_supervisor_contest_homepage') }}">back to list</a>
+
+    <a href="{{ path('app_supervisor_contest_edit', {'id': contest.id}) }}">edit</a>
+
+    {{ include('contest/supervisor/_delete_form.html.twig') }}
+
+    {% if contest.userContests is not empty %}
+        <h2>Les participations</h2>
+
+        <h3>A valider</h3>
+        {% for userContest in pendingUserContests %}
+            <div>
+                <p>Défi réalisé par : {{ userContest.user.username }}</p>
+                Réponse : <img src="{{ asset('uploads/' ~ userContest.answer) }}" alt="Image du concours" class="w-full h-auto rounded">
+
+                <form action="{{ path('app_supervisor_contest_validate', {id: userContest.id, success: 1}) }}" method="POST" style="display:inline;">
+                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Valider le défi</button>
+                </form>
+
+                <form action="{{ path('app_supervisor_contest_validate', {id: userContest.id, success: 0}) }}" method="POST" style="display:inline;">
+                    <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded">Invalider le défi</button>
+                </form>
+            </div>
+        {% endfor %}
+        
+        <h3>Déjà valider</h3>
+        {% for userContest in validUserContests %}
+            <div>
+                <p>Défi réalisé par : {{ userContest.user.username }}</p>
+                    Réponse : <img src="{{ asset('uploads/' ~ userContest.answer) }}" alt="Image du concours" class="w-full h-auto rounded">
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>Il n'y a pas encore de participants à ce défi.</p>
+    {% endif %}
+{% endblock %}

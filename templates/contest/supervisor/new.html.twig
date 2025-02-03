@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau Défi{% endblock %}
+
+{% block body %}
+    <h1>Créer un nouveau défi</h1>
+
+    {{ include('contest/supervisor/_form.html.twig') }}
+
+    <a href="{{ path('app_supervisor_contest_homepage') }}">back to list</a>
+{% endblock %}
