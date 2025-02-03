@@ -542,7 +542,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function hasAnsweredQuiz(Quiz $quiz): bool
     {
         $answersForQuiz = $this->getUserAnswers()->filter(function (UserAnswer $userAnswer) use ($quiz) {
-            return $userAnswer->getQuestion()->getQuiz() === $quiz;
+            /** @var Question */
+            $question = $userAnswer->getQuestion();
+            return $question->getQuiz() === $quiz;
         });
 
         return count($answersForQuiz) === count($quiz->getQuestions());

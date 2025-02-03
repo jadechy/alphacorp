@@ -8,31 +8,33 @@
 {% block admin_content %}
 	<section>
 
+		<div class="wrapper-table">
 
-		<table class="mt-8">
-			<thead>
-				<tr>
-					<th scope="col">
-						Key</th>
-					<th scope="col">
-						Value</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td>ID</td>
-					<td>{{ language.id }}</td>
-				</tr>
-				<tr>
-					<td>Nom</td>
-					<td>{{ language.name }}</td>
-				</tr>
-				<tr>
-					<td>Code</td>
-					<td>{{ language.code }}</td>
-				</tr>
-			</tbody>
-		</table>
+			<table class="mt-8">
+				<thead>
+					<tr>
+						<th scope="col">
+							Key</th>
+						<th scope="col">
+							Value</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>ID</td>
+						<td>{{ language.id }}</td>
+					</tr>
+					<tr>
+						<td>Nom</td>
+						<td>{{ language.name }}</td>
+					</tr>
+					<tr>
+						<td>Code</td>
+						<td>{{ language.code }}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 		<div class="flex justify-center items-center gap-5">
 
 

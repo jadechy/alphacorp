@@ -1,0 +1,13 @@
+{% extends 'admin/base_admin.html.twig' %}
+
+{% block title %}Edit Rank
+{% endblock %}
+
+{% block admin_content %}
+
+	{{ include('admin/rank/_form.html.twig') }}
+
+	<div class="mt-4 mx-auto w-fit">
+		{{ include('admin/rank/_delete_form.html.twig') }}
+	</div>
+{% endblock %}

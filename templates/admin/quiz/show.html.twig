@@ -7,54 +7,56 @@
 
 {% block admin_content %}
 	<section>
-		<table>
-			<thead>
-				<tr>
-					<th>Catégorie</th>
-					<th>Valeur</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td>Id</td>
-					<td>{{ quiz.id }}</td>
-				</tr>
-				<tr>
-					<td>Title</td>
-					<td>{{ quiz.title }}</td>
-				</tr>
-				<tr>
-					<td>Description</td>
-					<td>{{ quiz.description }}</td>
-				</tr>
-				<tr>
-					<td>Auteur</td>
-					<td>
-						<a href={{path("admin_user_show", {id: quiz.author.id} )}}>{{quiz.author.username}}{{ ux_icon('tabler:arrow-bar-right', {class: 'w-6 h-6'}) }}</a>
-					</td>
+		<div class="wrapper-table">
 
-				</tr>
-				<tr>
-					<td>Question</td>
-					<td class="flex flex-wrap">
-						{% for question in quiz.questions %}
-							<a href={{path("admin_question_show", {id: question.id} )}}>
-								{{ question.id }}
-								-
-								{{ question.content }}
-								{{ ux_icon('tabler:arrow-bar-right', {class: 'w-6 h-6'}) }}
+			<table>
+				<thead>
+					<tr>
+						<th>Catégorie</th>
+						<th>Valeur</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Id</td>
+						<td>{{ quiz.id }}</td>
+					</tr>
+					<tr>
+						<td>Title</td>
+						<td>{{ quiz.title }}</td>
+					</tr>
+					<tr>
+						<td>Description</td>
+						<td>{{ quiz.description }}</td>
+					</tr>
+					<tr>
+						<td>Auteur</td>
+						<td>
+							<a href={{path("admin_user_show", {id: quiz.author.id} )}}>{{quiz.author.username}}{{ ux_icon('tabler:arrow-bar-right', {class: 'w-6 h-6'}) }}</a>
+						</td>
 
-							</a>
+					</tr>
+					<tr>
+						<td>Question</td>
+						<td class="flex flex-wrap">
+							{% for question in quiz.questions %}
+								<a href={{path("admin_question_show", {id: question.id} )}}>
+									{{ question.id }}
+									-
+									{{ question.content }}
+									{{ ux_icon('tabler:arrow-bar-right', {class: 'w-6 h-6'}) }}
 
-						{% endfor %}
-					</td>
+								</a>
 
-				</tr>
+							{% endfor %}
+						</td>
+
+					</tr>
 
 
-			</tbody>
-		</table>
-
+				</tbody>
+			</table>
+		</div>
 		<div class="flex justify-center items-center gap-8">
 			<a href="{{ path('admin_quiz_edit', {'id': quiz.id}) }}" class="btn">
 				Modifier

@@ -6,14 +6,70 @@
 	Dashboard -
 	{{admin_title}}
 {% endblock %}
+{% block admin_nav %}
+	<nav class=" bg-neutral-950 p-6 flex gap-10 rounded justify-center flex-wrap">
+		{% for item in data %}
+			<a href="{{ path(item.path) }}" class="hover:text-fuchsia-500 text-center flex flex-col items-center">
+				{{ ux_icon('tabler:' ~ item.icon, {class: 'w-12 h-12 mb-4 '}) }}
+				<p class="capitalize font-medium text-sm truncate">{{ item.label }}</p>
+			</a>
+		{% endfor %}
+	</nav>
 
-{% block h1 %}
-	Dashboard -
-	{{admin_title}}
 {% endblock %}
+{% set data = [
+    {
+        label: 'Users',
+        path: 'admin_user_homepage', 
+        icon :"user",
+    },
+    {
+        label: 'Topics',
+        path: 'admin_topic_homepage', 
+        icon :"book",
+    },
+    {
+        label: 'Réponses',
+        path: 'admin_response_homepage', 
+        icon :"message-circle",
+    },
+    {
+        label: 'Catégories',
+        path: 'admin_category_homepage',         
+        icon :"folder",
+    },
+    {
+        label: 'Langue',
+        path: 'admin_language_homepage',      
+        icon :"flag",
+    },
+    {
+        label: 'Débannissement',
+        path: 'admin_banrequest', 
+        icon :"user-x",
+    },
+    {
+        label: 'Évènement',
+        path: 'admin_event_homepage', 
+        icon :"calendar-filled",
+    },
+    {
+        label: 'Quiz',
+        path: 'admin_quiz_homepage', 
+        icon :"clipboard-text",
+    },
+    {
+        label: 'Rank',
+        path: 'admin_rank_homepage', 
+        icon :"award",
+    },
+ ] 
+ %}
 
 
 {% block body %}
+
+
 	{% if return_path is defined and return_params is defined %}
 		<a href="{{ path(return_path, return_params) }}" class="flex hover:outline outline-neutral-300 w-fit rounded-3xl px-3 py-2">
 			{{ ux_icon('tabler:chevron-left', {class: 'w-6 h-6'}) }}
@@ -29,6 +85,7 @@
 			</p>
 		</a>
 	{% endif %}
+
 
 	<!-- Contenu principal -->
 	<section class="mt-8">

@@ -1,35 +1,34 @@
 {% extends 'admin/base_admin.html.twig' %}
 
 
-{% block title %}Quiz
+{% block title %}Rank
 {% endblock %}
 
 {% block admin_content %}
 	<div class="wrapper-table">
-
 		<table class="table">
 			<thead>
 				<tr>
 					<th>Id</th>
 					<th>Title</th>
+					<th>Minimum</th>
 					<th>Description</th>
-					<th>Auteur</th>
 					<th>actions</th>
 				</tr>
 			</thead>
 			<tbody>
-				{% for quiz in quizzes %}
+				{% for rank in ranks %}
 					<tr>
-						<td>{{ quiz.id }}</td>
-						<td>{{ quiz.title }}</td>
-						<td>{{ quiz.description }}</td>
-						<td>{{ quiz.author.username }}</td>
+						<td>{{ rank.id }}</td>
+						<td>{{ rank.title }}</td>
+						<td>{{ rank.minimum }}</td>
+						<td>{{ rank.description }}</td>
 						<td>
-							<a href="{{ path('admin_quiz_show', {'id': quiz.id}) }}">
+							<a href="{{ path('admin_rank_show', {'id': rank.id}) }}">
 								{{ ux_icon('tabler:eye', {class: 'w-6 h-6'}) }}
 
 							</a>
-							<a href="{{ path('admin_quiz_edit', {'id': quiz.id}) }}">
+							<a href="{{ path('admin_rank_edit', {'id': rank.id}) }}">
 								{{ ux_icon('tabler:edit', {class: 'w-6 h-6'}) }}
 
 							</a>
@@ -37,14 +36,11 @@
 					</tr>
 				{% else %}
 					<tr>
-						<td colspan="4">no records found</td>
+						<td colspan="5">no records found</td>
 					</tr>
 				{% endfor %}
 			</tbody>
 		</table>
 	</div>
-	<div class="w-fit mx-auto">
-
-		<a href="{{ path('admin_quiz_new') }}" class=" btn">Créer un nouveau quiz</a>
-	</div>
+	<a href="{{ path('admin_rank_new') }}">Create new</a>
 {% endblock %}

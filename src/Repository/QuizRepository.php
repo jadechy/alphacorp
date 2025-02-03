@@ -17,8 +17,10 @@ class QuizRepository extends ServiceEntityRepository
         parent::__construct($registry, Quiz::class);
     }
 
+    /** @return Quiz */
     public function findByAuthor(User $user)
     {
+        /** @var Quiz */
         return $this->createQueryBuilder('q')
             ->where('q.author = :author')
             ->setParameter('author', $user)

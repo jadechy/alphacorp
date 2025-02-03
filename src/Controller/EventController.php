@@ -64,6 +64,7 @@ class EventController extends AbstractController
             throw $this->createAccessDeniedException('Vous devez être connecté pour effectuer cette action.');
         }
 
+        /** @var User $user */
         $events = $eventRepository->findEventsByParticipant($user);
 
         return $this->render('event/author.html.twig', [

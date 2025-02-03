@@ -20,28 +20,25 @@ class UserRepository extends ServiceEntityRepository
     /** @return array<User> */
     public function findAllAlpha(): array
     {
-        $users = $this->createQueryBuilder('u')
+        /** @var array<User> */
+        return $this->createQueryBuilder('u')
             ->andWhere('u.roles LIKE :role')
             ->setParameter('role', '%ROLE_ALPHA%')
             ->getQuery()
             ->getResult();
-        return $users;
     }
 
     /** @return array<User> */
     public function searchAlphaByKeyword(string $keyword): array
     {
-
-        $users = $this->createQueryBuilder('u')
+        /** @var array<User> */
+        return $this->createQueryBuilder('u')
             ->where('u.username LIKE :search')
             ->andWhere('u.roles LIKE :role')
             ->setParameter('search', '%' . $keyword . '%')
             ->setParameter('role', '%ROLE_ALPHA%')
             ->getQuery()
             ->getResult();
-
-        /** @var array<User> */
-        return $users;
     }
     //    /**
     //     * @return User[] Returns an array of User objects

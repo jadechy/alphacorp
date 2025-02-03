@@ -142,7 +142,6 @@ class TopicAdminController extends AbstractController
         $form = $this->createForm(
             TopicAdminType::class,
             $topic,
-            ['is_admin' => true]
         );
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

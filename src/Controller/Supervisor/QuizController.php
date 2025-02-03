@@ -20,7 +20,6 @@ final class QuizController extends AbstractController
     #[Route(name: 'homepage', methods: ['GET'])]
     public function index(QuizRepository $quizRepository): Response
     {
-        $user = new User();
         /** @var User $user */
         $user = $this->getUser();
 

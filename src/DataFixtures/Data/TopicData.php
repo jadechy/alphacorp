@@ -5,6 +5,7 @@ namespace App\DataFixtures\Data;
 
 class TopicData
 {
+    /** @return array<int, array<string,list<array<string, string>>|string>> */
     public static function getTopics(): array
     {
         return [
