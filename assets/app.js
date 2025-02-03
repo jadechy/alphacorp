@@ -13,7 +13,3 @@ import "./js/quizNew.js";
 import "./js/deleteParticipantEvent.js";
 import "./js/accordion.js";
 import "./js/header.js";
-
-console.log("Turbo actif ?", typeof Turbo !== "undefined" ? "Oui" : "Non");
-
-console.log("This log comes from assets/app.js - welcome to AssetMapper! 🎉");

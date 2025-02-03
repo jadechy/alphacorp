@@ -20,7 +20,7 @@
 			</button>
 
 			<!-- Liens de navigation -->
-			<ul class="flex flex-col gap-6 mt-16 p-6 md:flex-row md:mt-0 md:p-0 md:justify-end">
+			<ul class="flex flex-col gap-4 mt-16 p-6 md:flex-row md:mt-0 md:p-0 md:justify-end">
 				{% if app.user %}
 					{% if not is_granted('ROLE_BANNED') %}
 						{% include "parts/components/nav_link.html.twig" with {"pathName": "app_event_homepage", "label": "Event"} %}
@@ -35,15 +35,17 @@
 						{% if is_granted('ROLE_ADMIN') %}
 							{% include "parts/components/nav_link.html.twig" with {"pathName": "admin_homepage", "label": "Admin"} %}
 						{% endif %}
-						{% include "parts/components/nav_link.html.twig" with {
+						<div class="flex gap-10">
+							{% include "parts/components/nav_link.html.twig" with {
 							"pathName": "app_user_show",
 							"parameters": {"id": app.user.id},
 							"label": ux_icon('tabler:user-filled', {class: 'w-6 h-6'})|raw
 						} %}
-						{% include "parts/components/nav_link.html.twig" with {
+							{% include "parts/components/nav_link.html.twig" with {
 							"pathName": "app_logout", 
 							"label": ux_icon('tabler:door-exit', {class: 'w-6 h-6'})|raw
 						} %}
+						</div>
 					{% else %}
 						<a href="#" class="text-gray-600 hover:text-blue-600">
 							Déconnexion

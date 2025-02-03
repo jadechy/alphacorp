@@ -6,7 +6,6 @@ document.addEventListener("DOMContentLoaded", function () {
       filterResponses(statusFilter.value);
     });
   } else {
-    console.error("Le filtre avec l'ID 'status' est introuvable.");
     return;
   }
   function filterResponses(filterValue) {
