@@ -9,8 +9,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const participantId = this.dataset.participantId; // Récupère l'ID du participant
       const eventId = this.dataset.eventId; // Récupère l'ID de l'événement
-      console.log("lala");
-      console.log(document.getElementById(`participant-${participantId}`));
       // Effectuer la requête AJAX avec Fetch
       console.log(
         document.querySelector(`[data-participant-id="${participantId}"]`)
@@ -23,7 +21,6 @@ document.addEventListener("DOMContentLoaded", function () {
         },
       })
         .then((response) => {
-          console.log(response);
           if (response.ok) {
             document
               .querySelector(`[data-participant-id="${participantId}"]`)
@@ -35,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
           }
         })
         .catch((error) => {
-          console.error("Error:", error);
+          // console.error("Error:", error);
           alert("Une erreur s'est produite.");
         });
     });

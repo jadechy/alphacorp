@@ -16,7 +16,7 @@
 				Vous avez fini le quiz !
 			</h2>
 		</div>
-		<div class="flex justify-center gap-5">
+		<div class="flex md:flex-row flex-col items-center justify-center md:gap-5 gap-2">
 			<a href="{{ path('app_quiz_homepage') }}" class="btn-secondary">Faire un nouveau quiz</a>
 			<a href="{{ path('app_quiz_results', {id: quiz.id}) }}" class="btn">Calculer mon score</a>
 		</div>
