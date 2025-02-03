@@ -16,6 +16,7 @@
     "knplabs/knp-paginator-bundle": "^6.6",
     "symfony/asset": "7.2.*",
     "symfony/console": "7.2.*",
+    "symfony/debug-bundle": "^7.2",
     "symfony/dotenv": "7.2.*",
     "symfony/flex": "^2",
     "symfony/form": "7.2.*",
@@ -47,7 +48,6 @@
     "phpstan/phpstan": "^2.0",
     "phpstan/phpstan-doctrine": "^2.0",
     "phpstan/phpstan-symfony": "^2.0",
-    "symfony/debug-bundle": "7.2.*",
     "symfony/web-profiler-bundle": "7.2.*"
   },
   "config": {
