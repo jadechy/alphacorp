@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Rank index{% endblock %}
+
+{% block body %}
+    <h1>Rank index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Minimum</th>
+                <th>Description</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for rank in ranks %}
+            <tr>
+                <td>{{ rank.id }}</td>
+                <td>{{ rank.title }}</td>
+                <td>{{ rank.minimum }}</td>
+                <td>{{ rank.description }}</td>
+                <td>
+                    <a href="{{ path('admin_rank_show', {'id': rank.id}) }}">show</a>
+                    <a href="{{ path('admin_rank_edit', {'id': rank.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('admin_rank_new') }}">Create new</a>
+{% endblock %}
