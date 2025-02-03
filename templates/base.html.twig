@@ -17,7 +17,7 @@
 			{{ encore_entry_script_tags('app') }}
 		{% endblock %}
 	</head>
-	<body class="dark:bg-neutral-800 dark:text-white relative">
+	<body class="dark:bg-neutral-800 dark:text-white relative min-h-full">
 		{% for label, messages in app.flashes %}
 			<div class="alert alert-{{ label }}">
 				{% for message in messages %}
@@ -32,5 +32,9 @@
 
 			{% block body %}{% endblock %}
 		</main>
+		<footer class="bg-neutral-950">
+			<img src="{{asset("/img/logo/all.svg")}}" class=" mx-auto h-50"/>
+		</footer>
+
 	</body>
 </html>
