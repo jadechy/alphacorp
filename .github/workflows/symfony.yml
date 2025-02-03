@@ -60,6 +60,9 @@ jobs:
     - name: Clear Symfony cache
       run: docker exec -i --user www-data symfony_php_1 php bin/console cache:clear || true
 
+    - name: Clear Composer cache
+      run: docker exec -i --user www-data symfony_php_1 composer cache:clear || true
+
     - name: Install Dependencies
       run: docker exec -i --user www-data symfony_php_1 composer install --no-dev --prefer-dist --no-progress --no-interaction
 
