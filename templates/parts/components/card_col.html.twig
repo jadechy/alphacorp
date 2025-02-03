@@ -1,6 +1,10 @@
 <div class="flex flex-col items-center rounded-md overflow-hidden group shadow shadow-neutral-900 hover:scale-105 transition">
 	<div class="w-full h-{{ height ? height : 20 }} overflow-hidden">
-		<img src={{ asset('img/uploads/' ~ img) }} class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" alt="Bromance 1" loading="lazy"/>
+		{% if img %}
+			<img src={{ asset('img/uploads/' ~ img) }} class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" alt="Bromance 1" loading="lazy"/>
+		{% else %}
+			{{ ux_icon('tabler:calendar-filled', {class: 'w-17 h-17 mx-auto mt-10'}) }}
+		{% endif %}
 	</div>
 	<p class="px-4 py-2">{{ title }}</p>
 </div>

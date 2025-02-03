@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\UserAnswerRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserAnswerRepository::class)]
 #[ORM\Table(name: 'ALP_USER_ANSWER')]
@@ -16,14 +17,17 @@ class UserAnswer
 
     #[ORM\ManyToOne(inversedBy: 'userAnswers')]
     #[ORM\JoinColumn(name: 'USR_ID', referencedColumnName: 'USR_ID')]
+    #[Assert\NotNull(message: "L'utilisateur doit être défini.")]
     private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'userAnswers')]
     #[ORM\JoinColumn(name: 'QST_ID', referencedColumnName: 'QST_ID')]
+    #[Assert\NotNull(message: "La question doit être définie.")]
     private ?Question $question = null;
 
     #[ORM\ManyToOne(inversedBy: 'userAnswers')]
     #[ORM\JoinColumn(name: 'ANS_ID', referencedColumnName: 'ANS_ID')]
+    #[Assert\NotNull(message: "La réponse doit être définie.")]
     private ?Answer $answer = null;
 
     public function getId(): int

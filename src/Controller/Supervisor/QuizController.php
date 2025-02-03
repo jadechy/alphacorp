@@ -72,6 +72,7 @@ final class QuizController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
+            $this->addFlash('success', 'Modification sauvegardée.');
 
             return $this->redirectToRoute('app_quiz_supervisor_homepage', [], Response::HTTP_SEE_OTHER);
         }

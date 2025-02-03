@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: 'ALP_USER')]
@@ -20,6 +21,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private int $id;
 
     #[ORM\Column(length: 100, name: 'USR_USERNAME', unique: true)]
+    #[Assert\NotBlank(message: "Le nom d'utilisateur ne peut pas être vide.")]
+    #[Assert\Length(
+        min: 3,
+        max: 100,
+        minMessage: "Le nom d'utilisateur doit comporter au moins {{ limit }} caractères.",
+        maxMessage: "Le nom d'utilisateur ne peut pas dépasser {{ limit }} caractères."
+    )]
     private string $username;
 
     #[ORM\Column(length: 100, name: 'USR_EMAIL', unique: true)]
@@ -533,12 +541,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function hasAnsweredQuiz(Quiz $quiz): bool
     {
-        $answersForQuiz = $this->getUserAnswers()->filter(function(UserAnswer $userAnswer) use ($quiz) {
+        $answersForQuiz = $this->getUserAnswers()->filter(function (UserAnswer $userAnswer) use ($quiz) {
             return $userAnswer->getQuestion()->getQuiz() === $quiz;
         });
 
         return count($answersForQuiz) === count($quiz->getQuestions());
-
     }
 
     /**

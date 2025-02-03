@@ -9,30 +9,36 @@
 	<tbody>
 		<tr>
 			<td>Title</td>
-			<td>{{ form_widget(form.title) }}</td>
+			<td>
+				<div>{{ form_widget(form.title) }}{{form_errors(form.title)}}</div>
+			</td>
 
 		</tr>
 		<tr>
 			<td>Short description</td>
-			<td>{{ form_widget(form.shortDescription) }}</td>
+			<td>
+				<div>{{ form_widget(form.shortDescription) }}{{form_errors(form.shortDescription)}}</div>
+			</td>
 
 		</tr>
 		<tr>
 			<td>Description</td>
-			<td>{{ form_widget(form.longDescription) }}</td>
+			<td>
+				<div>{{ form_widget(form.longDescription) }}{{form_errors(form.longDescription)}}</div>
+			</td>
 
 		</tr>
 		<tr>
 			<td>Auteur</td>
 			<td>
-				{{ form_widget(form.author) }}
+				<div>{{ form_widget(form.author) }}{{form_errors(form.author)}}</div>
 
 			</td>
 		</tr>
 		<tr>
 			<td>Status</td>
 			<td>
-				{{ form_widget(form.status) }}
+				<div>{{ form_widget(form.status) }}{{form_errors(form.status)}}</div>
 			</td>
 		</tr>
 
@@ -40,13 +46,13 @@
 		<tr>
 			<td>Catégorie</td>
 			<td>
-				{{ form_widget(form.category) }}
+				<div>{{ form_widget(form.category) }}{{form_errors(form.category)}}</div>
 			</td>
 		</tr>
 		<tr>
 			<td>Langue</td>
 			<td>
-				{{ form_widget(form.language) }}
+				<div>{{ form_widget(form.language) }}{{form_errors(form.language)}}</div>
 			</td>
 		</tr>
 		<tr>

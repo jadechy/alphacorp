@@ -89,8 +89,10 @@ class EventController extends AbstractController
 
             /** @var UploadedFile $imageFile */
             $imageFile = $form->get('imageFile')->getData();
-            $fileName = $fileUploader->upload($imageFile);
-            $event->setImage($fileName);
+            if ($imageFile) {
+                $fileName = $fileUploader->upload($imageFile);
+                $event->setImage($fileName);
+            }
 
             $entityManager->persist($event);
             $entityManager->flush();

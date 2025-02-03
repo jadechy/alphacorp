@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Symfony\Component\Validator\Constraints as Assert;
 use App\Repository\EventRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -17,21 +18,38 @@ class Event
     private int $id;
 
     #[ORM\Column(length: 70, name: 'EVT_TITLE')]
+    #[Assert\NotBlank(message: "Le titre de l'événement ne peut pas être vide.")]
+    #[Assert\Length(
+        min: 5,
+        max: 70,
+        minMessage: "Le titre de l'événement doit comporter au moins {{ limit }} caractères.",
+        maxMessage: "Le titre de l'événement ne peut pas dépasser {{ limit }} caractères."
+    )]
     private string $title;
 
     #[ORM\Column(length: 90, name: 'EVT_SHORT_DESCRIPTION', nullable: true)]
+    #[Assert\NotBlank(message: "La description courte ne peut pas être vide.")]
+    #[Assert\Length(
+        max: 90,
+        maxMessage: "La description courte ne peut pas dépasser {{ limit }} caractères."
+    )]
     private ?string $shortDescription = null;
 
     #[ORM\Column(length: 1500, name: 'EVT_LONG_DESCRIPTION', nullable: true)]
+    #[Assert\NotBlank(message: "La description longue ne peut pas être vide.")]
+    #[Assert\Length(max: 1500, maxMessage: "La description longue ne peut pas dépasser {{ limit }} caractères.")]
     private ?string $longDescription = null;
 
     #[ORM\Column(length: 100, name: 'EVT_IMAGE', nullable: true)]
     private ?string $image = null;
 
     #[ORM\Column(name: 'EVT_START_DATE')]
+    #[Assert\NotBlank(message: "La date de début est obligatoire.")]
     private \DateTimeImmutable $startAt;
 
     #[ORM\Column(name: 'EVT_END_DATE')]
+    #[Assert\NotBlank(message: "La date de fin est obligatoire.")]
+    #[Assert\GreaterThan(propertyPath: "startAt", message: "La date de fin doit être postérieure à la date de début.")]
     private \DateTimeImmutable $endAt;
 
     /**
@@ -45,6 +63,7 @@ class Event
     private ?User $author = null;
 
     #[ORM\Column(length: 255, name: 'EVT_LOCATION')]
+    #[Assert\NotBlank(message: "Le lieu de l'événement ne peut pas être vide.")]
     private string $location;
 
     public function __construct()

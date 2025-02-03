@@ -6,6 +6,7 @@ use App\Repository\AnswerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: AnswerRepository::class)]
 #[ORM\Table(name: 'ALP_ANSWER')]
@@ -17,17 +18,24 @@ class Answer
     private int $id;
 
     #[ORM\ManyToOne(inversedBy: 'answers')]
-    #[ORM\JoinColumn(name:'QST_ID',referencedColumnName:'QST_ID')]
+    #[ORM\JoinColumn(name: 'QST_ID', referencedColumnName: 'QST_ID')]
     private ?Question $question = null;
 
     #[ORM\Column(length: 50, name: 'ANS_ANSWER')]
+    #[Assert\NotBlank(message: "La réponse ne peut pas être vide.")]
+    #[Assert\Length(
+        min: 3,
+        max: 50,
+        minMessage: "La réponse doit comporter au moins {{ limit }} caractères.",
+        maxMessage: "La réponse ne doit pas dépasser {{ limit }} caractères."
+    )]
     private string $content;
 
     /**
      * @var Collection<int, UserAnswer>
      */
     #[ORM\OneToMany(targetEntity: UserAnswer::class, mappedBy: 'answer')]
-    #[ORM\JoinColumn(onDelete: 'CASCADE')] 
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
     private Collection $userAnswers;
 
     #[ORM\OneToOne(targetEntity: Question::class, mappedBy: 'correctAnswer')]

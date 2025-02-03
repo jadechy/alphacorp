@@ -36,7 +36,7 @@ class ResponseAdminType extends AbstractType
                 'choice_label' => 'username',
                 'placeholder' => 'Sélectionnez un utilisateur',
                 'attr' => [
-                    'class' => 'select',
+                    'class' => 'dashboard-select',
                 ],
             ]);
     }

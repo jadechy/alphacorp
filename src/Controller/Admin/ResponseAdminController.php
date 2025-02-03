@@ -54,13 +54,14 @@ final class ResponseAdminController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $response->setCreatedAt(new \DateTimeImmutable());
             $entityManager->persist($response);
             $entityManager->flush();
 
             return $this->redirectToRoute('admin_response_homepage', [], HttpResponse::HTTP_SEE_OTHER);
         }
 
-        return $this->render('admin/responsr/new.html.twig', [
+        return $this->render('admin/response/new.html.twig', [
             'response' => $response,
             'form' => $form,
         ]);
