@@ -6,10 +6,16 @@
 	Dashboard -
 	{{admin_title}}
 {% endblock %}
+{% block admin_nav %}
+	<nav class=" bg-neutral-950 p-6 flex gap-10 rounded justify-center flex-wrap">
+		{% for item in data %}
+			<a href="{{ path(item.path) }}" class="hover:text-fuchsia-500 text-center flex flex-col items-center">
+				{{ ux_icon('tabler:' ~ item.icon, {class: 'w-12 h-12 mb-4 '}) }}
+				<p class="capitalize font-medium text-sm truncate">{{ item.label }}</p>
+			</a>
+		{% endfor %}
+	</nav>
 
-{% block h1 %}
-	Dashboard -
-	{{admin_title}}
 {% endblock %}
 {% set data = [
     {
@@ -54,7 +60,7 @@
     },
     {
         label: 'Rank',
-        path: 'admin_event_homepage', 
+        path: 'admin_rank_homepage', 
         icon :"award",
     },
  ] 
@@ -62,6 +68,8 @@
 
 
 {% block body %}
+
+
 	{% if return_path is defined and return_params is defined %}
 		<a href="{{ path(return_path, return_params) }}" class="flex hover:outline outline-neutral-300 w-fit rounded-3xl px-3 py-2">
 			{{ ux_icon('tabler:chevron-left', {class: 'w-6 h-6'}) }}
@@ -77,17 +85,10 @@
 			</p>
 		</a>
 	{% endif %}
-	<nav class="absolute left-0 bg-neutral-950 p-6 flex flex-col gap-5 rounded">
 
-		{% for item in data %}
-			<a href="{{ path(item.path) }}" class="hover:text-fuchsia-500">
-				{{ ux_icon('tabler:' ~ item.icon, {class: 'w-12 h-12 mb-4 '}) }}
-			</a>
-		{% endfor %}
-	</nav>
 
 	<!-- Contenu principal -->
-	<section class="mt-8 ml-10">
+	<section class="mt-8">
 		{% block admin_content %}{% endblock %}
 	</section>
 {% endblock %}

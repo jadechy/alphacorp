@@ -67,6 +67,7 @@ class UserController extends AbstractController
     #[Route('/edit', name: 'edit')]
     public function myProfilEdit(Request $request, EntityManagerInterface $entityManager): Response
     {
+        /** @var User $user */
         $user = $this->getUser();
         $form = $this->createForm(UserEditType::class, $user);
         $form->handleRequest($request);

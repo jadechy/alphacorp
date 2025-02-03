@@ -140,8 +140,6 @@ class QuizController extends AbstractController
         EntityManagerInterface $entityManager,
         SessionInterface $session
     ): Response {
-        $user = new User();
-
         /** @var User $user */
         $user = $this->getUser();
 
