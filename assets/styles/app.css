@@ -142,15 +142,8 @@
         }
     } 
     .input{
-        width: 100%;
-        padding-inline: calc(var(--spacing )*8);
-        padding-block: calc(var(--spacing )*4);
-        border-radius: var(--radius-lg);
-        border: 1px solid var(--color-neutral-200);
-        font-size: var(--text-sm);
-        &:focus{
-            border-color: var(--color-fuchsia-300);
-        }
+        @apply w-full p-2 rounded-lg border border-neutral-200 text-sm focus:border-fuchsia-300 
+        sm:px-6 sm:py-3 md:px-10 md:py-5 lg:px-12 lg:py-6 ; 
 
     }
 

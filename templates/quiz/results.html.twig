@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% import 'macro/quiz/reponse_card.html.twig' as macros %}
-{% set percentage = (correctAnswersCount / quiz.questions|length) * 100 %}
+{% set percentage = (correctAnswersCount / (quiz.questions|length >0? quiz.questions|length: 1)) * 100 %}
 
 
 {% block body %}
@@ -14,18 +14,18 @@
 		<div class="h-6 w-full border border-neutral-500 rounded-full overflow-hidden">
 			<div class="h-full bg-green-300" style="width: {{ percentage }}%;"></div>
 		</div>
-		<p class="bg-fuchsia-300/70 rounded-xs w-fit p-3 mx-auto mt-8">{{correctAnswersCount}}/{{quiz.questions|length}}
+		<p class="bg-fuchsia-300/70 rounded-xs w-fit p-3 mx-auto mt-8">{{correctAnswersCount}}/{{quiz.questions|length }}
 			bonnes réponses</p>
 
 
-		<div class="max-w-3/4 mx-auto my-8">
+		<div class="md:max-w-3/4 md:mx-auto my-8">
 			{% for userResponse in userResponses %}
 				{{ macros.AfficheReponseQuizCard(userResponse) }}
 			{% endfor %}
 		</div>
 
 
-		<section class="mx-auto shadow-xl shadow-neutral-900 rounded text-center w-fit p-10">
+		<section class="mx-auto shadow-xl shadow-neutral-900 rounded text-center md:w-fit p-10">
 			{{ ux_icon('tabler:flask', {class: 'w-30 h-20 mx-auto'}) }}
 			<h2 class="text-xl">Vous avez gagné
 			</h2>

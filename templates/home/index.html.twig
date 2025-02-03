@@ -7,7 +7,14 @@
 		<img src="{{asset("/img/logo/all.svg")}}" class="h-60"/>
 		<div class="flex flex-col items-center gap-2">
 			<p>Devenez un homme alpha, un vrai</p>
-			<a href={{path("app_register")}} class="btn">S'inscrire</a>
+			{% if  is_granted("ROLE_USER")%}
+				<div class="flex gap-5 mt-4">
+					<a href={{path("app_register")}} class="btn-secondary">En apprendre +</a>
+					<a href={{path("app_register")}} class="btn">Gagner de l'XP</a>
+				</div>
+			{% else %}
+				<a href={{path("app_register")}} class="btn">S'inscrire</a>
+			{% endif %}
 		</div>
 	</div>
 {% endblock %}

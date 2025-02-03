@@ -1,32 +1,32 @@
-{{ form_start(form) }}
-    {{ form_widget(form.title) }}
+{{ form_start(form, {"attr":{"class": "flex flex-col gap-5 mt-8"}}) }}
+{{ form_widget(form.title) }}
 
-    {{ form_widget(form.shortDescription) }}
-    {{ form_widget(form.longDescription) }}
+{{ form_widget(form.shortDescription) }}
+{{ form_widget(form.longDescription) }}
 
-    {{ form_widget(form.location) }}
+{{ form_widget(form.location) }}
 
-    <div>
-        {{ form_label(form.startAt) }}
-        {{ form_widget(form.startAt) }}
-    </div>
+<div>
+	{{ form_label(form.startAt) }}
+	{{ form_widget(form.startAt) }}
+</div>
 
-    <div>
-        {{ form_label(form.endAt) }}
-        {{ form_widget(form.endAt) }}
-    </div>
+<div>
+	{{ form_label(form.endAt) }}
+	{{ form_widget(form.endAt) }}
+</div>
 
-    {% if event and event.image %}
-        <div>
-            <p>Image actuelle :</p>
-            <img src="{{ asset(event.image) }}" alt="Event Image" style="max-width: 200px;">
-        </div>
-        {{ form_row(form.imageFile, { 'label': 'Nouvelle image' }) }}
-    {% else %}
-        {{ form_widget(form.imageFile) }}
-    {% endif %}
+{% if event and event.image %}
+	<div>
+		<p>Image actuelle :</p>
+		<img src="{{ asset(event.image) }}" alt="Event Image" style="max-width: 200px;">
+	</div>
+	{{ form_row(form.imageFile, { 'label': 'Nouvelle image' }) }}
+{% else %}
+	{{ form_widget(form.imageFile) }}
+{% endif %}
 
-    <button type="submit" class="relative mt-5 bg-blue-600 flex-row p-2 items-center justify-center rounded-md text-sm overflow-hidden border cursor-pointer transition text-white hover:opacity-90 hover:scale-105 w-fit">
-        {{ button_label|default('Enregistrer') }}
-    </button>
+<button type="submit" class="btn mx-auto">
+	{{ button_label|default('Enregistrer') }}
+</button>
 {{ form_end(form) }}

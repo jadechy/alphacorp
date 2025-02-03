@@ -1,20 +1,18 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Créer un évènemet{% endblock %}
+{% block title %}Créer un évènemet
+{% endblock %}
 
 {% block body %}
-    <main class=" flex-1 py-10  px-5 sm:px-10 ">
-        <section>
-            <h1 class="text-lg font-medium text-black">Créer un nouvel <span class="font-bold text-blue-600">évènement</span></h1>
-            {{ include('event/_form.html.twig') }}
+	<section>
+		<a class="btn-secondary" href={{path("app_event_author")}}>
+			Voir mes évènements crée
+		</a>
 
-            <div class="flex items-center justify-center mt-4">
-                <a href="{{ path('author_event') }}">
-                    <button class="relative flex bg-blue-600 flex-row p-2 items-center justify-center rounded-md text-sm overflow-hidden border cursor-pointer transition text-white hover:opacity-90 hover:scale-105">
-                        Retour à mes évènements
-                    </button>
-                </a>
-            </div>
-        </section>
-    </main>
+		{{ include('event/_form.html.twig') }}
+
+		<div class="flex items-center justify-center mt-4">
+			<a href="{{ path('app_event_author') }}"></a>
+		</div>
+	</section>
 {% endblock %}

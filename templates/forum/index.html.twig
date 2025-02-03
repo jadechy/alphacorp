@@ -4,7 +4,7 @@
 {% endblock %}
 {% block body %}
 	<section>
-		<form method="get" action="{{ path('app_forum_homepage') }}" class="flex items-center gap-5 mb-6 mt-4">
+		<form method="get" action="{{ path('app_forum_homepage') }}" class="flex md:flex-row flex-col items-center gap-5 mb-6 mt-4">
 			<input type="text" name="q" value="{{ keyword|default('') }}" placeholder="Tapez un mot-clé..." class="input">
 			<select class="dashboard-select w-60" id="category" name="category">
 				<option value="all">Filtrer par catégorie</option>
@@ -18,7 +18,8 @@
 			</button>
 		</form>
 		{% if topics is not empty %}
-			<div class="grid grid-cols-2 gap-y-5 sm:grid-cols-4 gap-x-5">
+			<div class="grid grid-cols-1 gap-y-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-5">
+
 
 				{% for topic in topics %}
 					{% if topic.status.value == 'open' or topic.status.value == 'close' %}

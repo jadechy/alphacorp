@@ -6,8 +6,8 @@
 {% block body %}
 	<div>
 		<!-- Section Profil -->
-		<section class="flex gap-6">
-			<img src={{ asset('img/uploads/' ~ user.image ~ ".jpg") }} class="w-80 object-cover rounded-sm h-60" alt="Profile Picture"/>
+		<section class="flex md:flex-row flex-col gap-6">
+			<img src={{ asset('img/uploads/' ~ user.image ~ ".jpg") }} class="md:w-80 object-cover rounded-sm md:h-60 h-30 w-full" alt="Profile Picture"/>
 
 			<div class="flex justify-between w-full">
 				<div class="flex flex-col justify-between">
@@ -59,7 +59,7 @@
 			{% include 'parts/layouts/user/bromance_layout.html.twig' with {"path_bromance": "app_bromance_homepage"}  %}
 		{% endif %}
 		{% if bromance_user %}
-			<section class="mx-auto shadow-xl shadow-neutral-900 rounded text-center w-fit p-10 mt-20">
+			<section class="mx-auto shadow-xl shadow-neutral-900 rounded text-center md:w-fit w-full md:p-10 md:mt-20 mt-6 p-5">
 				{{ ux_icon('tabler:heart-handshake', {class: 'w-30 h-30 mx-auto'}) }}
 				<h2 class="text-xl">Notre bromance
 				</h2>

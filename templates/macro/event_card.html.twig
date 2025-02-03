@@ -1,10 +1,11 @@
 {% macro AfficheEventCard(event) %}
-	<a class="flex gap-6 rounded-lg w-full shadow-md shadow-neutral-900 hover:scale-110 hover:bg-neutral-700 transition overflow-hidden" href={{ path('app_event_show', { id : event.id } ) }}>
-		<img src={{ asset('img/uploads/' ~ event.image) }} alt="Event Image" class="w-80 h-40 object-cover"/>
+	<a class="flex md:flex-row flex-col gap-6 rounded-lg w-full shadow-md shadow-neutral-900 hover:scale-105 hover:bg-neutral-700 transition overflow-hidden md:h-50" href={{ path('app_event_show', { id : event.id } ) }}>
+		<div class="md:w-60 md:h-full  h-50 w-full object-cover">
+			<img src={{ asset('img/uploads/' ~ event.image) }} alt="Event Image" class="object-cover h-full w-full"/>
+		</div>
 
-
-		<div class="p-6 w-full">
-			<div class="flex justify-between items-center">
+		<div class="md:p-6 w-full pt-0 p-4">
+			<div class="flex md:flex-row flex-col-reverse items-start justify-between md:items-center">
 				<h2 class="text-lg">
 					{{event.title}}
 				</h2>
@@ -22,7 +23,7 @@
 					</span>
 				{% endif %}
 			</div>
-			<div class="flex gap-5 text-sm text-neutral-400 mb-4">
+			<div class="flex md:flex-row flex-col  md:gap-5 text-sm text-neutral-400 mb-4">
 				<p>
 					{{event.location}}
 				</p>
