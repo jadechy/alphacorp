@@ -45,11 +45,11 @@ jobs:
       run: |
         # Construire et démarrer les services définis dans docker-compose.yml à l'intérieur du conteneur
         cd .docker;
-        docker-compose -f docker-compose.yml up -d
+        docker-compose -f docker-compose.prod.yml up -d
 
     - name: Set up environment variables for Symfony
       run: |
-        echo "DATABASE_URL=mysql://symfony_user:symfony_password@mysql:3306/symfony_test_db" >> .env.test.local
+        echo "DATABASE_URL=mysql://app_user:helloworld@database:3306/app_db?serverVersion=8.0.33" >> .env.test.local
       
     - name: Add Git Safe Directory Exception
       run: docker exec -i symfony_php_1 git config --global --add safe.directory /var/www/symfony
@@ -72,3 +72,5 @@ jobs:
     #- name: Fixtures
    #   run: docker exec -i symfony_php_1 php bin/console doctrine:fixtures:load --no-interaction
 
+    - name: Shut down services
+      run: docker-compose down
