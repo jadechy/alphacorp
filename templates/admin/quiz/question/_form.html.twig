@@ -11,12 +11,22 @@
 		<tr>
 			<td>Content</td>
 			<td>
-				{{ form_widget(form.content) }}</td>
+				<div>
+					{{ form_widget(form.content) }}
+					{{ form_errors(form.content) }}
+
+				</div>
+			</td>
 		</tr>
 		<tr>
 			<td>XP</td>
 			<td>
-				{{ form_widget(form.xp) }}</td>
+				<div>
+					{{ form_widget(form.xp) }}
+					{{ form_errors(form.xp) }}
+
+				</div>
+			</td>
 		</tr>
 	</tbody>
 </table>

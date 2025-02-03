@@ -6,6 +6,7 @@ use App\Enum\ResponseStatusEnum;
 use App\Repository\ResponseRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ResponseRepository::class)]
 #[ORM\Table(name: 'ALP_RESPONSE')]
@@ -17,6 +18,11 @@ class Response
     private int $id;
 
     #[ORM\Column(type: Types::TEXT, name: 'RSP_CONTENT')]
+    #[Assert\NotBlank(message: "Le contenu de la réponse ne peut pas être vide.")]
+    #[Assert\Length(
+        max: 2000,
+        maxMessage: "Le contenu de la réponse ne doit pas dépasser {{ limit }} caractères."
+    )]
     private string $content;
 
     #[ORM\Column(name: 'RSP_CREATED_AT')]
@@ -26,11 +32,12 @@ class Response
     private ResponseStatusEnum $status;
 
     #[ORM\ManyToOne(inversedBy: 'responses')]
-    #[ORM\JoinColumn(name:'TPC_ID',referencedColumnName:'TPC_ID')]
+    #[ORM\JoinColumn(name: 'TPC_ID', referencedColumnName: 'TPC_ID')]
     private ?Topic $topic = null;
 
     #[ORM\ManyToOne(inversedBy: 'responses')]
-    #[ORM\JoinColumn(name:'USR_ID',referencedColumnName:'USR_ID')]
+    #[ORM\JoinColumn(name: 'USR_ID', referencedColumnName: 'USR_ID')]
+    #[Assert\NotNull(message: "L'auteur ne peut pas être vide.")]
     private ?User $author = null;
 
     public function getId(): int
@@ -97,5 +104,4 @@ class Response
 
         return $this;
     }
-
 }

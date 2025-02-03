@@ -11,9 +11,15 @@
 
 		{{ form_start(registrationForm, {"attr":{'class': "flex flex-col gap-8"}}) }}
 
-		{{ form_widget(registrationForm.username) }}
+		<div>
+			{{ form_widget(registrationForm.username) }}
+			{{ form_errors(registrationForm.username) }}
+		</div>
 
-		{{ form_widget(registrationForm.email) }}
+		<div>
+			{{ form_widget(registrationForm.email) }}
+			{{ form_errors(registrationForm.email) }}
+		</div>
 
 		<div>
 			{{ form_widget(registrationForm.plainPassword.first) }}
@@ -37,7 +43,9 @@
 							{{gender.vars.label}}</span>
 					</div>
 				{% endfor %}
+				{{ form_errors(registrationForm.gender) }}
 			</div>
+
 
 		</div>
 		<div class="flex justify-end">

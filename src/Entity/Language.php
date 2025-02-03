@@ -6,6 +6,7 @@ use App\Repository\LanguageRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: LanguageRepository::class)]
 #[ORM\Table(name: 'ALP_LANGUAGE')]
@@ -17,9 +18,23 @@ class Language
     private int $id;
 
     #[ORM\Column(length: 50, name: 'LNG_NAME')]
+    #[Assert\NotBlank(message: "Le nom de la langue ne peut pas être vide.")]
+    #[Assert\Length(
+        min: 5,
+        max: 50,
+        minMessage: "Le nom de la langue doit comporter au moins {{ limit }} caractères.",
+        maxMessage: "Le nom de la langue ne peut pas dépasser {{ limit }} caractères."
+    )]
     private string $name;
 
     #[ORM\Column(length: 20, name: 'LNG_CODE')]
+    #[Assert\NotBlank(message: "Le code de la langue ne peut pas être vide.")]
+    #[Assert\Length(
+        min: 2,
+        max: 20,
+        minMessage: "Le code de la langue doit comporter au moins {{ limit }} caractères.",
+        maxMessage: "Le code de la langue ne peut pas dépasser {{ limit }} caractères."
+    )]
     private string $code;
 
     /**

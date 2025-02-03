@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 use App\Repository\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -17,9 +19,23 @@ class Category
     private int $id;
 
     #[ORM\Column(length: 50, name: 'CAT_NAME')]
+    #[Assert\NotBlank(message: "Le nom de catégorie ne peut pas être vide.")]
+    #[Assert\Length(
+        min: 3,
+        max: 50,
+        minMessage: "Le nom de catégorie doit comporter au moins {{ limit }} caractères.",
+        maxMessage: "Le nom de catégorie ne peut pas dépasser {{ limit }} caractères."
+    )]
     private string $name;
 
     #[ORM\Column(length: 50, name: 'CAT_LABEL')]
+    #[Assert\NotBlank(message: "Le label ne peut pas être vide.")]
+    #[Assert\Length(
+        min: 3,
+        max: 50,
+        minMessage: "Le label doit comporter au moins {{ limit }} caractères.",
+        maxMessage: "Le label ne peut pas dépasser {{ limit }} caractères."
+    )]
     private string $label;
 
     /**

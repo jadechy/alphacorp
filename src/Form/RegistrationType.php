@@ -6,6 +6,7 @@ use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints as Assert;
 
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -30,6 +31,11 @@ class RegistrationType extends AbstractType
                     'class' => 'input',
                     'placeholder' => 'Email'
                 ],
+                // 'constraints' => [
+                //     new Assert\NotBlank(['message' => "L'email ne peut pas être vide."]),
+                //     new Assert\Email(['message' => "L'email '{{ value }}' n'est pas valide."]),
+                //     new Assert\Unique(['message' => "L'email existe déjà."]),
+                // ]
             ])
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
@@ -50,6 +56,15 @@ class RegistrationType extends AbstractType
                     ],
                 ],
                 'mapped' => false,
+                'constraints' => [
+                    new Assert\NotBlank([
+                        'message' => 'Le mot de passe ne peut pas être vide.',
+                    ]),
+                    new Assert\Length([
+                        'min' => 8,
+                        'minMessage' => 'Le mot de passe doit comporter au moins 8 caractères.',
+                    ]),
+                ],
             ])
             ->add('gender', ChoiceType::class, [
                 'label' => 'Sexe',

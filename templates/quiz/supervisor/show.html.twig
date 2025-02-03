@@ -32,15 +32,15 @@
 				<tr>
 					<td>Questions</td>
 					<td>
-						<ul class="flex flex-wrap gap-3">
+						<ul class="flex flex-wrap gap-5">
 							{% for question in quiz.questions %}
-								<li class="shadow shadow-neutral-900 p-4 hover:border rounded">
+								<li class="shadow shadow-neutral-950 p-4 hover:scale-110 rounded w-64 transition">
 									<div>
 										<p>Id :
 											{{ question.id }}</p>
 									</div>
 									<div>
-										<p>Question :
+										<p>
 											{{ question.content }}</p>
 									</div>
 									<div class="border-t flex flex-col gap-3 pt-3">
@@ -51,7 +51,7 @@
 														{{ answer.id }}</p>
 												</div>
 												<div>
-													<p>Réponse :
+													<p>
 														{{ answer.content }}</p>
 												</div>
 											</div>

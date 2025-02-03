@@ -7,6 +7,7 @@ use App\Repository\TopicRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TopicRepository::class)]
 #[ORM\Table(name: 'ALP_TOPIC')]
@@ -18,12 +19,27 @@ class Topic
     private int $id;
 
     #[ORM\Column(length: 70, name: 'TPC_TITLE')]
+    #[Assert\NotBlank(message: "Le titre ne peut pas être vide.")]
+    #[Assert\Length(
+        max: 70,
+        maxMessage: "Le titre ne doit pas dépasser {{ limit }} caractères."
+    )]
     private string $title;
 
     #[ORM\Column(length: 150, name: 'TPC_SHORT_DESCRIPTION')]
+    #[Assert\NotBlank(message: "La description courte ne peut pas être vide.")]
+    #[Assert\Length(
+        max: 150,
+        maxMessage: "La description courte ne doit pas dépasser {{ limit }} caractères."
+    )]
     private string $shortDescription;
 
     #[ORM\Column(length: 1300, name: 'TPC_LONG_DESCRIPTION')]
+    #[Assert\NotBlank(message: "La description longue ne peut pas être vide.")]
+    #[Assert\Length(
+        max: 1300,
+        maxMessage: "La description longue ne doit pas dépasser {{ limit }} caractères."
+    )]
     private string $longDescription;
 
     #[ORM\Column(enumType: TopicStatusEnum::class, name: 'TPC_STATUS')]
@@ -34,10 +50,12 @@ class Topic
 
     #[ORM\ManyToOne(inversedBy: 'topics')]
     #[ORM\JoinColumn(name: 'CAT_ID', referencedColumnName: 'CAT_ID')]
+    #[Assert\NotNull(message: "La catégorie ne peut pas être vide.")]
     private ?Category $category = null;
 
     #[ORM\ManyToOne(inversedBy: 'topics')]
     #[ORM\JoinColumn(name: 'LNG_ID', referencedColumnName: 'LNG_ID')]
+    #[Assert\NotNull(message: "La langue ne peut pas être vide.")]
     private ?Language $language = null;
 
     /**

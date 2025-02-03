@@ -6,6 +6,7 @@ use App\Repository\QuestionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: QuestionRepository::class)]
 #[ORM\Table(name: 'ALP_QUESTION')]
@@ -17,10 +18,17 @@ class Question
     private int $id;
 
     #[ORM\Column(length: 100, name: 'QST_QUESTION')]
+    #[Assert\NotBlank(message: "La question ne peut pas être vide.")]
+    #[Assert\Length(
+        min: 3,
+        max: 100,
+        minMessage: "La question doit comporter au moins {{ limit }} caractères.",
+        maxMessage: "La question ne doit pas dépasser {{ limit }} caractères."
+    )]
     private string $content;
 
     #[ORM\ManyToOne(inversedBy: 'questions')]
-    #[ORM\JoinColumn(name:'CHG_ID',referencedColumnName:'CHG_ID')]
+    #[ORM\JoinColumn(name: 'CHG_ID', referencedColumnName: 'CHG_ID')]
     private ?Quiz $quiz = null;
 
     /**
@@ -36,6 +44,12 @@ class Question
     private Collection $userAnswers;
 
     #[ORM\Column(nullable: true, name: 'QST_XP')]
+    #[Assert\Type(type: 'integer', message: "La valeur de XP doit être un entier.")]
+    #[Assert\Range(
+        min: 1,
+        max: 1000,
+        notInRangeMessage: "La valeur de XP doit être comprise entre {{ min }} et {{ max }}."
+    )]
     private ?int $xp = null;
 
     #[ORM\OneToOne(targetEntity: Answer::class, cascade: ['persist', 'remove'], inversedBy: 'correctForQuestion')]
