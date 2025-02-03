@@ -18,14 +18,14 @@
 			bonnes réponses</p>
 
 
-		<div class="max-w-3/4 mx-auto my-8">
+		<div class="md:max-w-3/4 md:mx-auto my-8">
 			{% for userResponse in userResponses %}
 				{{ macros.AfficheReponseQuizCard(userResponse) }}
 			{% endfor %}
 		</div>
 
 
-		<section class="mx-auto shadow-xl shadow-neutral-900 rounded text-center w-fit p-10">
+		<section class="mx-auto shadow-xl shadow-neutral-900 rounded text-center md:w-fit p-10">
 			{{ ux_icon('tabler:flask', {class: 'w-30 h-20 mx-auto'}) }}
 			<h2 class="text-xl">Vous avez gagné
 			</h2>

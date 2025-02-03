@@ -1,58 +1,60 @@
-<header class="mb-12">
-	<nav class="bg-neutral-950 flex justify-between items-center py-3 px-8 w-full" {# class="{{ isDark ? 'bg-neutral-950' : 'bg-gray-50' }}" #}>
+<header class="md:mb-12">
+	<nav class="bg-neutral-950 flex justify-between items-center py-3 px-8 w-full">
 
 		<a href="{{ path('app_home') }}">
 			<img src="{{asset("/img/logo/typographique.svg")}}" class="h-10"/>
 		</a>
 
-		<button id="menu-button" class="block md:hidden text-gray-700">
-			<i class="fas fa-bars"></i>
+		<!-- Bouton du menu -->
+		<button id="menu-button" class="block md:hidden text-neutral-200">
+			{{ ux_icon('tabler:menu-4', {class: 'w-6 h-6'}) }}
 		</button>
 
-		<ul id="menu" class="hidden md:flex gap-6">
-			{% if app.user %}
-				{% if not is_granted('ROLE_BANNED') %}
-					{% include "parts/components/nav_link.html.twig" with {"pathName": "app_event_homepage", "label": "Event"} %}
-					{% if is_granted('ROLE_ALPHA') %}
-						{% include "parts/components/nav_link.html.twig" with {"pathName": "app_user_alpha", "label": "Alpha"} %}
-						{% include "parts/components/nav_link.html.twig" with {"pathName": "app_quiz_homepage", "label": "Quiz"} %}
-					{% endif %}
+		<!-- Drawer (menu mobile) -->
+		<div
+			id="mobile-menu" class="fixed top-0 left-0 w-64 h-full bg-neutral-900 text-white transform -translate-x-full transition-transform duration-300 ease-in-out md:translate-none md:bg-transparent md:flex md:relative md:justify-end">
+			<!-- Bouton de fermeture -->
+			<button id="close-menu" class="absolute top-4 right-4  md:hidden">
 
+				{{ ux_icon('tabler:x', {class: 'w-6 h-6'}) }}
+			</button>
 
-					{% include "parts/components/nav_link.html.twig" with {"pathName": "app_forum_homepage", "label": "Forum"} %}
-
-					{% if is_granted('ROLE_SUPERVISOR') %}
-						{% include "parts/components/nav_link.html.twig" with {"pathName": "app_quiz_supervisor_homepage", "label": "Quiz"} %}
-					{% endif %}
-
-					{% if is_granted('ROLE_ADMIN') %}
-						{% include "parts/components/nav_link.html.twig" with {"pathName": "admin_homepage", "label": "Admin"} %}
-					{% endif %}
-					{% include "parts/components/nav_link.html.twig" with {
+			<!-- Liens de navigation -->
+			<ul class="flex flex-col gap-6 mt-16 p-6 md:flex-row md:mt-0 md:p-0 md:justify-end">
+				{% if app.user %}
+					{% if not is_granted('ROLE_BANNED') %}
+						{% include "parts/components/nav_link.html.twig" with {"pathName": "app_event_homepage", "label": "Event"} %}
+						{% if is_granted('ROLE_ALPHA') %}
+							{% include "parts/components/nav_link.html.twig" with {"pathName": "app_user_alpha", "label": "Alpha"} %}
+							{% include "parts/components/nav_link.html.twig" with {"pathName": "app_quiz_homepage", "label": "Quiz"} %}
+						{% endif %}
+						{% include "parts/components/nav_link.html.twig" with {"pathName": "app_forum_homepage", "label": "Forum"} %}
+						{% if is_granted('ROLE_SUPERVISOR') %}
+							{% include "parts/components/nav_link.html.twig" with {"pathName": "app_quiz_supervisor_homepage", "label": "Quiz"} %}
+						{% endif %}
+						{% if is_granted('ROLE_ADMIN') %}
+							{% include "parts/components/nav_link.html.twig" with {"pathName": "admin_homepage", "label": "Admin"} %}
+						{% endif %}
+						{% include "parts/components/nav_link.html.twig" with {
 							"pathName": "app_user_show",
 							"parameters": {"id": app.user.id},
 							"label": ux_icon('tabler:user-filled', {class: 'w-6 h-6'})|raw
 						} %}
-
-					{% include "parts/components/nav_link.html.twig" with {
+						{% include "parts/components/nav_link.html.twig" with {
 							"pathName": "app_logout", 
 							"label": ux_icon('tabler:door-exit', {class: 'w-6 h-6'})|raw
-							} 
-						%}
-
-
+						} %}
+					{% else %}
+						<a href="#" class="text-gray-600 hover:text-blue-600">
+							Déconnexion
+						</a>
+					{% endif %}
 				{% else %}
-					<a href="#" class="text-gray-600 hover:text-blue-600 {% if app.request.attributes.get('_route') == 'app_logout' %}font-bold text-blue-600{% endif %}">
-						Déconnexion
-					</a>
+					{% include "parts/components/nav_link.html.twig" with {"pathName": "app_register", "label": "S'inscrire"} %}
+					{% include "parts/components/nav_link.html.twig" with {"pathName": "app_login", "label": "Se connecter"} %}
 				{% endif %}
+			</ul>
+		</div>
 
-			{% else %}
-				{% include "parts/components/nav_link.html.twig" with {"pathName": "app_register", "label": "S'incrire"} %}
-				{% include "parts/components/nav_link.html.twig" with {"pathName": "app_login", "label": "Se connecter"} %}
-			{% endif %}
-
-
-		</ul>
 	</nav>
 </header>

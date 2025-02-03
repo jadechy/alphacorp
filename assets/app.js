@@ -12,4 +12,5 @@ import "./js/filterTopics.js";
 import "./js/quizNew.js";
 import "./js/deleteParticipantEvent.js";
 import "./js/accordion.js";
+import "./js/header.js";
 console.log("This log comes from assets/app.js - welcome to AssetMapper! 🎉");
