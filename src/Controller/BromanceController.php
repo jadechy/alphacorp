@@ -56,11 +56,6 @@ class BromanceController extends AbstractController
         $alpha = $this->getUser();
         $follower = $user;
 
-        if (!$follower) {
-            $this->addFlash('error', 'Utilisateur non trouvé');
-            return $this->redirectToRoute('app_bromance_homepage');
-        }
-
         if ($alpha === $follower) {
             $this->addFlash('error', 'Vous ne pouvez pas faire une demande à vous-même');
             return $this->redirectToRoute('app_bromance_homepage');
@@ -92,12 +87,6 @@ class BromanceController extends AbstractController
     #[Route('/reponse/{id}', name: 'reponse', methods: ['POST'])]
     public function reponseDemandeBromance(Bromance $bromance, Request $request, EntityManagerInterface $entityManager): Response
     {
-
-        if (!$bromance) {
-            $this->addFlash('error', 'Demande de bromance non trouvée');
-            return $this->redirectToRoute('app_bromance_homepage');
-        }
-
         $user = $this->getUser();
         if ($user !== $bromance->getFollower()) {
             $this->addFlash('error', 'Vous ne pouvez pas répondre à cette demande');

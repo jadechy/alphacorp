@@ -5,6 +5,7 @@ namespace App\DataFixtures\Data;
 
 class EventData
 {
+    /** @return array<array<string,string|\DateTimeImmutable>> */
     public static function getEvents(): array
     {
         return [

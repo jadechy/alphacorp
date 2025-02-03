@@ -11,11 +11,13 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 use App\Entity\Quiz;
+use App\Entity\Question;
+use App\Entity\Answer;
 use App\Entity\User;
+use App\Entity\UserAnswer;
 use App\Repository\QuizRepository;
 use App\Repository\QuestionRepository;
 use App\Repository\AnswerRepository;
-use App\Entity\UserAnswer;
 use App\Repository\UserAnswerRepository;
 
 #[Route('/quiz', name: "app_quiz_")]
@@ -41,10 +43,6 @@ class QuizController extends AbstractController
         }
 
         $firstQuestion = $questionRepository->findFirstQuestionByQuiz($quiz);
-
-        if (!$firstQuestion) {
-            throw $this->createNotFoundException('No questions found for this quiz.');
-        }
 
         return $this->redirectToRoute('app_quiz_question', [
             'id' => $quiz->getId(),
@@ -151,11 +149,17 @@ class QuizController extends AbstractController
 
         $totalXpEarned = 0;
 
+        /** @var array<UserAnswer> $userResponses */
         foreach ($userResponses as $userResponse) {
-            $correctAnswer = $userResponse->getQuestion()->getCorrectAnswer();
+            /** @var Question $question */
+            $question = $userResponse->getQuestion();
+            $correctAnswer = $question->getCorrectAnswer();
 
-            if ($userResponse->getAnswer()->getId() === $correctAnswer->getId()) {
-                $totalXpEarned += $userResponse->getQuestion()->getXp();
+            /** @var Answer $answer*/
+            $answer = $userResponse->getAnswer();
+            /** @var Answer $correctAnswer*/
+            if ($answer->getId() === $correctAnswer->getId()) {
+                $totalXpEarned += $question->getXp();
             }
         }
 
@@ -169,7 +173,13 @@ class QuizController extends AbstractController
         }
 
         $correctAnswersCount = count(array_filter($userResponses, function ($userResponse) {
-            return $userResponse->getAnswer()->getId() === $userResponse->getQuestion()->getCorrectAnswer()->getId();
+            /** @var Question $question */
+            $question = $userResponse->getQuestion();
+            /** @var Answer $answer */
+            $answer = $userResponse->getAnswer();
+            /** @var Answer $correctAnswer */
+            $correctAnswer = $question->getCorrectAnswer();
+            return $answer->getId() === $correctAnswer->getId();
         }));
 
         return $this->render('quiz/results.html.twig', [

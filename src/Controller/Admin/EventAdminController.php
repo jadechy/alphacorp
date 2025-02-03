@@ -122,8 +122,10 @@ class EventAdminController extends AbstractController
                 $fileName = $fileUploader->upload($imageFile);
                 $event->setImage($fileName);
             }
+            /** @var array<User> $selectedParticipants */
             $selectedParticipants = $form->get('participants')->getData();
             foreach ($selectedParticipants as $participant) {
+                /** @var User $participant */
                 $event->addParticipant($participant);
             }
             $entityManager->flush();
@@ -156,7 +158,7 @@ class EventAdminController extends AbstractController
     }
 
     #[Route('/{eventId}/remove-participant/{participantId}', name: 'remove_participant', methods: ['DELETE'])]
-    public function removeParticipant(string $eventId, string $participantId, EntityManagerInterface $entityManager, Request $request)
+    public function removeParticipant(string $eventId, string $participantId, EntityManagerInterface $entityManager, Request $request): Response
     {
         // Récupérer l'événement et le participant
         $event = $entityManager->getRepository(Event::class)->find($eventId);
@@ -164,7 +166,7 @@ class EventAdminController extends AbstractController
 
         if ($event && $participant) {
             // Retirer le participant de l'événement
-            $event->removeParticipant($participant); // Méthode dans l'entité Event
+            $event->removeParticipant($participant);
             $entityManager->flush();
 
             // Si c'est une requête AJAX, renvoyer une réponse JSON

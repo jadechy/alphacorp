@@ -27,6 +27,7 @@ final class QuestionController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var Question $question */
             $question = $form->getData();
 
             $question->setQuiz($quiz);
@@ -34,7 +35,7 @@ final class QuestionController extends AbstractController
             $correctAnswer = null;
 
             foreach ($question->getAnswers() as $index => $answer) {
-                $isCorrect = $form->get('answers')->get($index)->get('isCorrect')->getData();
+                $isCorrect = $form->get('answers')->get((string) $index)->get('isCorrect')->getData();
 
                 if ($isCorrect) {
                     $correctAnswer = $answer;
@@ -85,7 +86,7 @@ final class QuestionController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $correctAnswer = null;
             foreach ($question->getAnswers() as $index => $answer) {
-                $isCorrect = $form->get('answers')->get($index)->get('isCorrect')->getData();
+                $isCorrect = $form->get('answers')->get((string) $index)->get('isCorrect')->getData();
 
                 if ($isCorrect) {
                     $correctAnswer = $answer;
@@ -99,6 +100,7 @@ final class QuestionController extends AbstractController
 
             $entityManager->flush();
 
+            /** @var Quiz $quiz */
             $quiz = $question->getQuiz();
 
             return $this->redirectToRoute('app_quiz_supervisor_show', ['id' => $quiz->getId()], Response::HTTP_SEE_OTHER);
@@ -135,6 +137,7 @@ final class QuestionController extends AbstractController
             $entityManager->flush();
         }
 
+        /** @var Quiz quiz */
         $quiz = $question->getQuiz();
 
         return $this->redirectToRoute('app_quiz_supervisor_show', ['id' => $quiz->getId()], Response::HTTP_SEE_OTHER);

@@ -15,8 +15,10 @@ class RankRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Rank::class);
     }
+
     public function findCurrentRank(int $userXp): ?Rank
     {
+        /** @var Rank|null */
         return $this->createQueryBuilder('r')
             ->where('r.minimum <= :userRank')
             ->orderBy('r.minimum', 'DESC')
@@ -28,6 +30,7 @@ class RankRepository extends ServiceEntityRepository
 
     public function findNextRank(int $userXp): ?Rank
     {
+        /** @var Rank|null */
         return $this->createQueryBuilder('r')
             ->where('r.minimum > :userRank')
             ->orderBy('r.minimum', 'ASC')
