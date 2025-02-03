@@ -35,7 +35,12 @@ jobs:
 
         # Mettre à jour encore les sources après l'ajout du dépôt Docker
         sudo apt-get update
-
+        
+    - name: Install Docker and Docker Compose
+      run: |
+        sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+        sudo apt-get install -y docker-compose
+        
     - name: Build and run Symfony container
       run: |
         # Construire et démarrer les services définis dans docker-compose.yml à l'intérieur du conteneur
