@@ -43,29 +43,74 @@
     {% if contest.userContests is not empty %}
         <h2>Les participations</h2>
 
-        <h3>A valider</h3>
-        {% for userContest in pendingUserContests %}
-            <div>
-                <p>Défi réalisé par : {{ userContest.user.username }}</p>
-                Réponse : <img src="{{ asset('uploads/' ~ userContest.answer) }}" alt="Image du concours" class="w-full h-auto rounded">
+        {% if pendingUserContests is not empty %}
+            <h3>A valider</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Défi réalisé par</th>
+                        <th>Image</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for userContest in pendingUserContests %}
+                        <tr>
+                            <td>{{ userContest.user.username }}</td>
+                            <td><img src="{{ asset('uploads/' ~ userContest.answer) }}" alt="Image du concours" class="w-full h-auto rounded"></td>
+                            <td>
+                                <form action="{{ path('app_supervisor_contest_validate', {id: userContest.id, success: 1}) }}" method="POST" style="display:inline;">
+                                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Valider le défi</button>
+                                </form>
 
-                <form action="{{ path('app_supervisor_contest_validate', {id: userContest.id, success: 1}) }}" method="POST" style="display:inline;">
-                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Valider le défi</button>
-                </form>
-
-                <form action="{{ path('app_supervisor_contest_validate', {id: userContest.id, success: 0}) }}" method="POST" style="display:inline;">
-                    <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded">Invalider le défi</button>
-                </form>
-            </div>
-        {% endfor %}
+                                <form action="{{ path('app_supervisor_contest_validate', {id: userContest.id, success: 0}) }}" method="POST" style="display:inline;">
+                                    <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded">Invalider le défi</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Il n'y a plus de participation à valider.</p>
+        {% endif %}
         
-        <h3>Déjà valider</h3>
-        {% for userContest in validUserContests %}
-            <div>
-                <p>Défi réalisé par : {{ userContest.user.username }}</p>
-                    Réponse : <img src="{{ asset('uploads/' ~ userContest.answer) }}" alt="Image du concours" class="w-full h-auto rounded">
-            </div>
-        {% endfor %}
+        {% if validUserContests is not empty %}
+            <h3>Déjà valider</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Défi réalisé par</th>
+                        <th>Image</th>
+                        <th>Résultat</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for userContest in validUserContests %}
+                        <tr>
+                            <td>{{ userContest.user.username }}</td>
+                            <td><img src="{{ asset('uploads/' ~ userContest.answer) }}" alt="Image du concours" class="w-full h-auto rounded"></td>
+                            <td>{{ userContest.success == 1 ? 'Validé' : 'Pas validé' }}</td>
+                            <td>
+                                {% if userContest.success == 0 %}
+                                    <form action="{{ path('app_supervisor_contest_validate', {id: userContest.id, success: 1}) }}" method="POST" style="display:inline;">
+                                        <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Valider le défi</button>
+                                    </form>
+                                {% else %}
+                                    <form action="{{ path('app_supervisor_contest_validate', {id: userContest.id, success: 0}) }}" method="POST" style="display:inline;">
+                                        <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded">Invalider le défi</button>
+                                    </form>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Il n'y a pas de participation validé.</p>
+        {% endif %}
+
     {% else %}
         <p>Il n'y a pas encore de participants à ce défi.</p>
     {% endif %}

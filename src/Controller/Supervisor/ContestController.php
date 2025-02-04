@@ -63,9 +63,9 @@ class ContestController extends AbstractController
         $pendingUserContests = [];
 
         foreach ($userContests as $userContest) {
-            if ($userContest->getSuccess() === 1 || $userContest->getSuccess() === 0) {
+            if ($userContest->isSuccess() === true || $userContest->isSuccess() === false) {
                 $validUserContests[] = $userContest;
-            } elseif ($userContest->getSuccess() === null) {
+            } elseif ($userContest->isSuccess() === null) {
                 $pendingUserContests[] = $userContest;
             }
         }
@@ -110,7 +110,7 @@ class ContestController extends AbstractController
         return $this->redirectToRoute('app_supervisor_contest_homepage', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/{id}/validate/{success}', name: 'app_contest_validate', methods: ['POST'])]
+    #[Route('/{id}/validate/{success}', name: 'validate', methods: ['POST'])]
     public function validateContest(UserContest $userContest, int $success, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
