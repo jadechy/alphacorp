@@ -26,23 +26,21 @@
 		{% if user_contest is not null %}
 			<div class="border-b mb-4 py-4">
 				<h2 class="text-xl mb-3">Votre image</h2>
-				<div class="flex items-center">
+				<div class="flex md:flex-row flex-col gap-5 items-center">
 					<img src={{ asset('img/uploads/' ~ answerImage) }} alt="Image du concours" class="w-60 h-auto max-h-100 rounded">
 					{{ macrosContestResult.AfficheContestResult(contest, user_contest) }}
-
 				</div>
 			</div>
 			<p>Modifier l'image:</p>
-			<form action="{{ path('app_contest_edit', {'id': contest.id}) }}" method="POST" enctype="multipart/form-data" class="flex justify-between items-center mt-4">
+			<form action="{{ path('app_contest_edit', {'id': contest.id}) }}" method="POST" enctype="multipart/form-data" class="flex justify-between md:flex-row flex-col  items-center mt-4">
 				<input type="file" name="image" accept="image/*">
-				<button type="submit" class="btn">Modifier l'image</button>
+				<button type="submit" class="btn mt-4 md:mt-0">Modifier l'image</button>
 			</form>
-
 		{% else %}
 			<h2 class="text-xl">Pour participer à ce défi ajouter votre photo</h2>
-			<form action="{{ path('app_contest_upload_image', {'id': contest.id}) }}" method="POST" enctype="multipart/form-data" class="mt-4 flex items-center justify-between">
+			<form action="{{ path('app_contest_upload_image', {'id': contest.id}) }}" method="POST" enctype="multipart/form-data" class="mt-4 flex md:flex-row flex-col items-center justify-between">
 				<input type="file" name="image" accept="image/*">
-				<button type="submit" class="btn">Ajouter l'image</button>
+				<button type="submit" class="btn mt-4 md:mt-0">Ajouter l'image</button>
 			</form>
 		{% endif %}
 	</section>
