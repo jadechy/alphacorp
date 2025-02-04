@@ -1,13 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Contest{% endblock %}
+{% block title %}Edit Contest
+{% endblock %}
 
 {% block body %}
-    <h1>Edit Contest</h1>
+	<a href={{ path("app_contest_supervisor_show", {'id': contest.id} ) }} class="flex hover:outline outline-neutral-300 w-fit rounded-3xl px-3 py-2 mb-4">
 
-    {{ include('contest/supervisor/_form.html.twig', {'button_label': 'Update'}) }}
+		{{ ux_icon('tabler:chevron-left', {class: 'w-6 h-6'}) }}
+		Retour à la liste
+	</a>
 
-    <a href="{{ path('app_supervisor_contest_homepage') }}">back to list</a>
+	{{ include('contest/supervisor/_form.html.twig', {'button_label': 'Update'}) }}
 
-    {{ include('contest/supervisor/_delete_form.html.twig') }}
+	{{ include('contest/supervisor/_delete_form.html.twig') }}
 {% endblock %}

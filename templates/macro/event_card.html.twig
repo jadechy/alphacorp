@@ -1,4 +1,7 @@
 {% macro AfficheEventCard(event) %}
+	{% import 'macro/badge_status.html.twig' as macrosBadge %}
+
+
 	<a class="flex md:flex-row flex-col gap-6 rounded-lg w-full shadow-md shadow-neutral-900 hover:scale-105 hover:bg-neutral-700 transition overflow-hidden md:h-50" href={{ path('app_event_show', { id : event.id } ) }}>
 		<div class="md:w-60 md:h-full  h-50 w-full object-cover">
 			<img src={{ asset('img/uploads/' ~ event.image) }} alt="Event Image" class="object-cover h-full w-full"/>
@@ -10,19 +13,9 @@
 					<h2 class="text-lg">
 						{{event.title}}
 					</h2>
-					{% if event.isInFuture() %}
-						<span class="py-1.5 px-2.5 bg-green-500/30 rounded-full flex w-20 justify-center items-center gap-1">
-							<p class="font-medium text-xs ">Ouvert</p>
-						</span>
-					{% elseif event.isFinished() %}
-						<span class="py-1.5 px-2.5 bg-red-500/30 rounded-full flex w-20 justify-center items-center gap-1">
-							<p class="font-medium text-xs ">Fermé</p>
-						</span>
-					{% elseif event.isOngoing() %}
-						<span class="py-1.5 px-2.5 bg-orange-500/30 rounded-full flex w-20 justify-center items-center gap-1">
-							<p class="font-medium text-xs ">En cours</p>
-						</span>
-					{% endif %}
+					{{ macrosBadge.AfficheBadgeStatus(event) }}
+
+
 				</div>
 				<div class="flex md:flex-row flex-col  md:gap-5 text-sm text-neutral-400 mb-4">
 					<p>

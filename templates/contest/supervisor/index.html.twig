@@ -11,10 +11,10 @@
 					<th>Id</th>
 					<th>Title</th>
 					<th>Description</th>
-                    <th>Date d'ouverture</th>
-                    <th>Date de fermeture</th>
-                    <th>XP</th>
-                    <th>Nombre de participation</th>
+					<th>Date d'ouverture</th>
+					<th>Date de fermeture</th>
+					<th>XP</th>
+					<th>Nombre de participation</th>
 
 					<th>Actions</th>
 				</tr>
@@ -25,17 +25,17 @@
 						<td>{{ contest.id }}</td>
 						<td>{{ contest.title }}</td>
 						<td>{{ contest.description }}</td>
-                        <td>{{ contest.startOn ? contest.startOn|date('Y-m-d H:i:s') : '' }}</td>
-                        <td>{{ contest.endOn ? contest.endOn|date('Y-m-d H:i:s') : '' }}</td>
-                        <td>{{ contest.xp }}</td>
-                        <td>{{ contest.userContests|length }}</td>
+						<td>{{ contest.startOn ? contest.startOn|date('Y-m-d H:i:s') : '' }}</td>
+						<td>{{ contest.endOn ? contest.endOn|date('Y-m-d H:i:s') : '' }}</td>
+						<td>{{ contest.xp }}</td>
+						<td>{{ contest.userContests|length }}</td>
 
 						<td>
-							<a href="{{ path('app_supervisor_contest_show', {'id': contest.id}) }}">
+							<a href="{{ path('app_contest_supervisor_show', {'id': contest.id}) }}">
 								{{ ux_icon('tabler:eye', {class: 'w-6 h-6'}) }}
 
 							</a>
-							<a href="{{ path('app_supervisor_contest_edit', {'id': contest.id}) }}">
+							<a href="{{ path('app_contest_supervisor_edit', {'id': contest.id}) }}">
 								{{ ux_icon('tabler:edit', {class: 'w-6 h-6'}) }}
 
 							</a>
@@ -49,5 +49,5 @@
 			</tbody>
 		</table>
 	</div>
-	<a href="{{ path('app_supervisor_contest_new') }}">Create new</a>
+	<a href="{{ path('app_contest_supervisor_new') }}" class="btn">Créer un nouveau défi</a>
 {% endblock %}

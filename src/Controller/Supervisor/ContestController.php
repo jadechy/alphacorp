@@ -4,6 +4,7 @@ namespace App\Controller\Supervisor;
 
 use App\Entity\UserContest;
 use App\Entity\Contest;
+use App\Entity\User;
 use App\Form\ContestType;
 use App\Repository\ContestRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -11,14 +12,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route('/supervisor/contest', name: "app_supervisor_contest_")]
+#[Route('/supervisor/contest', name: "app_contest_supervisor_")]
 #[IsGranted('ROLE_SUPERVISOR')]
 class ContestController extends AbstractController
 {
     #[Route('/', name: 'homepage')]
     public function listContest(ContestRepository $contestRepository): Response
     {
+        $user = new User();
         /** @var User $user */
         $user = $this->getUser();
 
@@ -45,7 +48,7 @@ class ContestController extends AbstractController
             $entityManager->persist($contest);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_supervisor_contest_homepage', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_contest_supervisor_homepage', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('contest/supervisor/new.html.twig', [
@@ -55,7 +58,7 @@ class ContestController extends AbstractController
     }
 
     #[Route('/{id}', name: 'show', methods: ['GET'])]
-    public function show(Contest $contest,EntityManagerInterface $entityManager): Response
+    public function show(Contest $contest, EntityManagerInterface $entityManager): Response
     {
         $userContests = $entityManager->getRepository(UserContest::class)->findBy(['contest' => $contest]);
 
@@ -86,7 +89,7 @@ class ContestController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_supervisor_contest_homepage', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_contest_supervisor_homepage', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('contest/supervisor/edit.html.twig', [
@@ -98,7 +101,7 @@ class ContestController extends AbstractController
     #[Route('/{id}', name: 'delete', methods: ['POST'])]
     public function delete(Request $request, Contest $contest, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$contest->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $contest->getId(), $request->getPayload()->getString('_token'))) {
             foreach ($contest->getUserContests() as $userContest) {
                 $entityManager->remove($userContest);
             }
@@ -107,7 +110,7 @@ class ContestController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_supervisor_contest_homepage', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_contest_supervisor_homepage', [], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/{id}/validate/{success}', name: 'validate', methods: ['POST'])]
@@ -115,7 +118,7 @@ class ContestController extends AbstractController
     {
         $user = $this->getUser();
         if ($user !== $userContest->getContest()->getAuthor()) {
-            return $this->redirectToRoute('app_supervisor_contest_show', ['id' => $userContest->getContest()->getId()]);
+            return $this->redirectToRoute('app_contest_supervisor_show', ['id' => $userContest->getContest()->getId()]);
         }
 
         $userContest->setSuccess($success);
@@ -124,7 +127,7 @@ class ContestController extends AbstractController
             $contest = $userContest->getContest();
             $xp = $contest->getXp();
             $user = $userContest->getUser();
-    
+
             if ($xp) {
                 $user->setXp($user->getXp() + $xp);
             }
@@ -132,7 +135,6 @@ class ContestController extends AbstractController
 
         $entityManager->flush();
 
-        return $this->redirectToRoute('app_supervisor_contest_show', ['id' => $userContest->getContest()->getId()]);
+        return $this->redirectToRoute('app_contest_supervisor_show', ['id' => $userContest->getContest()->getId()]);
     }
-
 }

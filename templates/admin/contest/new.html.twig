@@ -1,12 +1,10 @@
 {% extends 'admin/base_admin.html.twig' %}
 
-{% block admin_title %}Créer un nouveau défi{% endblock %}
-{% set return_path = 'admin_homepage' %}
+{% block admin_title %}Créer un nouveau défi
+{% endblock %}
+{% set return_path = 'admin_contest_homepage' %}
 
 {% block admin_content %}
-    <h1>Créer un nouveau défi</h1>
 
-    {{ include('admin/contest/_form.html.twig') }}
-
-    <a href="{{ path('admin_contest_homepage') }}">Retour à la liste</a>
+	{{ include('admin/contest/_form.html.twig') }}
 {% endblock %}

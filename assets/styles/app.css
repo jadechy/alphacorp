@@ -54,7 +54,7 @@
     
                 td {
                     padding: calc(var(--spacing, 0.5rem) * 3); 
-    min-width:calc(var(--spacing, 0.5rem) * 15);
+                    min-width:calc(var(--spacing, 0.5rem) * 15);
                     &:last-child {
                         display: flex;
                         justify-content: end;
@@ -73,7 +73,7 @@
                 transition: color 0.2s ease;
     
                 &:hover {
-                     background-color: var(--color-neutral-900);
+                     /* background-color: var(--color-neutral-900); */
                 }
             }
             td {
