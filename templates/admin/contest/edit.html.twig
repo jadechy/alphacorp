@@ -1,0 +1,14 @@
+{% extends 'admin/base_admin.html.twig' %}
+
+{% block title %}Edit Défi{% endblock %}
+{% set return_path = 'admin_homepage' %}
+
+{% block admin_content %}
+    <h1>Edit Défi</h1>
+
+    {{ include('admin/contest/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('admin_contest_homepage') }}">back to list</a>
+
+    {{ include('admin/contest/_delete_form.html.twig') }}
+{% endblock %}
