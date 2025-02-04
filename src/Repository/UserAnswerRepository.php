@@ -18,7 +18,10 @@ class UserAnswerRepository extends ServiceEntityRepository
         parent::__construct($registry, UserAnswer::class);
     }
 
-    public function findAllAnswerByUserAndQuiz(User $user, Quiz $quiz){
+    /** @return UserAnswer */
+    public function findAllAnswerByUserAndQuiz(User $user, Quiz $quiz)
+    {
+        /** @var UserAnswer */
         return $this->createQueryBuilder('ur')
         ->join('ur.question', 'q')
         ->where('q.quiz = :quiz')

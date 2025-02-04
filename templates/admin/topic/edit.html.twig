@@ -8,10 +8,8 @@
 
 
 {% block admin_content %}
-	<div>
-		{{ include('admin/topic/_form.html.twig') }}
-	</div>
+	{{ include('admin/topic/_form.html.twig') }}
 	<div class="flex justify-center">
-		{{ include('forum/topic/_delete_form.html.twig') }}
+		{{ include('admin/topic/_delete_form.html.twig') }}
 	</div>
 {% endblock %}

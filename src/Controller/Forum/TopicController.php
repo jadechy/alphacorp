@@ -116,6 +116,7 @@ class TopicController extends AbstractController
 
             $entityManager->persist($topic);
             $entityManager->flush();
+            $this->addFlash('success', 'Topic crée, en attende de validation');
 
             return $this->redirectToRoute('app_forum_homepage', [], HttpResponse::HTTP_SEE_OTHER);
         }

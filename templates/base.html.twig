@@ -17,7 +17,7 @@
 			{{ encore_entry_script_tags('app') }}
 		{% endblock %}
 	</head>
-	<body class="dark:bg-neutral-800 dark:text-white relative">
+	<body class="dark:bg-neutral-800 dark:text-white relative min-h-full">
 		{% for label, messages in app.flashes %}
 			<div class="alert alert-{{ label }}">
 				{% for message in messages %}
@@ -26,11 +26,16 @@
 			</div>
 		{% endfor %}
 		{% include('parts/layouts/header_layout.html.twig' ) %}
+		{% block admin_nav %}{% endblock %}
 
-		<main class=" md:px-20 md:pb-20 mt-5 mx-6 mb-10">
+		<main class=" md:px-20 md:pb-20 mt-5 mx-6 mb-10 mb:mt-17">
 			<h1 class="font-bold text-fuchsia-300 text-center text-2xl mb-8">{{title|raw}}</h1>
 
 			{% block body %}{% endblock %}
 		</main>
+		<footer class="bg-neutral-950">
+			<img src="{{asset("/img/logo/all.svg")}}" class=" mx-auto h-50"/>
+		</footer>
+
 	</body>
 </html>

@@ -29,58 +29,58 @@
 	</div>
 
 	<section class="mt-2">
+		<div class="wrapper-table">
 
-		<table>
-			<thead>
-				<tr>
-					<th scope="col">
-						ID</th>
-					<th scope="col">
-						Auteur</th>
-					<th scope="col">
-						Topic</th>
-					<th scope="col">
-						Status</th>
-					<th scope="col">
-						Actions</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for response in pagination.items %}
-					<tr data-status="{{response.status.name}}">
-						<td>{{ response.id }}</td>
-						<td>{{ response.author.username }}</td>
-						<td>{{ response.topic.title }}</td>
-						<td>
-							<form method="POST" action="{{ path('admin_response_change_status', { id: response.id }) }}" class="inline">
-								<input type="hidden" name="status" value="{{ response.status.value }}">
-								<div class="relative">
+
+			<table>
+				<thead>
+					<tr>
+						<th scope="col">
+							ID</th>
+						<th scope="col">
+							Auteur</th>
+						<th scope="col">
+							Topic</th>
+						<th scope="col">
+							Status</th>
+						<th scope="col">
+							Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for response in pagination.items %}
+						<tr data-status="{{response.status.name}}">
+							<td>{{ response.id }}</td>
+							<td>{{ response.author.username }}</td>
+							<td class="min-w-40">{{ response.topic.title }}</td>
+							<td>
+								<form method="POST" action="{{ path('admin_response_change_status', { id: response.id }) }}" class="inline">
+									<input type="hidden" name="status" value="{{ response.status.value }}">
 									<select name="status" class="dashboard-select" onchange="this.form.submit()">
 										<option value="validated" {% if response.status.value == 'validated' %} selected {% endif %}>Validé</option>
 										<option value="rejected" {% if response.status.value == 'rejected' %} selected {% endif %}>Rejeté</option>
 										<option value="waiting" {% if response.status.value == 'waiting' %} selected {% endif %}>En attente</option>
 										<option value="deleted" {% if response.status.value == 'deleted' %} selected {% endif %}>Supprimé</option>
 									</select>
-
-								</div>
-							</form>
-						</td>
-						<td>
-							<a href="{{ path('admin_response_show', {'id': response.id}) }}">
-								{{ ux_icon('tabler:eye', {class: 'w-6 h-6'}) }}
-							</a>
-							<a href="{{ path('admin_response_edit', {'id': response.id}) }}">
-								{{ ux_icon('tabler:edit', {class: 'w-6 h-6'}) }}
-							</a>
-						</td>
-					</tr>
-				{% else %}
-					<tr>
-						<td colspan="4">Aucune réponse trouvé.</td>
-					</tr>
-				{% endfor %}
-			</tbody>
-		</table>
+								</form>
+							</td>
+							<td>
+								<a href="{{ path('admin_response_show', {'id': response.id}) }}">
+									{{ ux_icon('tabler:eye', {class: 'w-6 h-6'}) }}
+								</a>
+								<a href="{{ path('admin_response_edit', {'id': response.id}) }}">
+									{{ ux_icon('tabler:edit', {class: 'w-6 h-6'}) }}
+								</a>
+							</td>
+						</tr>
+					{% else %}
+						<tr>
+							<td colspan="4">Aucune réponse trouvé.</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
 		{{ knp_pagination_render(pagination) }}
 		<a href="{{ path('admin_response_new') }}" class="btn">
 			Créer une nouvelle réponse

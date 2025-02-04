@@ -2,7 +2,9 @@
 
 namespace App\DataFixtures;
 
+use App\DataFixtures\Data\ContestData;
 use App\DataFixtures\Data\EventData;
+use App\DataFixtures\Data\QuizData;
 use App\DataFixtures\Data\TopicData;
 use App\Entity\Bromance;
 use App\Entity\User;
@@ -11,12 +13,15 @@ use App\Entity\Category;
 use App\Entity\Event;
 use App\Entity\Language;
 use App\Entity\Question;
+use App\Entity\Challenge;
 use App\Entity\Quiz;
 use App\Entity\Rank;
 use App\Entity\Response;
-use App\Entity\Test;
+use App\Entity\Contest;
 use App\Entity\Topic;
 use App\Entity\UserAnswer;
+use App\Entity\UserContest;
+use App\Entity\AlphaScream;
 use App\Enum\StatusUserEnum;
 use App\Enum\BromanceStatusEnum;
 use App\Enum\BromanceRequestStatusEnum;
@@ -37,9 +42,12 @@ class AppFixtures extends Fixture
 
     public const MAX_BROMANCE = 7;
 
-
     public const MAX_CHALLENGES = 15;
+
+    public const MAX_SCREAM = 12;
+
     protected $faker;
+
     public function __construct(protected UserPasswordHasherInterface $passwordHasher)
     {
         $this->faker = Factory::create('fr_FR');
@@ -55,6 +63,7 @@ class AppFixtures extends Fixture
         $events = [];
         $challenges = [];
         $questions = [];
+        $screams = [];
 
         $this->createActiveUsers($manager, $users);
         $this->createUser($manager, $users);
@@ -68,14 +77,14 @@ class AppFixtures extends Fixture
         $this->createLanguages($manager, $languages);
         $this->createTopics($manager, $topics, $categories, $languages, $users);
 
-
-        // $this->linkTopicsToCategoriesAndLanguages($topics, $categories, $languages, $users);
-
         $this->createBromance($manager, $users);
         $this->createRank($manager, $ranks);
         $this->createEvents($manager, $events, $users);
-        $this->createChallenges($manager, $challenges, $users, $questions);
-        $this->linkUserToAnswerQuestion($manager, $users, $questions);
+        $this->createContests($manager, $challenges, $users, $questions);
+        $this->createQuizs($manager, $users, $challenges);
+        $this->linkUserToContest($manager, $users, $challenges);
+
+        $this->createAlphaScreams($manager, $users, $screams);
 
         $manager->flush();
     }
@@ -151,8 +160,12 @@ class AppFixtures extends Fixture
             $manager->persist(object: $user);
         }
     }
+
     /**
-     * @return User[] 
+     * Crée des utilisateurs admin.
+     *
+     * @param ObjectManager $manager
+     * @param User[] $users Tableau d'objets User.
      */
     protected function createAdminUser(ObjectManager $manager, array &$users): void
     {
@@ -173,7 +186,10 @@ class AppFixtures extends Fixture
     }
 
     /**
-     * @return User[] 
+     * Crée des utilisateurs admin.
+     *
+     * @param ObjectManager $manager
+     * @param User[] $users Tableau d'objets User.
      */
     protected function createAdminUsers(ObjectManager $manager, array &$users): void
     {
@@ -315,20 +331,24 @@ class AppFixtures extends Fixture
      * @param Language[] $languages Tableau d'objets de Language.
      * @param User[] $users Tableau d'objets d'User.
      */
-    protected function createTopics(ObjectManager $manager, array $topics, array $categories, array $languages, array $users)
+    protected function createTopics(ObjectManager $manager, array $topics, array $categories, array $languages, array $users): void
     {
         $topicsData = TopicData::getTopics();
 
         foreach ($topicsData as $index => $topicData) {
             $topic = new Topic();
+            /** @var array<string,string> $topicData */
             $topic->setTitle($topicData["title"]);
             $topic->setShortDescription($topicData["shortDescription"]);
             $topic->setLongDescription($topicData["longDescription"]);
             $topic->setCategory($categories[$topicData["category"]]);
             $topic->setLanguage($languages[$topicData["language"]]);
             $topic->setStatus(TopicStatusEnum::OPEN);
-            foreach ($topicData["responses"] as $responseData) {
+            /** @var array<string, string> $responses */
+            $responses = $topicData["responses"];
+            foreach ($responses as $responseData) {
                 $response = new Response();
+                /** @var array<string, string> $responseData*/
                 $response->setContent($responseData["content"]);
                 $response->setCreatedAt(new \DateTimeImmutable());
                 $response->setStatus(ResponseStatusEnum::VALIDATED);
@@ -443,11 +463,13 @@ class AppFixtures extends Fixture
         $eventsData = EventData::getEvents();
         foreach ($eventsData as $eventData) {
             $event = new Event();
+            /** @var array<string, string> $eventData */
             $event->setTitle($eventData["title"]);
             $event->setShortDescription($eventData["shortDescription"]);
             $event->setLongDescription($eventData["longDescription"]);
             $event->setImage($eventData["image"]);
             $event->setLocation($eventData["location"]);
+            /** @var array<string,\DateTimeImmutable> $eventData */
             $event->setStartAt($eventData["startAt"]);
             $event->setEndAt($eventData["endAt"]);
 
@@ -474,6 +496,49 @@ class AppFixtures extends Fixture
     }
 
     /**
+     * Crée des quizs.
+     *
+     * @param ObjectManager $manager 
+     * @param User[] $users Tableau d'objets User.
+     */
+    protected function createQuizs(ObjectManager $manager,  array $users, array $challenges): void
+    {
+        $quizsData = QuizData::getQuizs();
+        foreach ($quizsData as $quizData) {
+            $quiz = new Quiz();
+            $quiz->setTitle($quizData["title"]);
+            $quiz->setDescription($quizData["description"]);
+            $supervisorUsers = array_filter($users, function ($user) {
+                return in_array('ROLE_SUPERVISOR', $user->getRoles(), true);
+            });
+            $supervisorUsers = array_values($supervisorUsers);
+            $authorIndex = array_rand($supervisorUsers);
+            $author = $supervisorUsers[$authorIndex];
+            $quiz->setAuthor($author);
+            foreach ($quizData["questions"] as $questionData) {
+                $question = new Question();
+                $question->setContent($questionData["question"]);
+                $question->setXp(3);
+                $answers = [];
+                foreach ($questionData["answers"] as $answerData) {
+                    $answer = new Answer();
+                    $answer->setContent($answerData);
+                    $question->addAnswer($answer);
+                    $answers[] = $answer;
+                    $manager->persist($answer);
+                };
+                $question->setCorrectAnswer($answers[$questionData["correct"]]);
+                $quiz->addQuestion($question);
+                $manager->persist($question);
+            }
+
+            $challenges[] = $quiz;
+            $manager->persist($quiz);
+        }
+    }
+
+
+    /**
      * Crée des challenges.
      *
      * @param ObjectManager $manager
@@ -481,15 +546,15 @@ class AppFixtures extends Fixture
      * @param User[] $users Tableau d'objets User.
      * @param Question[] $questions Tableau d'objets Question.
      */
-    protected function createChallenges(ObjectManager $manager, array &$challenges, array $users, array &$questions): void
+    protected function createContests(ObjectManager $manager, array &$challenges, array $users): void
     {
-        for ($j = 0; $j < self::MAX_CHALLENGES; $j++) {
-            $challenge = random_int(min: 0, max: 1) === 0 ? new Test() : new Quiz();
-            $title = $challenge instanceof Test ? 'Test' : 'Quiz';
-            $description = $challenge instanceof Test ? 'Un test pour évaluer vos compétences.' : 'Un quiz pour tester vos connaissances.';
+        $contestsData = ContestData::getContests();
 
-            $challenge->setTitle($this->faker->word());
-            $challenge->setDescription(description: "$description");
+        foreach ($contestsData as $contestData) {
+            $challenge = new Contest();
+
+            $challenge->setTitle($contestData["title"]);
+            $challenge->setDescription($contestData["description"]);
 
             $supervisors = array_filter($users, function ($user) {
                 return in_array('ROLE_SUPERVISOR', $user->getRoles(), true);
@@ -511,20 +576,10 @@ class AppFixtures extends Fixture
                     $user->getParticipations()->add($challenge);
                 }
             }
+            $challenge->setStartOn(new \DateTimeImmutable('+1 day'));
+            $challenge->setEndOn(new \DateTimeImmutable('+14 days'));
+            $challenge->setXp(5);
 
-            if ($challenge instanceof Test) {
-                $challenge->setStartOn(new \DateTimeImmutable('+1 day'));
-                $challenge->setEndOn(new \DateTimeImmutable('+7 days'));
-                $challenge->setSuccess(random_int(0, 1) === 1);
-                $challenge->setXp(5);
-            }
-
-            if ($challenge instanceof Quiz) {
-                $this->createQuestions($manager, $challenge, $questions);
-                foreach ($questions as $question) {
-                    $challenge->getQuestions()->add($question);
-                }
-            }
 
             $manager->persist(object: $challenge);
             $challenges[] = $challenge;
@@ -532,73 +587,72 @@ class AppFixtures extends Fixture
     }
 
     /**
-     * Crée des questions.
-     *
-     * @param ObjectManager $manager
-     * @param Question[] $questions Tableau d'objets Question.
-     */
-    protected function createQuestions(ObjectManager $manager, Quiz $quiz, array &$questions): void
-    {
-        for ($k = 0; $k < random_int(3, 10); $k++) {
-            $question = new Question();
-            $question->setContent("Question n°$k pour le quiz '{$quiz->getTitle()}'");
-            $question->setXp(2);
-
-            $question->setQuiz($quiz);
-            $quiz->getQuestions()->add($question);
-
-            $answers = [];
-
-            for ($l = 0; $l < 4; $l++) {
-                $answer = new Answer();
-                $answer->setContent("Réponse $l pour question n°$k");
-                $answer->setQuestion($question);
-
-                $manager->persist($answer);
-                $question->getAnswers()->add($answer);
-                $answers[] = $answer;
-            }
-
-            $correctAnswer = $answers[array_rand($answers)];
-            $question->setCorrectAnswer($correctAnswer);
-
-            $manager->persist(object: $question);
-            $questions[] = $question;
-        }
-    }
-
-    /**
-     * Lie les réponses au questions à un utilisateur ALPHA.
+     * Lie les contests au défis à un utilisateur ALPHA.
      *
      * @param ObjectManager $manager
      * @param User[] $users Tableau d'objets User.
-     * @param Question[] $questions Tableau d'objets Question.
+     * @param Challenge[] $challenges Tableau d'objets Challenge.
      */
-    protected function linkUserToAnswerQuestion(ObjectManager $manager, array $users, array $questions): void
+    protected function linkUserToContest(ObjectManager $manager, array $users, array $challenges): void
     {
         foreach ($users as $user) {
             if (!in_array('ROLE_ALPHA', $user->getRoles(), true)) {
                 continue;
             }
 
-            if (empty($questions)) {
+            if (empty($challenges)) {
                 continue;
             }
 
-            $randomIndex = array_rand($questions);
-            $question = $questions[$randomIndex];
+            $contest = null;
+            foreach ($challenges as $challenge) {
+                if ($challenge instanceof Contest) {
+                    $contest = $challenge;
+                    break;
+                }
+            }
 
-            $answers = $question->getAnswers();
+            if ($contest === null) {
+                continue;
+            }
 
-            $randomAnswerIndex = array_rand($answers->toArray());
-            $answer = $answers->get($randomAnswerIndex);
+            $userContest = new UserContest();
+            $userContest->setUser($user);
+            $userContest->setContest($contest);
+            $userContest->setAnswer('image.png');
+            $userContest->setSuccess(random_int(0, 1) === 1);
 
-            $userAnswer = new UserAnswer();
-            $userAnswer->setUser($user);
-            $userAnswer->setQuestion($question);
-            $userAnswer->setAnswer($answer);
+            $manager->persist($userContest);
+        }
+    }
 
-            $manager->persist($userAnswer);
+    /**
+     * Crée des cris d'alpha.
+     *
+     * @param ObjectManager $manager
+     * @param User[] $users Tableau d'objets User.
+     * @param AlphaScream[] $screams Tableau d'objets AlphaScream.
+     */
+    protected function createAlphaScreams(ObjectManager $manager, array $users, array &$screams): void
+    {
+        for ($j = 0; $j < self::MAX_SCREAM; $j++) {
+            $alphascream = new AlphaScream();
+
+            $alphaUsers = array_filter($users, function ($user) {
+                return in_array('ROLE_ALPHA', $user->getRoles(), true);
+            });
+
+            $alphaUsers = array_values($alphaUsers);
+
+            $alpha = $alphaUsers[array_rand($alphaUsers)];
+            $alphascream->setAlpha($alpha);
+
+            $alphascream->setScore(mt_rand(1, 1000) / 100);
+            $alphascream->setCreatedAt(createdAt: new \DateTimeImmutable());
+            $alphascream->setLevel();
+
+            $manager->persist(object: $alphascream);
+            $screams[] = $alphascream;
         }
     }
 }

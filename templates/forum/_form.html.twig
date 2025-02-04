@@ -1,17 +1,29 @@
 {{ form_start(form) }}
 <div class="flex flex-col gap-5">
-	{{ form_widget(form.title) }}
-
-	{{ form_widget(form.shortDescription) }}
-
-	{{ form_widget(form.longDescription) }}
+	<div>
+		{{ form_widget(form.title) }}
+		{{ form_errors(form.title) }}
+	</div>
+	<div>
+		{{ form_widget(form.shortDescription) }}
+		{{ form_errors(form.shortDescription) }}
+	</div>
+	<div>
+		{{ form_widget(form.longDescription) }}
+		{{ form_errors(form.longDescription) }}
+	</div>
 	<div class="flex gap-4">
-		{{ form_widget(form.category) }}
-
-		{{ form_widget(form.language) }}
+		<div class="w-full">
+			{{ form_widget(form.category) }}
+			{{ form_errors(form.category) }}
+		</div>
+		<div class="w-full">
+			{{ form_widget(form.language) }}
+			{{ form_errors(form.language) }}
+		</div>
 	</div>
 </div>
-<div class="w-fit mx-auto">
+<div class="w-fit mx-auto mt-8">
 
 	<button type="submit" class="btn">
 		{{ button_label|default('Enregistrer') }}

@@ -1,0 +1,48 @@
+{% extends 'admin/base_admin.html.twig' %}
+
+
+{% block title %}Rank
+{% endblock %}
+{% set return_path = 'admin_homepage' %}
+
+
+{% block admin_content %}
+	<div class="wrapper-table">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Id</th>
+					<th>Title</th>
+					<th>Minimum</th>
+					<th>Description</th>
+					<th>actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for rank in ranks %}
+					<tr>
+						<td>{{ rank.id }}</td>
+						<td>{{ rank.title }}</td>
+						<td>{{ rank.minimum }}</td>
+						<td>{{ rank.description }}</td>
+						<td>
+							<a href="{{ path('admin_rank_show', {'id': rank.id}) }}">
+								{{ ux_icon('tabler:eye', {class: 'w-6 h-6'}) }}
+
+							</a>
+							<a href="{{ path('admin_rank_edit', {'id': rank.id}) }}">
+								{{ ux_icon('tabler:edit', {class: 'w-6 h-6'}) }}
+
+							</a>
+						</td>
+					</tr>
+				{% else %}
+					<tr>
+						<td colspan="5">no records found</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	<a href="{{ path('admin_rank_new') }}" class="btn">Créer un nouveau rank</a>
+{% endblock %}

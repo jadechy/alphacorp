@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: 'ALP_USER')]
@@ -20,6 +21,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private int $id;
 
     #[ORM\Column(length: 100, name: 'USR_USERNAME', unique: true)]
+    #[Assert\NotBlank(message: "Le nom d'utilisateur ne peut pas être vide.")]
+    #[Assert\Length(
+        min: 3,
+        max: 100,
+        minMessage: "Le nom d'utilisateur doit comporter au moins {{ limit }} caractères.",
+        maxMessage: "Le nom d'utilisateur ne peut pas dépasser {{ limit }} caractères."
+    )]
     private string $username;
 
     #[ORM\Column(length: 100, name: 'USR_EMAIL', unique: true)]
@@ -112,7 +120,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: BanRequest::class, mappedBy: 'user')]
     private Collection $banRequests;
 
+    /**
+     * @var Collection<int, UserContest>
+     */
+    #[ORM\OneToMany(targetEntity: UserContest::class, mappedBy: 'user')]
+    private Collection $userContests;
 
+    /**
+     * @var Collection<int, AlphaScream>
+     */
+    #[ORM\OneToMany(targetEntity: AlphaScream::class, mappedBy: 'alpha')]
+    private Collection $alphaScreams;
 
     public function __construct()
     {
@@ -126,6 +144,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->authorEvents = new ArrayCollection();
         $this->userAnswers = new ArrayCollection();
         $this->banRequests = new ArrayCollection();
+        $this->userContests = new ArrayCollection();
+        $this->alphaScreams = new ArrayCollection();
     }
 
     public function getId(): int
@@ -533,12 +553,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function hasAnsweredQuiz(Quiz $quiz): bool
     {
-        $answersForQuiz = $this->getUserAnswers()->filter(function(UserAnswer $userAnswer) use ($quiz) {
-            return $userAnswer->getQuestion()->getQuiz() === $quiz;
+        $answersForQuiz = $this->getUserAnswers()->filter(function (UserAnswer $userAnswer) use ($quiz) {
+            /** @var Question */
+            $question = $userAnswer->getQuestion();
+            return $question->getQuiz() === $quiz;
         });
 
         return count($answersForQuiz) === count($quiz->getQuestions());
-
     }
 
     /**
@@ -565,6 +586,89 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($banRequest->getUser() === $this) {
                 $banRequest->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserContest>
+     */
+    public function getUserContests(): Collection
+    {
+        return $this->userContests;
+    }
+
+    public function hasAnsweredContest(Contest $contest): bool
+    {
+        /** @var UserContest $userContest */
+        foreach ($this->userContests as $userContest) {
+            if ($userContest->getContest() === $contest && !empty($userContest->getAnswer())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function getAnswerForContest(Contest $contest): ?string
+    {
+        foreach ($this->userContests as $userContest) {
+            if ($userContest->getContest() === $contest) {
+                return $userContest->getAnswer();
+            }
+        }
+
+        return null;
+    }
+
+
+    public function addUserContest(UserContest $userContest): static
+    {
+        if (!$this->userContests->contains($userContest)) {
+            $this->userContests->add($userContest);
+            $userContest->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserContest(UserContest $userContest): static
+    {
+        if ($this->userContests->removeElement($userContest)) {
+            // set the owning side to null (unless already changed)
+            if ($userContest->getUser() === $this) {
+                $userContest->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, AlphaScream>
+     */
+    public function getAlphaScreams(): Collection
+    {
+        return $this->alphaScreams;
+    }
+
+    public function addAlphaScream(AlphaScream $alphaScream): static
+    {
+        if (!$this->alphaScreams->contains($alphaScream)) {
+            $this->alphaScreams->add($alphaScream);
+            $alphaScream->setAlpha($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAlphaScream(AlphaScream $alphaScream): static
+    {
+        if ($this->alphaScreams->removeElement($alphaScream)) {
+            // set the owning side to null (unless already changed)
+            if ($alphaScream->getAlpha() === $this) {
+                $alphaScream->setAlpha(null);
             }
         }
 

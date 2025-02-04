@@ -34,6 +34,7 @@ final class QuestionAdminController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var Question $question */
             $question = $form->getData();
 
             $question->setQuiz($quiz);
@@ -41,7 +42,7 @@ final class QuestionAdminController extends AbstractController
             $correctAnswer = null;
 
             foreach ($question->getAnswers() as $index => $answer) {
-                $isCorrect = $form->get('answers')->get($index)->get('isCorrect')->getData();
+                $isCorrect = $form->get('answers')->get((string) $index)->get('isCorrect')->getData();
 
                 if ($isCorrect) {
                     $correctAnswer = $answer;
@@ -92,7 +93,7 @@ final class QuestionAdminController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $correctAnswer = null;
             foreach ($question->getAnswers() as $index => $answer) {
-                $isCorrect = $form->get('answers')->get($index)->get('isCorrect')->getData();
+                $isCorrect = $form->get('answers')->get((string) $index)->get('isCorrect')->getData();
 
                 if ($isCorrect) {
                     $correctAnswer = $answer;
@@ -106,6 +107,7 @@ final class QuestionAdminController extends AbstractController
 
             $entityManager->flush();
 
+            /** @var Quiz $quiz */
             $quiz = $question->getQuiz();
 
             return $this->redirectToRoute('admin_quiz_show', ['id' => $quiz->getId()], Response::HTTP_SEE_OTHER);
@@ -143,6 +145,7 @@ final class QuestionAdminController extends AbstractController
             $entityManager->flush();
         }
 
+        /** @var Quiz $quiz */
         $quiz = $question->getQuiz();
 
         return $this->redirectToRoute('admin_quiz_show', ['id' => $quiz->getId()], Response::HTTP_SEE_OTHER);

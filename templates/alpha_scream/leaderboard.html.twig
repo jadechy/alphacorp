@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Classement Alpha{% endblock %}
+
+{% block body %}
+    <h1>🏆 Classement des plus grands cris Alpha 🏆</h1>
+    <table>
+        <tr>
+            <th>#</th>
+            <th>Utilisateur</th>
+            <th>Score</th>
+            <th>Date</th>
+            <th>Niveau</th>
+        </tr>
+        {% for scream in screams %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ scream.alpha.username }}</td>
+                <td>{{ scream.score }}</td>
+                <td>{{ scream.createdAt|date('d/m/Y H:i') }}</td>
+                <td>{{ scream.level }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

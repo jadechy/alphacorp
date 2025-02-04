@@ -23,7 +23,7 @@
 
 				{% for topic in topics %}
 					{% if topic.status.value == 'open' or topic.status.value == 'close' %}
-						{% include 'macro/topic_card.html.twig' %}
+						{% include 'macro/forum/topic_card.html.twig' %}
 					{% endif %}
 				{% endfor %}
 			</div>

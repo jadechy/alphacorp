@@ -1,0 +1,10 @@
+{% extends 'admin/base_admin.html.twig' %}
+
+{% block admin_title %}Créer un nouveau défi
+{% endblock %}
+{% set return_path = 'admin_contest_homepage' %}
+
+{% block admin_content %}
+
+	{{ include('admin/contest/_form.html.twig') }}
+{% endblock %}

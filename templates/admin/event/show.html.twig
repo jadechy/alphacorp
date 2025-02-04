@@ -8,78 +8,80 @@
 
 {% block admin_content %}
 	<section>
+		<div class="wrapper-table">
 
-		<table>
-			<thead>
-				<tr>
-					<th>Catégorie</th>
-					<th>Valeur</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td>Id</td>
-					<td>{{event.id}}</td>
-				</tr>
-				<tr>
-					<td>Title</td>
-					<td>{{event.title}}</td>
-				</tr>
-				<tr>
-					<td>Short description</td>
-					<td>{{event.shortDescription}}</td>
-				</tr>
-				<tr>
-					<td>Long description</td>
-					<td>{{event.longDescription}}</td>
-				</tr>
-				<tr>
-					<td>Location</td>
-					<td>{{event.location}}</td>
-				</tr>
-				<tr>
-					<td>Start</td>
-					<td>{{event.startAt|format_datetime('short', 'none', locale: 'fr')}}</td>
-				</tr>
-				<tr>
-					<td>End</td>
-					<td>{{event.endAt|format_datetime('short', 'none', locale: 'fr')}}</td>
-				</tr>
-				<tr>
-					<td>Image</td>
-					<td>
-						<img src={{ asset('img/uploads/' ~ event.image) }} alt={{event.image}} class="w-80 h-40 object-cover"/>
+			<table>
+				<thead>
+					<tr>
+						<th>Catégorie</th>
+						<th>Valeur</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Id</td>
+						<td>{{event.id}}</td>
+					</tr>
+					<tr>
+						<td>Title</td>
+						<td>{{event.title}}</td>
+					</tr>
+					<tr>
+						<td>Short description</td>
+						<td>{{event.shortDescription}}</td>
+					</tr>
+					<tr>
+						<td>Long description</td>
+						<td>{{event.longDescription}}</td>
+					</tr>
+					<tr>
+						<td>Location</td>
+						<td>{{event.location}}</td>
+					</tr>
+					<tr>
+						<td>Start</td>
+						<td>{{event.startAt|format_datetime('short', 'none', locale: 'fr')}}</td>
+					</tr>
+					<tr>
+						<td>End</td>
+						<td>{{event.endAt|format_datetime('short', 'none', locale: 'fr')}}</td>
+					</tr>
+					<tr>
+						<td>Image</td>
+						<td>
+							<img src={{ asset('img/uploads/' ~ event.image) }} alt={{event.image}} class="w-80 h-40 object-cover"/>
 
 
-					</td>
-				</tr>
-				<tr>
-					<td>Author</td>
-					<td>
-						<a href={{path("admin_user_show", {id: event.author.id} )}}>{{event.author.id}}
-							-
-							{{event.author.username}}
-							{{ ux_icon('tabler:arrow-bar-right', {class: 'w-6 h-6'}) }}
-						</a>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						Participants -
-						{{ event.participants|length }}
-					</td>
-					<td>
-						{% for participant in event.participants %}
-							<a href={{path("admin_user_show", {id: participant.id} )}}>
-								{{participant.id}}
-								{{participant.username}}
+						</td>
+					</tr>
+					<tr>
+						<td>Author</td>
+						<td>
+							<a href={{path("admin_user_show", {id: event.author.id} )}}>{{event.author.id}}
+								-
+								{{event.author.username}}
 								{{ ux_icon('tabler:arrow-bar-right', {class: 'w-6 h-6'}) }}
 							</a>
-						{% endfor %}
-					</td>
-				</tr>
-			</tbody>
-		</table>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Participants -
+							{{ event.participants|length }}
+						</td>
+						<td>
+							{% for participant in event.participants %}
+								<a href={{path("admin_user_show", {id: participant.id} )}}>
+									{{participant.id}}
+									{{participant.username}}
+									{{ ux_icon('tabler:arrow-bar-right', {class: 'w-6 h-6'}) }}
+								</a>
+							{% endfor %}
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 		<div class="flex justify-center items-center gap-8">
 			<a href="{{ path('admin_event_edit', {'id': event.id}) }}" class="btn">
 				Modifier

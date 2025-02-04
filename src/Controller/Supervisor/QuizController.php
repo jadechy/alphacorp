@@ -20,7 +20,6 @@ final class QuizController extends AbstractController
     #[Route(name: 'homepage', methods: ['GET'])]
     public function index(QuizRepository $quizRepository): Response
     {
-        $user = new User();
         /** @var User $user */
         $user = $this->getUser();
 
@@ -72,6 +71,7 @@ final class QuizController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
+            $this->addFlash('success', 'Modification sauvegardée.');
 
             return $this->redirectToRoute('app_quiz_supervisor_homepage', [], Response::HTTP_SEE_OTHER);
         }

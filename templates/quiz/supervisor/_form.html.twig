@@ -1,13 +1,17 @@
 {{ form_start(form) }}
-    <div class="flex flex-col gap-5">
-        {{ form_widget(form.title) }}
-
-        {{ form_widget(form.description) }}
-
-    </div>
-    <div class="flex items-center justify-center gap-5 mt-8">
-        <button type="submit" class="btn">
-            {{ button_label|default('Suivant') }}
-        </button>
-    </div>
+<div class="flex flex-col gap-5">
+	<div>
+		{{ form_widget(form.title) }}
+		{{ form_errors(form.title) }}
+	</div>
+	<div>
+		{{ form_widget(form.description) }}
+		{{ form_errors(form.description) }}
+	</div>
+</div>
+<div class="flex items-center justify-center gap-5 mt-8">
+	<button type="submit" class="btn">
+		{{ button_label|default('Suivant') }}
+	</button>
+</div>
 {{ form_end(form) }}

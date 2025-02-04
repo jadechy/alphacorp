@@ -6,13 +6,13 @@ use App\Repository\CategoryRepository;
 
 class CategoryColorService
 {
-    private $categoryRepository;
 
-    public function __construct(CategoryRepository $categoryRepository)
+    public function __construct(private CategoryRepository $categoryRepository)
     {
-        $this->categoryRepository = $categoryRepository;
+
     }
 
+    /** @return array<string> */
     public function getCategoryColors(): array
     {
         $categories = $this->categoryRepository->findAll();

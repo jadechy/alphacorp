@@ -15,7 +15,10 @@ class AnswerType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('content', TextType::class)
+            ->add('content', TextType::class, [
+                'required' => true,
+                'label' => false,
+            ])
             ->add('isCorrect', CheckboxType::class, [
                 'required' => false,
                 'mapped' => false,

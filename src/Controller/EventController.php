@@ -64,6 +64,7 @@ class EventController extends AbstractController
             throw $this->createAccessDeniedException('Vous devez être connecté pour effectuer cette action.');
         }
 
+        /** @var User $user */
         $events = $eventRepository->findEventsByParticipant($user);
 
         return $this->render('event/author.html.twig', [
@@ -89,8 +90,10 @@ class EventController extends AbstractController
 
             /** @var UploadedFile $imageFile */
             $imageFile = $form->get('imageFile')->getData();
-            $fileName = $fileUploader->upload($imageFile);
-            $event->setImage($fileName);
+            if ($imageFile) {
+                $fileName = $fileUploader->upload($imageFile);
+                $event->setImage($fileName);
+            }
 
             $entityManager->persist($event);
             $entityManager->flush();

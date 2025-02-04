@@ -67,6 +67,7 @@ class UserController extends AbstractController
     #[Route('/edit', name: 'edit')]
     public function myProfilEdit(Request $request, EntityManagerInterface $entityManager): Response
     {
+        /** @var User $user */
         $user = $this->getUser();
         $form = $this->createForm(UserEditType::class, $user);
         $form->handleRequest($request);
@@ -124,11 +125,14 @@ class UserController extends AbstractController
     }
 
     #[Route('/alpha', name: 'alpha')]
-    public function searchAlphaUser(Request $request, UserRepository $userRepository, EntityManagerInterface $entityManager): Response
+    public function searchAlphaUser(Request $request, UserRepository $userRepository): Response
     {
+        /** @var User $user */
+        $user = $this->getUser();
+        $userId = $user->getId();
         $keyword = $request->query->get('q', '');
         $users = [];
-        $users = strlen($keyword) > 1 ? $userRepository->searchAlphaByKeyword($keyword, $entityManager) : $userRepository->findAllAlpha();
+        $users = strlen($keyword) > 1 ? $userRepository->searchAlphaByKeyword($keyword, $userId) : $userRepository->findAllAlpha($userId);
         return $this->render('user/alpha_search.html.twig', [
             'users' => $users,
             'keyword' => $keyword,

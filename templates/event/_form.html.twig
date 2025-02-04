@@ -1,19 +1,38 @@
 {{ form_start(form, {"attr":{"class": "flex flex-col gap-5 mt-8"}}) }}
-{{ form_widget(form.title) }}
+<div>
+	{{ form_widget(form.title) }}
+	{{ form_errors(form.title) }}
+</div>
 
-{{ form_widget(form.shortDescription) }}
-{{ form_widget(form.longDescription) }}
+<div>
+	{{ form_widget(form.shortDescription) }}
+	{{ form_errors(form.shortDescription) }}
 
-{{ form_widget(form.location) }}
+</div>
+<div>
+	{{ form_widget(form.longDescription) }}
+	{{ form_errors(form.longDescription) }}
+
+</div>
+
+<div>
+	{{ form_widget(form.location) }}
+	{{ form_errors(form.location) }}
+
+</div>
 
 <div>
 	{{ form_label(form.startAt) }}
 	{{ form_widget(form.startAt) }}
+	{{ form_errors(form.startAt) }}
+
 </div>
 
 <div>
 	{{ form_label(form.endAt) }}
 	{{ form_widget(form.endAt) }}
+	{{ form_errors(form.endAt) }}
+
 </div>
 
 {% if event and event.image %}

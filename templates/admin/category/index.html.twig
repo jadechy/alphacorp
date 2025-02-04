@@ -5,39 +5,43 @@
 {% set return_path = 'admin_homepage' %}
 
 {% block admin_content %}
-	<table class="mt-9">
-		<thead>
-			<tr>
-				<th scope="col">ID</th>
-				<th scope="col">Name</th>
-				<th scope="col">Label</th>
-				<th scope="col">Nombre de Topics</th>
-				<th scope="col"></th>
-			</tr>
-		</thead>
-		<tbody class="divide-y divide-gray-300 ">
-			{% for category in pagination.items %}
+	<div class="wrapper-table">
+
+
+		<table class="mt-9">
+			<thead>
 				<tr>
-					<td>{{ category.id }}</td>
-					<td>{{ category.name }}</td>
-					<td>{{ category.label }}</td>
-					<td>{{ category.topics|length }}</td>
-					<td>
-						<a href="{{ path('admin_category_show', {'id': category.id}) }}">
-							{{ ux_icon('tabler:eye', {class: 'w-6 h-6'}) }}
-						</a>
-						<a href="{{ path('admin_category_edit', {'id': category.id}) }}">
-							{{ ux_icon('tabler:edit', {class: 'w-6 h-6'}) }}
-						</a>
-					</td>
+					<th scope="col">ID</th>
+					<th scope="col">Name</th>
+					<th scope="col">Label</th>
+					<th scope="col">Nombre de Topics</th>
+					<th scope="col"></th>
 				</tr>
-			{% else %}
-				<tr>
-					<td colspan="4">Aucun topic trouvé.</td>
-				</tr>
-			{% endfor %}
-		</tbody>
-	</table>
+			</thead>
+			<tbody class="divide-y divide-gray-300 ">
+				{% for category in pagination.items %}
+					<tr>
+						<td>{{ category.id }}</td>
+						<td>{{ category.name }}</td>
+						<td>{{ category.label }}</td>
+						<td>{{ category.topics|length }}</td>
+						<td>
+							<a href="{{ path('admin_category_show', {'id': category.id}) }}">
+								{{ ux_icon('tabler:eye', {class: 'w-6 h-6'}) }}
+							</a>
+							<a href="{{ path('admin_category_edit', {'id': category.id}) }}">
+								{{ ux_icon('tabler:edit', {class: 'w-6 h-6'}) }}
+							</a>
+						</td>
+					</tr>
+				{% else %}
+					<tr>
+						<td colspan="4">Aucun topic trouvé.</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
 	{{ knp_pagination_render(pagination) }}
 
 	<div class="flex">

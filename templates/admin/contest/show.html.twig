@@ -1,0 +1,120 @@
+{% extends 'admin/base_admin.html.twig' %}
+
+{% block admin_title %}Défi
+{% endblock %}
+{% set return_path = 'admin_contest_homepage' %}
+
+
+{% block admin_content %}
+	<section>
+		<div class="wrapper-table">
+			<table>
+				<thead>
+					<tr>
+						<th>Catégorie</th>
+						<th>Valeur</th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<tr>
+						<td>Id</td>
+						<td>{{ contest.id }}</td>
+					</tr>
+					<tr>
+						<td>Title</td>
+						<td>{{ contest.title }}</td>
+					</tr>
+					<tr>
+						<td>Description</td>
+						<td>{{ contest.description }}</td>
+					</tr>
+					<tr>
+						<td>Date de début</td>
+						<td>{{ contest.startOn ? contest.startOn|date('Y-m-d H:i:s') : '' }}</td>
+					</tr>
+					<tr>
+						<td>Date de fin</td>
+						<td>{{ contest.endOn ? contest.endOn|date('Y-m-d H:i:s') : '' }}</td>
+					</tr>
+					<tr>
+						<td>Xp</td>
+						<td>{{ contest.xp }}</td>
+					</tr>
+					<tr>
+						<td>Auteur</td>
+						<td>{{ contest.author.username }}</td>
+					</tr>
+					<tr>
+						<td>Participants</td>
+						<td class="flex-wrap ">
+							{% for userContest in contest.userContests %}
+
+								<a href={{path("admin_user_show", {"id": userContest.user.id} )}}>{{userContest.user.username}}</a>
+							{% endfor %}
+						</td>
+					</tr>
+
+				</tbody>
+			</table>
+		</div>
+		<div class="flex flex-col items-center gap-2.5">
+			<a href="{{ path('admin_contest_edit', {'id': contest.id}) }}" class="btn">Modifier</a>
+
+			{{ include('admin/contest/_delete_form.html.twig') }}
+		</div>
+	</section>
+	<article class="mt-40">
+		<h2 class="text-2xl text-center">Les participations</h2>
+		<div class="wrapper-table">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Défi réalisé par</th>
+						<th>Image</th>
+						<th>Résultat</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for userContest in contest.userContests %}
+						<tr>
+							<td>
+								<a href={{path("admin_user_show", {"id": userContest.user.id} )}} class="w-fit">{{ userContest.user.username }}</a>
+
+
+							</td>
+							<td><img src="{{ asset('img/uploads/' ~ userContest.answer) }}" alt="Image du concours" class="w-30 h-auto rounded"></td>
+							<td>
+								<form method="POST" action="{{ path('admin_contest_user_success_edit', { id: userContest.id }) }}">
+
+									<input type="hidden" name="status" value="{{ userContest.success }}">
+
+
+									<select name="status" class="dashboard-select" onchange="this.form.submit()">
+										<option value="0" {% if userContest.success == 0 %} selected {% endif %}>Pas validé</option>
+
+
+										<option value="1" {% if userContest.success == 1 %} selected {% endif %}>Validé</option>
+
+
+									</select>
+								</form>
+
+							</td>
+							<td>
+								<form action="{{ path('admin_contest_user_delete', {id: userContest.id}) }}" method="POST">
+									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ userContest.id) }}">
+
+
+									<button type="submit" class="btn-delete">
+										Supprimé</button>
+								</form>
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</article>
+{% endblock %}

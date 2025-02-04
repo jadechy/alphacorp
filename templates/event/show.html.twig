@@ -3,27 +3,21 @@
 {% block title %}
 	{{event.title}}
 {% endblock %}
+{% import 'macro/badge_status.html.twig' as macrosBadge %}
+
 
 {% block body %}
 	<section class="flex md:flex-row flex-col md:gap-10 gap-5 justify-start">
-		<img src={{ asset('img/uploads/' ~ event.image) }} alt="Event Image" class="md:w-80 md:h-100 rounded-lg object-cover h-40 w-full"/>
+		{% if event.image %}
+			<img src={{ asset('img/uploads/' ~ event.image) }} alt="Event Image" class="md:w-80 md:h-100 rounded-lg object-cover h-40 w-full"/>
+		{% else %}
+			{{ ux_icon('tabler:calendar-filled', {class: 'w-40 h-40 mx-auto mt-10'}) }}
+		{% endif %}
+
 
 		<div class="w-full flex flex-col md:gap-5 gap-2.5">
-			<div>
-				{% if event.isInFuture() %}
-					<span class="py-1.5 px-2.5 bg-green-700/80 rounded-full flex w-20 justify-center items-center gap-1">
-						<p class="font-medium text-xs">Ouvert</p>
-					</span>
-				{% elseif event.isFinished() %}
-					<span class="py-1.5 px-2.5 bg-red-700/80 rounded-full flex w-20 justify-center items-center gap-1">
-						<p class="font-medium text-xs">Fermé</p>
-					</span>
-				{% elseif event.isOngoing() %}
-					<span class="py-1.5 px-2.5 bg-orange-700/80 rounded-full flex w-20 justify-center items-center gap-1">
-						<p class="font-medium text-xs">En cours</p>
-					</span>
-				{% endif %}
-			</div>
+			{{ macrosBadge.AfficheBadgeStatus(event) }}
+
 
 			<div class="text-neutral-400">
 				<p>{{event.location}}</p>

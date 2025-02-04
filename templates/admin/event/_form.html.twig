@@ -8,34 +8,49 @@
 	</thead>
 	<tbody>
 		{# <tr>
-																																																															<td>Id</td>
-																																																															<td>{{event.id}}</td>
-																																																														</tr> #}
+																																																																											<td>Id</td>
+																																																																											<td>{{event.id}}</td>
+																																																																										</tr> #}
 		<tr>
 			<td>Title</td>
-			<td>{{ form_widget(form.title) }}</td>
+			<td>
+				<div>{{ form_widget(form.title) }}{{form_errors(form.title)}}</div>
+			</td>
 		</tr>
 		<tr>
 			<td>Short description</td>
-			<td>{{ form_widget(form.shortDescription) }}</td>
+			<td>
+				<div>{{ form_widget(form.shortDescription) }}{{form_errors(form.shortDescription)}}</div>
+			</td>
 		</tr>
 		<tr>
 			<td>Long description</td>
-			<td>{{ form_widget(form.longDescription) }}</td>
+			<td>
+				<div>{{ form_widget(form.longDescription) }}{{form_errors(form.longDescription)}}</div>
+			</td>
 		</tr>
 		<tr>
 			<td>Location</td>
-			<td>{{form_widget(form.location)}}</td>
+			<td>
+				<div>{{form_widget(form.location)}}{{form_errors(form.location)}}</div>
+			</td>
 
 		</tr>
 		<tr>
 			<td>Start</td>
-			<td>{{form_widget(form.startAt)}}</td>
+			<td>
+				<div>{{form_widget(form.startAt)}}{{form_errors(form.startAt)}}</div>
+			</td>
 
 		</tr>
 		<tr>
 			<td>End</td>
-			<td>{{form_widget(form.endAt)}}</td>
+			<td>
+				<div>{{form_widget(form.endAt)}}
+					{{form_errors(form.startAt)}}
+				</div>
+
+			</td>
 
 		</tr>
 		<tr>
@@ -58,7 +73,10 @@
 		</tr>
 		<tr>
 			<td>Author</td>
-			<td>{{form_widget(form.author)}}</td>
+			<td>
+				<div>{{form_widget(form.author)}}{{form_errors(form.author)}}</div>
+			</td>
+
 
 		</tr>
 

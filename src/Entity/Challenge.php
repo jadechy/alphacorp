@@ -6,10 +6,11 @@ use App\Repository\ChallengeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\InheritanceType('JOINED')]
 #[ORM\DiscriminatorColumn(name: 'CHG_TYPE', type: 'string')]
-#[ORM\DiscriminatorMap(['quiz' => Quiz::class, 'test' => Test::class])]
+#[ORM\DiscriminatorMap(['quiz' => Quiz::class, 'contest' => Contest::class])]
 #[ORM\Entity(repositoryClass: ChallengeRepository::class)]
 #[ORM\Table(name: 'ALP_CHALLENGE')]
 class Challenge
@@ -20,9 +21,23 @@ class Challenge
     private int $id;
 
     #[ORM\Column(length: 50, name: 'CHG_TITLE')]
+    #[Assert\NotBlank(message: "Le titre ne peut pas être vide.")]
+    #[Assert\Length(
+        min: 3,
+        max: 50,
+        minMessage: "Le titre doit comporter au moins {{ limit }} caractères.",
+        maxMessage: "Le titre ne peut pas dépasser {{ limit }} caractères."
+    )]
     private string $title;
 
-    #[ORM\Column(length: 150, name: 'CHG_DESCRIPTION')]
+    #[ORM\Column(length: 250, name: 'CHG_DESCRIPTION')]
+    #[Assert\NotBlank(message: "La description ne peut pas être vide.")]
+    #[Assert\Length(
+        min: 3,
+        max: 250,
+        minMessage: "La description doit comporter au moins {{ limit }} caractères.",
+        maxMessage: "La description ne peut pas dépasser {{ limit }} caractères."
+    )]
     private string $description;
 
     /**
@@ -32,7 +47,7 @@ class Challenge
     private Collection $users;
 
     #[ORM\ManyToOne(inversedBy: 'challenges')]
-    #[ORM\JoinColumn(name:'USR_ID',referencedColumnName:'USR_ID')]
+    #[ORM\JoinColumn(name: 'USR_ID', referencedColumnName: 'USR_ID')]
     private ?User $author = null;
 
     public function __construct()
@@ -113,13 +128,13 @@ class Challenge
         return $this instanceof Quiz;
     }
 
-    public function isTest(): bool
+    public function isContest(): bool
     {
-        return $this instanceof Test;
+        return $this instanceof Contest;
     }
 
     public function getChallengeType(): string
     {
-        return $this->isQuiz() ? 'quiz' : ($this->isTest() ? 'test' : 'unknown');
+        return $this->isQuiz() ? 'quiz' : ($this->isContest() ? 'contest' : 'unknown');
     }
 }
