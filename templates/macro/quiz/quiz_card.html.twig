@@ -6,11 +6,6 @@
 					{{quiz.questions|length}}
 					questions</span>
 			</h2>
-
-			<p class="italic">
-				Par
-				{{quiz.author.username}}
-			</p>
 		</div>
 		{% if app.user.hasAnsweredQuiz(quiz)%}
 			<a href={{ path('app_quiz_start', {id: quiz.id} ) }} class="btn-secondary mx-auto">Voir mon score</a>

@@ -27,10 +27,13 @@
 						{% endif %}
 					{% endif  %}
 				</div>
-				<div class="rounded-full bg-fuchsia-500 h-fit px-3 py-1 w-fit">
-					<p>{{user.xp ? user.xp: 0}}
-						XP</p>
-				</div>
+				{% if is_granted('ROLE_ALPHA') %}
+
+					<div class="rounded-full bg-fuchsia-500 h-fit px-3 py-1 w-fit">
+						<p>{{user.xp ? user.xp: 0}}
+							XP</p>
+					</div>
+				{% endif %}
 			</div>
 
 		</section>
