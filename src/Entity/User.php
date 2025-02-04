@@ -126,6 +126,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: UserContest::class, mappedBy: 'user')]
     private Collection $userContests;
 
+    /**
+     * @var Collection<int, AlphaScream>
+     */
+    #[ORM\OneToMany(targetEntity: AlphaScream::class, mappedBy: 'alpha')]
+    private Collection $alphaScreams;
+
     public function __construct()
     {
         $this->responses = new ArrayCollection();
@@ -139,6 +145,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->userAnswers = new ArrayCollection();
         $this->banRequests = new ArrayCollection();
         $this->userContests = new ArrayCollection();
+        $this->alphaScreams = new ArrayCollection();
     }
 
     public function getId(): int
@@ -632,6 +639,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($userContest->getUser() === $this) {
                 $userContest->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, AlphaScream>
+     */
+    public function getAlphaScreams(): Collection
+    {
+        return $this->alphaScreams;
+    }
+
+    public function addAlphaScream(AlphaScream $alphaScream): static
+    {
+        if (!$this->alphaScreams->contains($alphaScream)) {
+            $this->alphaScreams->add($alphaScream);
+            $alphaScream->setAlpha($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAlphaScream(AlphaScream $alphaScream): static
+    {
+        if ($this->alphaScreams->removeElement($alphaScream)) {
+            // set the owning side to null (unless already changed)
+            if ($alphaScream->getAlpha() === $this) {
+                $alphaScream->setAlpha(null);
             }
         }
 

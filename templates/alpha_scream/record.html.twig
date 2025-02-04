@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cri de Guerre Alpha{% endblock %}
+
+{% block body %}
+    <h1>🦁 Cri de Guerre Alpha</h1>
+    <button id="startRecording">🎤 Lancer l'enregistrement</button>
+    <button id="stopRecording" disabled>🛑 Arrêter</button>
+    <audio id="audioPlayer" controls></audio>
+    <p id="scoreResult"></p>
+
+    <script src="{{ asset('js/audioRecorder.js') }}"></script>
+{% endblock %}
