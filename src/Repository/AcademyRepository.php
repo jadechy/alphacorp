@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\User;
 use App\Entity\Academy;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -14,6 +15,17 @@ class AcademyRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Academy::class);
+    }
+
+    /** @return Academy */
+    public function findByAuthor(User $user)
+    {
+        /** @var Academy */
+        return $this->createQueryBuilder('a')
+            ->where('a.author = :author')
+            ->setParameter('author', $user)
+            ->getQuery()
+            ->getResult();
     }
 
     //    /**
