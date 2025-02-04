@@ -52,23 +52,23 @@ jobs:
         echo "DATABASE_URL=mysql://app_user:helloworld@mysql:3306/app_db?serverVersion=8.0.33" >> .env
 
     - name: Add Git Safe Directory Exception
-      run: docker exec -i symfony_php_1 git config --global --add safe.directory /var/www/symfony
+      run: docker exec -i symfony-php-1 git config --global --add safe.directory /var/www/symfony
 
     - name: Fix Permissions
-      run: docker exec -i symfony_php_1 chown -R www-data:www-data /var/www/symfony
+      run: docker exec -i symfony-php-1 chown -R www-data:www-data /var/www/symfony
 
     - name: Wait for MySQL to be ready
       run: |
-        docker exec -e MYSQL_USER=app_user -e MYSQL_PASSWORD=helloworld symfony_php_1 bash -c "until mysql -h mysql -uapp_user -phey -e 'select 1'; do echo 'Waiting for MySQL...'; sleep 5; done;"
+        docker exec -e MYSQL_USER=app_user -e MYSQL_PASSWORD=helloworld symfony-php-1 bash -c "until mysql -h mysql -uapp_user -phey -e 'select 1'; do echo 'Waiting for MySQL...'; sleep 5; done;"
 
     - name: Clear Symfony cache
-      run: docker exec -i --user www-data symfony_php_1 php bin/console cache:clear || true
+      run: docker exec -i --user www-data symfony-php-1 php bin/console cache:clear || true
 
     - name: Install Dependencies
-      run: docker exec -i --user www-data symfony_php_1 composer install --no-dev --prefer-dist --no-progress --no-interaction
+      run: docker exec -i --user www-data symfony-php-1 composer install --no-dev --prefer-dist --no-progress --no-interaction
 
     - name: Migrations
-      run: docker exec -i symfony_php_1 php bin/console doctrine:migrations:migrate --no-interaction
+      run: docker exec -i symfony-php-1 php bin/console doctrine:migrations:migrate --no-interaction
 
     - name: Shut down services
       run: docker-compose down
