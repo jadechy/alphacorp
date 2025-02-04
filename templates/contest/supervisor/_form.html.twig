@@ -1,4 +1,6 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_widget(form,{"attr":{class: "flex flex-col gap-10"}}) }}
+<div class="mx-auto w-fit mt-10">
+	<button class="btn ">{{ button_label|default('Save') }}</button>
+</div>
 {{ form_end(form) }}

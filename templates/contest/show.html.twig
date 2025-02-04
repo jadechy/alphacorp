@@ -45,6 +45,6 @@
 		{% endif %}
 	</section>
 	{% if is_granted('edit', contest) %}
-		<a href="{{ path('app_supervisor_contest_edit', {'id': contest.id}) }}" class="btn btn-warning">Modifier</a>
+		<a href="{{ path('app_contest_supervisoredit', {'id': contest.id}) }}" class="btn btn-warning">Modifier</a>
 	{% endif %}
 {% endblock %}

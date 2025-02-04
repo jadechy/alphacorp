@@ -12,7 +12,7 @@ use Knp\Component\Pager\PaginatorInterface;
 
 use App\Entity\UserContest;
 use App\Entity\Contest;
-use App\Form\Admin\ContestAdminType;
+use App\Form\ContestType;
 use App\Repository\ContestRepository;
 
 #[Route('/admin/contest', name: "admin_contest_")]
@@ -37,10 +37,13 @@ class ContestAdminController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $contest = new Contest();
-        $form = $this->createForm(ContestAdminType::class, $contest);
+        $form = $this->createForm(ContestType::class, $contest);
         $form->handleRequest($request);
-
+        /** @var User $user */
+        $user = $this->getUser();
         if ($form->isSubmitted() && $form->isValid()) {
+            $contest->setAuthor($user);
+
             $entityManager->persist($contest);
             $entityManager->flush();
 
@@ -54,7 +57,7 @@ class ContestAdminController extends AbstractController
     }
 
     #[Route('/{id}', name: 'show', methods: ['GET'])]
-    public function show(Contest $contest,EntityManagerInterface $entityManager): Response
+    public function show(Contest $contest, EntityManagerInterface $entityManager): Response
     {
         return $this->render('admin/contest/show.html.twig', [
             'contest' => $contest,
@@ -64,7 +67,7 @@ class ContestAdminController extends AbstractController
     #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Contest $contest, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(ContestAdminType::class, $contest);
+        $form = $this->createForm(ContestType::class, $contest);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -82,7 +85,7 @@ class ContestAdminController extends AbstractController
     #[Route('/{id}', name: 'delete', methods: ['POST'])]
     public function delete(Request $request, Contest $contest, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$contest->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $contest->getId(), $request->getPayload()->getString('_token'))) {
             foreach ($contest->getUserContests() as $userContest) {
                 $entityManager->remove($userContest);
             }
@@ -92,5 +95,30 @@ class ContestAdminController extends AbstractController
         }
 
         return $this->redirectToRoute('admin_contest_homepage', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/user/{id}', name: 'user_delete', methods: ['POST'])]
+    public function deleteUserContest(Request $request, UserContest $userContest, EntityManagerInterface $entityManager): Response
+    {
+        $contest = $userContest->getContest();
+
+        if ($userContest && $this->isCsrfTokenValid('delete' . $userContest->getId(), $request->getPayload()->getString('_token'))) {
+            $entityManager->remove($userContest);
+            $entityManager->flush();
+        }
+        $this->addFlash('success', 'Suppression effectué avec succès.');
+        return $this->redirectToRoute('admin_contest_show', ["id" => $contest->getId()], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/user/success/{id}', name: 'user_success_edit', methods: ['POST'])]
+    public function UpdateUserContestSuccess(Request $request, UserContest $userContest, EntityManagerInterface $entityManager): Response
+    {
+        $success = $request->request->get('success');
+        $userContest->setSuccess($success);
+        $entityManager->flush();
+
+
+        $this->addFlash('success', 'Modification effectuée.');
+        return $this->redirectToRoute('admin_contest_show', ["id" => $userContest->getContest()->getId()], Response::HTTP_SEE_OTHER);
     }
 }

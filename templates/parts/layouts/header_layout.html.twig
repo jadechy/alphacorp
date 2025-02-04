@@ -33,6 +33,9 @@
 						{% include "parts/components/nav_link.html.twig" with {"pathName": "app_forum_homepage", "label": "Forum"} %}
 						{% if is_granted('ROLE_SUPERVISOR') %}
 							{% include "parts/components/nav_link.html.twig" with {"pathName": "app_quiz_supervisor_homepage", "label": "Quiz"} %}
+							{% include "parts/components/nav_link.html.twig" with {"pathName": "app_contest_supervisor_homepage", "label": "Défi"} %}
+
+
 						{% endif %}
 						{% if is_granted('ROLE_ADMIN') %}
 							{% include "parts/components/nav_link.html.twig" with {"pathName": "admin_homepage", "label": "Admin"} %}

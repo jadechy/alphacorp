@@ -1,117 +1,141 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Défi{% endblock %}
+{% block title %}Défi
+{% endblock %}
 
 {% block body %}
-    <h1>Défi</h1>
+	<a href={{ path("app_contest_supervisor_homepage") }} class="flex hover:outline outline-neutral-300 w-fit rounded-3xl px-3 py-2 mb-4">
+		{{ ux_icon('tabler:chevron-left', {class: 'w-6 h-6'}) }}
+		Retour à la liste
+	</a>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ contest.id }}</td>
-            </tr>
-            <tr>
-                <th>Title</th>
-                <td>{{ contest.title }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ contest.description }}</td>
-            </tr>
-            <tr>
-                <th>StartOn</th>
-                <td>{{ contest.startOn ? contest.startOn|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>EndOn</th>
-                <td>{{ contest.endOn ? contest.endOn|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Xp</th>
-                <td>{{ contest.xp }}</td>
-            </tr>
-        </tbody>
-    </table>
+	<section class="wrapper-table">
+		<table>
+			<thead>
+				<tr>
+					<th>Catégorie</th>
+					<th>Valeur</th>
+				</tr>
+			</thead>
 
-    <a href="{{ path('app_supervisor_contest_homepage') }}">back to list</a>
+			<tbody>
+				<tr>
+					<td>Id</td>
+					<td>{{ contest.id }}</td>
+				</tr>
+				<tr>
+					<td>Title</td>
+					<td>{{ contest.title }}</td>
+				</tr>
+				<tr>
+					<td>Description</td>
+					<td>{{ contest.description }}</td>
+				</tr>
+				<tr>
+					<td>StartOn</td>
+					<td>{{ contest.startOn ? contest.startOn|date('Y-m-d H:i:s') : '' }}</td>
+				</tr>
+				<tr>
+					<td>EndOn</td>
+					<td>{{ contest.endOn ? contest.endOn|date('Y-m-d H:i:s') : '' }}</td>
+				</tr>
+				<tr>
+					<td>Xp</td>
+					<td>{{ contest.xp }}</td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="flex items-center flex-col gap-5">
+			<a href="{{ path('app_contest_supervisor_edit', {'id': contest.id}) }}" class="btn">edit</a>
+			{{ include('contest/supervisor/_delete_form.html.twig') }}
+		</div>
+	</section>
 
-    <a href="{{ path('app_supervisor_contest_edit', {'id': contest.id}) }}">edit</a>
 
-    {{ include('contest/supervisor/_delete_form.html.twig') }}
+	<section class="mt-40">
+		{% if contest.userContests is not empty %}
+			<h2 class="text-2xl text-center">Les participations</h2>
 
-    {% if contest.userContests is not empty %}
-        <h2>Les participations</h2>
+			{% if pendingUserContests is not empty %}
+				<h3 class="text-xl">A valider</h3>
+				<div class="wrapper-table">
+					<table>
+						<thead>
+							<tr>
+								<th>Défi réalisé par</th>
+								<th>Image</th>
+								<th>Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for userContest in pendingUserContests %}
+								<tr>
+									<td>{{ userContest.user.username }}</td>
+									<td><img src="{{ asset('img/uploads/' ~ userContest.answer) }}" alt="Image du concours" class="w-30 h-auto rounded"></td>
+									<td>
+										<form action="{{ path('app_contest_supervisor_validate', {id: userContest.id, success: 1}) }}" method="POST">
+											<button type="submit" class="border-2 border-green-700 rounded-full transition group hover:bg-green-700 hover:scale-110">
+												{{ ux_icon('tabler:check', {class: 'w-6 h-6 text-green-700 group-hover:text-white transition'}) }}
+											</button>
+										</form>
 
-        {% if pendingUserContests is not empty %}
-            <h3>A valider</h3>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Défi réalisé par</th>
-                        <th>Image</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for userContest in pendingUserContests %}
-                        <tr>
-                            <td>{{ userContest.user.username }}</td>
-                            <td><img src="{{ asset('uploads/' ~ userContest.answer) }}" alt="Image du concours" class="w-full h-auto rounded"></td>
-                            <td>
-                                <form action="{{ path('app_supervisor_contest_validate', {id: userContest.id, success: 1}) }}" method="POST" style="display:inline;">
-                                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Valider le défi</button>
-                                </form>
+										<form action="{{ path('app_contest_supervisor_validate', {id: userContest.id, success: 0}) }}" method="POST">
+											<button type="submit" class="border-2 border-red-700 rounded-full transition hover:bg-red-700 group ml-4 hover:scale-110">
+												{{ ux_icon('tabler:x', {class: 'w-6 h-6 text-red-700 group-hover:text-white transition'}) }}
+											</button>
+										</form>
+									</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			{% else %}
+				<p class="text-neutral-300 italic">Il n'y a plus de participation à valider.</p>
+			{% endif %}
 
-                                <form action="{{ path('app_supervisor_contest_validate', {id: userContest.id, success: 0}) }}" method="POST" style="display:inline;">
-                                    <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded">Invalider le défi</button>
-                                </form>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        {% else %}
-            <p>Il n'y a plus de participation à valider.</p>
-        {% endif %}
-        
-        {% if validUserContests is not empty %}
-            <h3>Déjà valider</h3>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Défi réalisé par</th>
-                        <th>Image</th>
-                        <th>Résultat</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for userContest in validUserContests %}
-                        <tr>
-                            <td>{{ userContest.user.username }}</td>
-                            <td><img src="{{ asset('uploads/' ~ userContest.answer) }}" alt="Image du concours" class="w-full h-auto rounded"></td>
-                            <td>{{ userContest.success == 1 ? 'Validé' : 'Pas validé' }}</td>
-                            <td>
-                                {% if userContest.success == 0 %}
-                                    <form action="{{ path('app_supervisor_contest_validate', {id: userContest.id, success: 1}) }}" method="POST" style="display:inline;">
-                                        <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Valider le défi</button>
-                                    </form>
-                                {% else %}
-                                    <form action="{{ path('app_supervisor_contest_validate', {id: userContest.id, success: 0}) }}" method="POST" style="display:inline;">
-                                        <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded">Invalider le défi</button>
-                                    </form>
-                                {% endif %}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        {% else %}
-            <p>Il n'y a pas de participation validé.</p>
-        {% endif %}
-
-    {% else %}
-        <p>Il n'y a pas encore de participants à ce défi.</p>
-    {% endif %}
+			<article class="mt-10">
+				{% if validUserContests is not empty %}
+					<h3 class="text-xl text-center">Déjà valider</h3>
+					<div class="wrapper-table">
+						<table class="table">
+							<thead>
+								<tr>
+									<th>Défi réalisé par</th>
+									<th>Image</th>
+									<th>Résultat</th>
+									<th>Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for userContest in validUserContests %}
+									<tr>
+										<td>{{ userContest.user.username }}</td>
+										<td><img src="{{ asset('img/uploads/' ~ userContest.answer) }}" alt="Image du concours" class="w-30 h-auto rounded"></td>
+										<td>{{ userContest.success == 1 ? 'Validé' : 'Pas validé' }}</td>
+										<td>
+											{% if userContest.success == 0 %}
+												<form action="{{ path('app_contest_supervisor_validate', {id: userContest.id, success: 1}) }}" method="POST">
+													<button type="submit" class="border-2 border-green-700 rounded-full transition group hover:bg-green-700 hover:scale-110">
+														{{ ux_icon('tabler:check', {class: 'w-6 h-6 text-green-700 group-hover:text-white transition'}) }}</button>
+												</form>
+											{% else %}
+												<form action="{{ path('app_contest_supervisor_validate', {id: userContest.id, success: 0}) }}" method="POST">
+													<button type="submit" class="border-2 border-red-700 rounded-full transition hover:bg-red-700 group ml-4 hover:scale-110">{{ ux_icon('tabler:x', {class: 'w-6 h-6 text-red-700 group-hover:text-white transition'}) }}</button>
+												</form>
+											{% endif %}
+										</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				{% else %}
+					<p>Il n'y a pas de participation validé.</p>
+				{% endif %}
+			</article>
+		{% else %}
+			<p>Il n'y a pas encore de participants à ce défi.</p>
+		{% endif %}
+	</section>
 {% endblock %}

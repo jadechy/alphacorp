@@ -1,6 +1,7 @@
 {% extends 'admin/base_admin.html.twig' %}
 
-{% block admin_title %}Défi{% endblock %}
+{% block admin_title %}Défi
+{% endblock %}
 {% set return_path = 'admin_homepage' %}
 
 {% block admin_content %}
@@ -24,10 +25,10 @@
 						<th scope="col">
 							Date de fermeture
 						</th>
-                        <th scope="col">
+						<th scope="col">
 							XP
 						</th>
-                        <th scope="col">
+						<th scope="col">
 							Nombre de participation
 						</th>
 						<th scope="col">
@@ -41,14 +42,14 @@
 					{% for contest in pagination.items %}
 						<tr>
 							<td>{{ contest.id }}</td>
-                            <td>{{ contest.title }}</td>
-                            <td>{{ contest.description }}</td>
-                            <td>{{ contest.startOn ? contest.startOn|date('Y-m-d H:i:s') : '' }}</td>
-                            <td>{{ contest.endOn ? contest.endOn|date('Y-m-d H:i:s') : '' }}</td>
-                            <td>{{ contest.xp }}</td>
-                            <td>{{ contest.userContests|length }}</td>
-                            <td>{{ contest.author.username }}</td>
-                                <td>
+							<td>{{ contest.title }}</td>
+							<td>{{ contest.description }}</td>
+							<td>{{ contest.startOn ? contest.startOn|date('Y-m-d H:i:s') : '' }}</td>
+							<td>{{ contest.endOn ? contest.endOn|date('Y-m-d H:i:s') : '' }}</td>
+							<td>{{ contest.xp }}</td>
+							<td>{{ contest.userContests|length }}</td>
+							<td>{{ contest.author.username }}</td>
+							<td>
 								<a href="{{ path('admin_contest_show', {'id': contest.id}) }}">
 									{{ ux_icon('tabler:eye', {class: 'w-6 h-6'}) }}
 								</a>

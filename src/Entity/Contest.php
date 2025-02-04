@@ -7,18 +7,28 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ContestRepository::class)]
 #[ORM\Table(name: 'ALP_CONTEST')]
 class Contest extends Challenge
 {
     #[ORM\Column(type: Types::DATETIME_MUTABLE, name: 'CON_START_DATE')]
+    #[Assert\NotBlank(message: "La date de début est obligatoire.")]
     private \DateTimeInterface $startOn;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, name: 'CON_END_DATE')]
+    #[Assert\NotBlank(message: "La date de fin est obligatoire.")]
+    #[Assert\GreaterThan(propertyPath: "startOn", message: "La date de fin doit être postérieure à la date de début.")]
     private \DateTimeInterface $endOn;
 
     #[ORM\Column(nullable: true, name: 'CON_XP')]
+    #[Assert\Type(type: 'integer', message: "La valeur de XP doit être un entier.")]
+    #[Assert\Range(
+        min: 1,
+        max: 1000,
+        notInRangeMessage: "La valeur de XP doit être comprise entre {{ min }} et {{ max }}."
+    )]
     private ?int $xp = null;
 
     /**
@@ -100,7 +110,7 @@ class Contest extends Challenge
                 return $userContest;
             }
         }
-        
+
         return null;
     }
 
