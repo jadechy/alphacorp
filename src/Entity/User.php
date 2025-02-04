@@ -132,6 +132,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: AlphaScream::class, mappedBy: 'alpha')]
     private Collection $alphaScreams;
 
+    /**
+     * @var Collection<int, Academy>
+     */
+    #[ORM\OneToMany(targetEntity: Academy::class, mappedBy: 'author')]
+    private Collection $courses;
+
+    /**
+     * @var Collection<int, Academy>
+     */
+    #[ORM\ManyToMany(targetEntity: Academy::class, inversedBy: 'participants')]
+    #[ORM\JoinTable(name: 'ALP_USER_ACADEMY')]
+    #[ORM\JoinColumn(name: 'USR_ID', referencedColumnName: 'USR_ID')]
+    #[ORM\InverseJoinColumn(name: 'ACA_ID', referencedColumnName: 'ACA_ID')]
+    private Collection $academies;
+
     public function __construct()
     {
         $this->responses = new ArrayCollection();
@@ -146,6 +161,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->banRequests = new ArrayCollection();
         $this->userContests = new ArrayCollection();
         $this->alphaScreams = new ArrayCollection();
+        $this->courses = new ArrayCollection();
+        $this->academies = new ArrayCollection();
     }
 
     public function getId(): int
@@ -670,6 +687,63 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             if ($alphaScream->getAlpha() === $this) {
                 $alphaScream->setAlpha(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Academy>
+     */
+    public function getCourses(): Collection
+    {
+        return $this->courses;
+    }
+
+    public function addCourse(Academy $course): static
+    {
+        if (!$this->courses->contains($course)) {
+            $this->courses->add($course);
+            $course->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCourse(Academy $course): static
+    {
+        if ($this->courses->removeElement($course)) {
+            // set the owning side to null (unless already changed)
+            if ($course->getAuthor() === $this) {
+                $course->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Academy>
+     */
+    public function getAcademies(): Collection
+    {
+        return $this->academies;
+    }
+
+    public function addAcademy(Academy $academy): static
+    {
+        if (!$this->academies->contains($academy)) {
+            $this->academies->add($academy);
+            $academy->addParticipant($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAcademy(Academy $academy): static
+    {
+        if ($this->academies->removeElement($academy)) {
+            $academy->removeParticipant($this);
         }
 
         return $this;

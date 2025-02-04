@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Academy{% endblock %}
+
+{% block body %}
+    <h1>Academy</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ academy.id }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ academy.title }}</td>
+            </tr>
+            <tr>
+                <th>ShortDescription</th>
+                <td>{{ academy.shortDescription }}</td>
+            </tr>
+            <tr>
+                <th>Free</th>
+                <td>{{ academy.free ? 'Oui' : 'Non' }}</td>
+            </tr>
+            <tr>
+                <th>Price</th>
+                <td>{{ academy.price }}</td>
+            </tr>
+            <tr>
+                <th>CreatedAt</th>
+                <td>{{ academy.createdAt ? academy.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_supervisor_academy_index') }}">Retour à la liste</a>
+
+    <a href="{{ path('app_supervisor_academy_edit', {'id': academy.id}) }}">Modifier</a>
+
+    {{ include('academy/supervisor/_delete_form.html.twig') }}
+{% endblock %}

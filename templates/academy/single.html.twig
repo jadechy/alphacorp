@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Formations{% endblock %}
+
+{% block body %}
+    {% if academy.price > 0 and not hasAccess %}
+        <button id="checkout-button">Payer {{ academy.price }}€</button>
+
+        <script src="https://js.stripe.com/v3/"></script>
+        <script>
+            document.getElementById('checkout-button').addEventListener('click', function() {
+                fetch('/payment/{{ academy.id }}')
+                    .then(response => response.json())
+                    .then(session => {
+                        var stripe = Stripe('{{ stripe_public_key }}');
+                        stripe.redirectToCheckout({ sessionId: session.id });
+                    });
+            });
+        </script>
+    {% else %}
+        <p>{{academy.title}}</p>
+        <p>{{academy.shortDescription}}</p>
+        <p>{{academy.content}}</p>
+        <p>Formateur : {{ academy.author.username }}</p>
+        <p>Créé le: {{ academy.createdAt|format_datetime('short', 'none', locale: 'fr') }}</p>
+    {% endif %}
+
+    <a href="{{ path('app_academy_homepage' ) }}">Retour aux formations</a>
+{% endblock %}

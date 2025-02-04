@@ -22,6 +22,7 @@ use App\Entity\Topic;
 use App\Entity\UserAnswer;
 use App\Entity\UserContest;
 use App\Entity\AlphaScream;
+use App\Entity\Academy;
 use App\Enum\StatusUserEnum;
 use App\Enum\BromanceStatusEnum;
 use App\Enum\BromanceRequestStatusEnum;
@@ -46,6 +47,8 @@ class AppFixtures extends Fixture
 
     public const MAX_SCREAM = 12;
 
+    public const MAX_ACADEMY = 25;
+
     protected $faker;
 
     public function __construct(protected UserPasswordHasherInterface $passwordHasher)
@@ -64,6 +67,7 @@ class AppFixtures extends Fixture
         $challenges = [];
         $questions = [];
         $screams = [];
+        $academies = [];
 
         $this->createActiveUsers($manager, $users);
         $this->createUser($manager, $users);
@@ -85,6 +89,8 @@ class AppFixtures extends Fixture
         $this->linkUserToContest($manager, $users, $challenges);
 
         $this->createAlphaScreams($manager, $users, $screams);
+
+        $this->createAcademy($manager, $users, $academies);
 
         $manager->flush();
     }
@@ -653,6 +659,61 @@ class AppFixtures extends Fixture
 
             $manager->persist(object: $alphascream);
             $screams[] = $alphascream;
+        }
+    }
+
+    /**
+     * Crée des formations.
+     *
+     * @param ObjectManager $manager
+     * @param User[] $users Tableau d'objets User.
+     * @param Academy[] $academies Tableau d'objets Academy.
+     */
+    protected function createAcademy(ObjectManager $manager, array $users, array &$academies): void
+    {
+        for ($j = 0; $j < self::MAX_ACADEMY; $j++){
+            $academy = new Academy();
+
+            $supervisorUsers = array_filter($users, function ($user) {
+                return in_array('ROLE_SUPERVISOR', $user->getRoles(), true);
+            });
+
+            $supervisorUsers = array_values($supervisorUsers);
+            $supervisor = $supervisorUsers[array_rand($supervisorUsers)];
+            $academy->setAuthor($supervisor);
+
+            $academy->setTitle(title : "Titre la formation $j");
+            $academy->setShortDescription(shortDescription : "Courte description de la formation $j");
+            $academy->setContent(content : "Contenu de la formation $j");
+
+            $academy->setFree(random_int(0, 1) === 1);
+            if ($academy->isFree() === false) {
+                $randomPrice = random_int(100, 1000);
+                $academy->setPrice($randomPrice);
+            }
+            $academy->setCreatedAt(createdAt: new \DateTimeImmutable());
+            
+            $alphaUsers = array_filter($users, function ($user) {
+                return in_array('ROLE_ALPHA', $user->getRoles(), true);
+            });
+            
+            $alphaUsers = array_values($alphaUsers);
+            
+            if (count($alphaUsers) > 0) {
+                $randomKeys = array_rand($alphaUsers, min(5, count($alphaUsers)));
+            
+                if (!is_array($randomKeys)) {
+                    $randomKeys = [$randomKeys];
+                }
+            
+                foreach ($randomKeys as $key) {
+                    $user = $alphaUsers[$key];
+                    $user->addAcademy($academy); 
+                }
+            }
+            
+            $manager->persist(object: $academy);
+            $academies[] = $academy;
         }
     }
 }

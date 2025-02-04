@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Toutes les formations{% endblock %}
+
+{% import 'macro/academy_card.html.twig' as macros %}
+
+{% block body %}
+    {% for academy in academies %}
+        {{ macros.AfficheAcademyCard(academy) }}
+    {% endfor %}
+{% endblock %}
