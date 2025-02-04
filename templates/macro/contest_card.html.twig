@@ -26,10 +26,11 @@
 			</p>
 		</div>
 
-		{% if contest.isInFuture() and not app.user.hasAnsweredContest(contest) and not is_granted("ROLE_SUPERVISOR") %}
-            <a href={{ path('app_contest_single', {id: contest.id} ) }} class="btn mx-auto">Participer au défi</a>
-        {% elseif app.user.hasAnsweredContest(contest) and not is_granted("ROLE_SUPERVISOR") %}
+		{% if is_granted('view', contest) and contest.isInFuture() and not app.user.hasAnsweredContest(contest) %}
+            <a href={{ path('app_contest_single', {id: contest.id} ) }} class="btn mx-auto">Voir le défi</a>
+        {% elseif is_granted('participate', contest) and app.user.hasAnsweredContest(contest) %}
 			<a href={{ path('app_contest_single', {id: contest.id} ) }} class="btn-secondary mx-auto">Voir le résultat</a>
         {% endif %}
+
 	</div>
 {% endmacro %}

@@ -8,38 +8,43 @@
         <p>{{contest.description}}</p>
         <p>Par {{contest.author.username}}</p>
 
-        {% if answerImage %}
-            <h2 class="mt-5">Votre image :</h2>
-            <img src="{{ asset(answerImage) }}" alt="Image du concours" class="w-full h-auto rounded">
-            {% set userContest = contest.getUserContestForUser(app.user) %}
+        {% if is_granted('participate', contest) %}
+            {% if answerImage %}
+                <h2 class="mt-5">Votre image :</h2>
+                <img src="{{ asset(answerImage) }}" alt="Image du concours" class="w-full h-auto rounded">
+                {% set userContest = contest.getUserContestForUser(app.user) %}
 
-            {% if userContest is not null %}
-                {% if userContest.success is null %}
+                {% if userContest is not null %}
+                    {% if userContest.success is null %}
+                        <p>Vos résultats sont en cours</p>
+                        <p>Modifier l'image:</p>
+                        <form action="{{ path('app_contest_edit', {'id': contest.id}) }}" method="POST" enctype="multipart/form-data">
+                            <input type="file" name="image" accept="image/*" class="mb-3">
+                            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Ajouter une image</button>
+                        </form>
+                    {% elseif userContest.success == 1 %}
+                        <p>Vous avez réussi le défi. Vous avez gagné {{contest.xp}} xp.</p>
+                    {% else %}
+                        <p>Vous n'avez pas réussi le défi.</p>
+                    {% endif %}
+                {% else %}
                     <p>Vos résultats sont en cours</p>
                     <p>Modifier l'image:</p>
                     <form action="{{ path('app_contest_edit', {'id': contest.id}) }}" method="POST" enctype="multipart/form-data">
                         <input type="file" name="image" accept="image/*" class="mb-3">
                         <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Ajouter une image</button>
                     </form>
-                {% elseif userContest.success == 1 %}
-                    <p>Vous avez réussi le défi. Vous avez gagné {{contest.xp}} xp.</p>
-                {% else %}
-                    <p>Vous n'avez pas réussi le défi.</p>
                 {% endif %}
             {% else %}
-                <p>Vos résultats sont en cours</p>
-                <p>Modifier l'image:</p>
-                <form action="{{ path('app_contest_edit', {'id': contest.id}) }}" method="POST" enctype="multipart/form-data">
+                <p>Pour participer à ce défi ajouter votre photo:</p>
+                <form action="{{ path('app_contest_upload_image', {'id': contest.id}) }}" method="POST" enctype="multipart/form-data">
                     <input type="file" name="image" accept="image/*" class="mb-3">
                     <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Ajouter une image</button>
                 </form>
             {% endif %}
-        {% else %}
-            <p>Pour participer à ce défi ajouter votre photo:</p>
-            <form action="{{ path('app_contest_upload_image', {'id': contest.id}) }}" method="POST" enctype="multipart/form-data">
-                <input type="file" name="image" accept="image/*" class="mb-3">
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Ajouter une image</button>
-            </form>
+        {% endif %}
+        {% if is_granted('edit', contest) %}
+            <a href="{{ path('app_supervisor_contest_edit', {'id': contest.id}) }}" class="btn btn-warning">Modifier</a>
         {% endif %}
 	</section>
 {% endblock %}

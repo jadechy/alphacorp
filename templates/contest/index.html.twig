@@ -9,5 +9,9 @@
 		{% for contest in contests %}
 			{{ macros.AfficheContestCard(contest) }}
 		{% endfor %}
+
+		{% if is_granted('create', contest) %}
+            <a href="{{ path('app_supervisor_contest_new') }}" class="btn btn-warning">Créer</a>
+        {% endif %}
 	</section>
 {% endblock %}

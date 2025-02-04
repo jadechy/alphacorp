@@ -8,6 +8,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 use App\Entity\Contest;
 use App\Entity\UserContest;
@@ -18,26 +19,36 @@ use App\Service\FileUploader;
 final class ContestController extends AbstractController
 {
     #[Route('/', name: 'homepage')]
-    public function listContest(ContestRepository $contestRepository): Response
+    public function listContest(ContestRepository $contestRepository, AuthorizationCheckerInterface $authChecker): Response
     {
+        $contest = new Contest();
+
         $contests = $contestRepository->findAll();
 
         return $this->render('contest/index.html.twig', [
             'contests' => $contests,
+            'contest' => $contest
         ]);
     }
 
     #[Route('/{id}/single', name: 'single')]
-    public function singleContest(ContestRepository $contestRepository, Contest $contest): Response
+    public function singleContest(ContestRepository $contestRepository, Contest $contest, AuthorizationCheckerInterface $authChecker): Response
     {
+        if (!$authChecker->isGranted('view', $contest)) {
+            throw $this->createAccessDeniedException('Accès interdit');
+        }
+
         /** @var User $user */
         $user = $this->getUser();
 
         $answerImage = $user->getAnswerForContest($contest);
 
+        $canParticipate = $authChecker->isGranted('participate', $contest);
+
         return $this->render('contest/single.html.twig', [
             'contest' => $contest,
-            'answerImage' => $answerImage
+            'answerImage' => $answerImage,
+            'can_participate' => $canParticipate
         ]);
     }
 
