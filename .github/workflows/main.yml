@@ -68,9 +68,9 @@ jobs:
     - name: Install Dependencies
       run: docker exec -i --user www-data symfony_php_1 composer install --no-dev --prefer-dist --no-progress --no-interaction
 
-    - name: Wait for MySQL to be ready
-      run: |
-        docker exec -e MYSQL_USER=${MYSQL_USER} -e MYSQL_PASSWORD=${MYSQL_PASSWORD} symfony_php_1 bash -c "until mysql -h mysql -u${MYSQL_USER} -p${MYSQL_PASSWORD} -e 'select 1'; do echo 'Waiting for MySQL...'; sleep 5; done;"
+    # - name: Wait for MySQL to be ready
+    #   run: |
+    #     docker exec -e MYSQL_USER=${MYSQL_USER} -e MYSQL_PASSWORD=${MYSQL_PASSWORD} symfony_php_1 bash -c "until mysql -h mysql -u${MYSQL_USER} -p${MYSQL_PASSWORD} -e 'select 1'; do echo 'Waiting for MySQL...'; sleep 5; done;"
 
     - name: Migrations
       run: docker exec -i symfony_php_1 php bin/console doctrine:migrations:migrate --no-interaction
