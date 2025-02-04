@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tous les défis{% endblock %}
+
+{% import 'macro/contest_card.html.twig' as macros %}
+
+{% block body %}
+    <section class=" grid grid-cols-1 gap-y-5 md:grid-cols-3 lg:grid-cols-4 gap-x-7">
+		{% for contest in contests %}
+			{{ macros.AfficheContestCard(contest) }}
+		{% endfor %}
+
+		{% if is_granted('create', contest) %}
+            <a href="{{ path('app_supervisor_contest_new') }}" class="btn btn-warning">Créer</a>
+        {% endif %}
+	</section>
+{% endblock %}

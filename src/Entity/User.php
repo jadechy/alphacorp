@@ -120,7 +120,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: BanRequest::class, mappedBy: 'user')]
     private Collection $banRequests;
 
-
+    /**
+     * @var Collection<int, UserContest>
+     */
+    #[ORM\OneToMany(targetEntity: UserContest::class, mappedBy: 'user')]
+    private Collection $userContests;
 
     public function __construct()
     {
@@ -134,6 +138,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->authorEvents = new ArrayCollection();
         $this->userAnswers = new ArrayCollection();
         $this->banRequests = new ArrayCollection();
+        $this->userContests = new ArrayCollection();
     }
 
     public function getId(): int
@@ -574,6 +579,59 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($banRequest->getUser() === $this) {
                 $banRequest->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserContest>
+     */
+    public function getUserContests(): Collection
+    {
+        return $this->userContests;
+    }
+
+    public function hasAnsweredContest(Contest $contest): bool
+    {
+        /** @var UserContest $userContest */
+        foreach ($this->userContests as $userContest) {
+            if ($userContest->getContest() === $contest && !empty($userContest->getAnswer())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function getAnswerForContest(Contest $contest): ?string
+    {
+        foreach ($this->userContests as $userContest) {
+            if ($userContest->getContest() === $contest) {
+                return $userContest->getAnswer();
+            }
+        }
+
+        return null;
+    }
+
+
+    public function addUserContest(UserContest $userContest): static
+    {
+        if (!$this->userContests->contains($userContest)) {
+            $this->userContests->add($userContest);
+            $userContest->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserContest(UserContest $userContest): static
+    {
+        if ($this->userContests->removeElement($userContest)) {
+            // set the owning side to null (unless already changed)
+            if ($userContest->getUser() === $this) {
+                $userContest->setUser(null);
             }
         }
 

@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\InheritanceType('JOINED')]
 #[ORM\DiscriminatorColumn(name: 'CHG_TYPE', type: 'string')]
-#[ORM\DiscriminatorMap(['quiz' => Quiz::class, 'test' => Test::class])]
+#[ORM\DiscriminatorMap(['quiz' => Quiz::class, 'contest' => Contest::class])]
 #[ORM\Entity(repositoryClass: ChallengeRepository::class)]
 #[ORM\Table(name: 'ALP_CHALLENGE')]
 class Challenge
@@ -128,13 +128,13 @@ class Challenge
         return $this instanceof Quiz;
     }
 
-    public function isTest(): bool
+    public function isContest(): bool
     {
-        return $this instanceof Test;
+        return $this instanceof Contest;
     }
 
     public function getChallengeType(): string
     {
-        return $this->isQuiz() ? 'quiz' : ($this->isTest() ? 'test' : 'unknown');
+        return $this->isQuiz() ? 'quiz' : ($this->isContest() ? 'contest' : 'unknown');
     }
 }

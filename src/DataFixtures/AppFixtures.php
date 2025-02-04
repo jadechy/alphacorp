@@ -15,9 +15,10 @@ use App\Entity\Challenge;
 use App\Entity\Quiz;
 use App\Entity\Rank;
 use App\Entity\Response;
-use App\Entity\Test;
+use App\Entity\Contest;
 use App\Entity\Topic;
 use App\Entity\UserAnswer;
+use App\Entity\UserContest;
 use App\Enum\StatusUserEnum;
 use App\Enum\BromanceStatusEnum;
 use App\Enum\BromanceRequestStatusEnum;
@@ -80,6 +81,7 @@ class AppFixtures extends Fixture
         $this->createEvents($manager, $events, $users);
         $this->createChallenges($manager, $challenges, $users, $questions);
         $this->linkUserToAnswerQuestion($manager, $users, $questions);
+        $this->linkUserToContest($manager, $users, $challenges);
 
         $manager->flush();
     }
@@ -501,9 +503,9 @@ class AppFixtures extends Fixture
     protected function createChallenges(ObjectManager $manager, array &$challenges, array $users, array &$questions): void
     {
         for ($j = 0; $j < self::MAX_CHALLENGES; $j++) {
-            $challenge = random_int(min: 0, max: 1) === 0 ? new Test() : new Quiz();
-            $title = $challenge instanceof Test ? 'Test' : 'Quiz';
-            $description = $challenge instanceof Test ? 'Un test pour évaluer vos compétences.' : 'Un quiz pour tester vos connaissances.';
+            $challenge = random_int(min: 0, max: 1) === 0 ? new Contest() : new Quiz();
+            $title = $challenge instanceof Contest ? 'Contest' : 'Quiz';
+            $description = $challenge instanceof Contest ? 'Un défi pour évaluer vos compétences.' : 'Un quiz pour tester vos connaissances.';
 
             $challenge->setTitle($title);
             $challenge->setDescription(description: "$description");
@@ -529,10 +531,9 @@ class AppFixtures extends Fixture
                 }
             }
 
-            if ($challenge instanceof Test) {
+            if ($challenge instanceof Contest) {
                 $challenge->setStartOn(new \DateTimeImmutable('+1 day'));
                 $challenge->setEndOn(new \DateTimeImmutable('+7 days'));
-                $challenge->setSuccess(random_int(0, 1) === 1);
                 $challenge->setXp(5);
             }
 
@@ -616,6 +617,46 @@ class AppFixtures extends Fixture
             $userAnswer->setAnswer($answer);
 
             $manager->persist($userAnswer);
+        }
+    }
+
+    /**
+     * Lie les réponses au défis à un utilisateur ALPHA.
+     *
+     * @param ObjectManager $manager
+     * @param User[] $users Tableau d'objets User.
+     * @param Challenge[] $challenges Tableau d'objets Challenge.
+     */
+    protected function linkUserToContest(ObjectManager $manager, array $users, array $challenges): void
+    {
+        foreach ($users as $user) {
+            if (!in_array('ROLE_ALPHA', $user->getRoles(), true)) {
+                continue;
+            }
+
+            if (empty($challenges)) {
+                continue;
+            }
+
+            $contest = null;
+            foreach ($challenges as $challenge) {
+                if ($challenge instanceof Contest) {
+                    $contest = $challenge;
+                    break; 
+                }
+            }
+
+            if ($contest === null) {
+                continue; 
+            }
+
+            $userContest = new UserContest();
+            $userContest->setUser($user);
+            $userContest->setContest($contest);
+            $userContest->setAnswer('image.png');
+            $userContest->setSuccess(random_int(0, 1) === 1);
+
+            $manager->persist($userContest);
         }
     }
 }
