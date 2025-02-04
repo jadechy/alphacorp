@@ -12,7 +12,9 @@ permissions:
 jobs:
   symfony-tests:
     runs-on: ubuntu-latest
-
+    env:
+      MYSQL_USER: app_user
+      MYSQL_PASSWORD: hey
     steps:
     - name: Checkout the repository
       uses: actions/checkout@v4
@@ -65,10 +67,10 @@ jobs:
 
     - name: Install Dependencies
       run: docker exec -i --user www-data symfony_php_1 composer install --no-dev --prefer-dist --no-progress --no-interaction
-      
+
     - name: Wait for MySQL to be ready
       run: |
-        docker exec symfony_php_1 bash -c "until mysqladmin ping -h mysql --silent; do echo 'Waiting for MySQL...'; sleep 5; done;"
+        docker exec -e MYSQL_USER=${MYSQL_USER} -e MYSQL_PASSWORD=${MYSQL_PASSWORD} symfony_php_1 bash -c "until mysql -h mysql -u${MYSQL_USER} -p${MYSQL_PASSWORD} -e 'select 1'; do echo 'Waiting for MySQL...'; sleep 5; done;"
 
     - name: Migrations
       run: docker exec -i symfony_php_1 php bin/console doctrine:migrations:migrate --no-interaction
