@@ -1,0 +1,21 @@
+{% macro AfficheContestResult(contest, userContest) %}
+
+
+	<section class="mx-auto shadow-xl shadow-neutral-900 rounded text-center w-full md:w-fit h-fit p-5">
+		{{ ux_icon('tabler:heart-handshake', {class: 'w-30 h-30 mx-auto'}) }}
+		<h3 class="text-xl">Résultats</h3>
+		<p class="text-3xl text-fuchsia-500 mt-4">
+			{% if userContest.success is null %}
+				En cours de validation...
+			{%  elseif userContest.success == 1 %}
+				<span class="text-neutral-400 font-normal text-base">Vous avez réussi le défi.</span>
+			</br>
+
+			Vous avez gagné
+			{{contest.xp}}
+			xp.
+		{% else %}
+			Vous n'avez pas réussi le défi.
+		{% endif %}
+	</p>
+</section>{% endmacro %}

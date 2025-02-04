@@ -1,0 +1,16 @@
+{% macro AfficheBadgeStatus(event) %}
+	{% if event.isInFuture() %}
+		<span class="py-1.5 px-2.5 bg-green-500/30 rounded-full flex w-20 justify-center items-center gap-1">
+			<p class="font-medium text-xs ">Ouvert</p>
+		</span>
+	{% elseif event.isFinished() %}
+		<span class="py-1.5 px-2.5 bg-red-500/30 rounded-full flex w-20 justify-center items-center gap-1">
+			<p class="font-medium text-xs ">Fermé</p>
+		</span>
+	{% elseif event.isOngoing() %}
+		<span class="py-1.5 px-2.5 bg-orange-500/30 rounded-full flex w-20 justify-center items-center gap-1">
+			<p class="font-medium text-xs ">En cours</p>
+		</span>
+	{% endif %}
+
+{% endmacro %}

@@ -25,8 +25,10 @@
 					{% if not is_granted('ROLE_BANNED') %}
 						{% include "parts/components/nav_link.html.twig" with {"pathName": "app_event_homepage", "label": "Event"} %}
 						{% if is_granted('ROLE_ALPHA') %}
-							{% include "parts/components/nav_link.html.twig" with {"pathName": "app_user_alpha", "label": "Alpha"} %}
 							{% include "parts/components/nav_link.html.twig" with {"pathName": "app_quiz_homepage", "label": "Quiz"} %}
+							{% include "parts/components/nav_link.html.twig" with {"pathName": "app_contest_homepage", "label": "Défi"} %}
+							{% include "parts/components/nav_link.html.twig" with {"pathName": "app_user_alpha", "label": "Alpha"} %}
+
 						{% endif %}
 						{% include "parts/components/nav_link.html.twig" with {"pathName": "app_forum_homepage", "label": "Forum"} %}
 						{% if is_granted('ROLE_SUPERVISOR') %}
@@ -35,7 +37,7 @@
 						{% if is_granted('ROLE_ADMIN') %}
 							{% include "parts/components/nav_link.html.twig" with {"pathName": "admin_homepage", "label": "Admin"} %}
 						{% endif %}
-						<div class="flex gap-10">
+						<div class="flex gap-5">
 							{% include "parts/components/nav_link.html.twig" with {
 							"pathName": "app_user_show",
 							"parameters": {"id": app.user.id},
