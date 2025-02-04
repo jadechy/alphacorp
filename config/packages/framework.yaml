@@ -7,8 +7,7 @@ framework:
         handler_id: 'session.handler.native_file'
         cookie_secure: auto       # En production, cela doit être 'auto' si vous utilisez HTTPS
         cookie_samesite: 'Lax'    # Utilisez 'Strict' ou 'Lax' pour éviter des erreurs liées à CSRF
-        cookie_httponly: true
-        cookie_samesite: 'Lax'    # Définit la politique SameSite pour le cookie CSRF
+        cookie_httponly: true 
         storage_id: session.storage.native
 
     #esi: true
