@@ -19,6 +19,7 @@ use App\Entity\Contest;
 use App\Entity\Topic;
 use App\Entity\UserAnswer;
 use App\Entity\UserContest;
+use App\Entity\AlphaScream;
 use App\Enum\StatusUserEnum;
 use App\Enum\BromanceStatusEnum;
 use App\Enum\BromanceRequestStatusEnum;
@@ -40,8 +41,9 @@ class AppFixtures extends Fixture
 
     public const MAX_BROMANCE = 7;
 
-
     public const MAX_CHALLENGES = 15;
+
+    public const MAX_SCREAM = 12;
 
     protected $faker;
 
@@ -60,6 +62,7 @@ class AppFixtures extends Fixture
         $events = [];
         $challenges = [];
         $questions = [];
+        $screams = [];
 
         $this->createActiveUsers($manager, $users);
         $this->createUser($manager, $users);
@@ -82,6 +85,8 @@ class AppFixtures extends Fixture
         $this->createChallenges($manager, $challenges, $users, $questions);
         $this->linkUserToAnswerQuestion($manager, $users, $questions);
         $this->linkUserToContest($manager, $users, $challenges);
+
+        $this->createAlphaScreams($manager, $users, $screams);
 
         $manager->flush();
     }
@@ -657,6 +662,36 @@ class AppFixtures extends Fixture
             $userContest->setSuccess(random_int(0, 1) === 1);
 
             $manager->persist($userContest);
+        }
+    }
+
+    /**
+     * Crée des cris d'alpha.
+     *
+     * @param ObjectManager $manager
+     * @param User[] $users Tableau d'objets User.
+     * @param AlphaScream[] $screams Tableau d'objets AlphaScream.
+     */
+    protected function createAlphaScreams(ObjectManager $manager, array $users, array &$screams): void
+    {
+        for ($j = 0; $j < self::MAX_SCREAM; $j++){
+            $alphascream = new AlphaScream();
+
+            $alphaUsers = array_filter($users, function ($user) {
+                return in_array('ROLE_ALPHA', $user->getRoles(), true);
+            });
+
+            $alphaUsers = array_values($alphaUsers);
+
+            $alpha = $alphaUsers[array_rand($alphaUsers)];
+            $alphascream->setAlpha($alpha);
+
+            $alphascream->setScore(mt_rand(1, 1000) / 100);
+            $alphascream->setCreatedAt(createdAt: new \DateTimeImmutable());
+            $alphascream->setLevel();
+
+            $manager->persist(object: $alphascream);
+            $screams[] = $alphascream;
         }
     }
 }
