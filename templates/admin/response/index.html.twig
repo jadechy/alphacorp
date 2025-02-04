@@ -56,15 +56,12 @@
 							<td>
 								<form method="POST" action="{{ path('admin_response_change_status', { id: response.id }) }}" class="inline">
 									<input type="hidden" name="status" value="{{ response.status.value }}">
-									<div class="relative">
-										<select name="status" class="dashboard-select" onchange="this.form.submit()">
-											<option value="validated" {% if response.status.value == 'validated' %} selected {% endif %}>Validé</option>
-											<option value="rejected" {% if response.status.value == 'rejected' %} selected {% endif %}>Rejeté</option>
-											<option value="waiting" {% if response.status.value == 'waiting' %} selected {% endif %}>En attente</option>
-											<option value="deleted" {% if response.status.value == 'deleted' %} selected {% endif %}>Supprimé</option>
-										</select>
-
-									</div>
+									<select name="status" class="dashboard-select" onchange="this.form.submit()">
+										<option value="validated" {% if response.status.value == 'validated' %} selected {% endif %}>Validé</option>
+										<option value="rejected" {% if response.status.value == 'rejected' %} selected {% endif %}>Rejeté</option>
+										<option value="waiting" {% if response.status.value == 'waiting' %} selected {% endif %}>En attente</option>
+										<option value="deleted" {% if response.status.value == 'deleted' %} selected {% endif %}>Supprimé</option>
+									</select>
 								</form>
 							</td>
 							<td>

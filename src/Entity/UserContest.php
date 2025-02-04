@@ -21,7 +21,7 @@ class UserContest
     #[ORM\Column(length: 255, name: 'UCT_ANSWER')]
     private ?string $answer = null;
 
-    #[ORM\Column(name: 'UCT_SUCCESS', nullable:true)]
+    #[ORM\Column(name: 'UCT_SUCCESS', nullable: true)]
     private ?bool $success = null;
 
     #[ORM\ManyToOne(inversedBy: 'userContests')]
@@ -62,7 +62,7 @@ class UserContest
         return $this->success;
     }
 
-    public function setSuccess(bool $success): static
+    public function setSuccess(?bool $success): static
     {
         $this->success = $success;
 

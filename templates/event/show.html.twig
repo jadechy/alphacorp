@@ -3,6 +3,8 @@
 {% block title %}
 	{{event.title}}
 {% endblock %}
+{% import 'macro/badge_status.html.twig' as macrosBadge %}
+
 
 {% block body %}
 	<section class="flex md:flex-row flex-col md:gap-10 gap-5 justify-start">
@@ -14,21 +16,8 @@
 
 
 		<div class="w-full flex flex-col md:gap-5 gap-2.5">
-			<div>
-				{% if event.isInFuture() %}
-					<span class="py-1.5 px-2.5 bg-green-700/80 rounded-full flex w-20 justify-center items-center gap-1">
-						<p class="font-medium text-xs">Ouvert</p>
-					</span>
-				{% elseif event.isFinished() %}
-					<span class="py-1.5 px-2.5 bg-red-700/80 rounded-full flex w-20 justify-center items-center gap-1">
-						<p class="font-medium text-xs">Fermé</p>
-					</span>
-				{% elseif event.isOngoing() %}
-					<span class="py-1.5 px-2.5 bg-orange-700/80 rounded-full flex w-20 justify-center items-center gap-1">
-						<p class="font-medium text-xs">En cours</p>
-					</span>
-				{% endif %}
-			</div>
+			{{ macrosBadge.AfficheBadgeStatus(event) }}
+
 
 			<div class="text-neutral-400">
 				<p>{{event.location}}</p>

@@ -17,7 +17,7 @@
 		{% else %}
 			<div class="grid grid-cols-2 gap-y-5 sm:grid-cols-4 gap-x-5 mt-9">
 				{% for topic in topics %}
-					{% include "macro/topic_card.html.twig" with {"title": topic.title, "height": 50} %}
+					{% include "macro/forum/topic_card.html.twig" with {"title": topic.title, "height": 50} %}
 				{% endfor %}
 			</div>
 		{% endif %}

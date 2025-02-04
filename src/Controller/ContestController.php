@@ -13,6 +13,7 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use App\Entity\Contest;
 use App\Entity\UserContest;
 use App\Repository\ContestRepository;
+use App\Repository\UserContestRepository;
 use App\Service\FileUploader;
 
 #[Route('/contest', name: "app_contest_")]
@@ -31,8 +32,8 @@ final class ContestController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/single', name: 'single')]
-    public function singleContest(ContestRepository $contestRepository, Contest $contest, AuthorizationCheckerInterface $authChecker): Response
+    #[Route('/{id}/show', name: 'show')]
+    public function singleContest(Contest $contest, AuthorizationCheckerInterface $authChecker, UserContestRepository $userContestRepository): Response
     {
         if (!$authChecker->isGranted('view', $contest)) {
             throw $this->createAccessDeniedException('Accès interdit');
@@ -41,14 +42,20 @@ final class ContestController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
+        $user_contest = new UserContest();
+        $user_contest = $userContestRepository->findOneBy([
+            'contest' => $contest,
+            'user' => $user
+        ]);
         $answerImage = $user->getAnswerForContest($contest);
 
         $canParticipate = $authChecker->isGranted('participate', $contest);
 
-        return $this->render('contest/single.html.twig', [
+        return $this->render('contest/show.html.twig', [
             'contest' => $contest,
             'answerImage' => $answerImage,
-            'can_participate' => $canParticipate
+            'can_participate' => $canParticipate,
+            "user_contest" => $user_contest
         ]);
     }
 
@@ -56,7 +63,7 @@ final class ContestController extends AbstractController
     public function uploadImage(int $id, Request $request, EntityManagerInterface $entityManager, FileUploader $fileUploader): Response
     {
         $contest = $entityManager->getRepository(Contest::class)->find($id);
-        
+
         if (!$contest) {
             throw $this->createNotFoundException('Défi non trouvé.');
         }
@@ -75,28 +82,28 @@ final class ContestController extends AbstractController
             $userContest = new UserContest();
             $userContest->setUser($user);
             $userContest->setContest($contest);
-            $userContest->setAnswer($fileName); 
+            $userContest->setAnswer($fileName);
             $userContest->setSuccess(null);
 
             $entityManager->persist($userContest);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_contest_single', ['id' => $contest->getId()]);
+            return $this->redirectToRoute('app_contest_show', ['id' => $contest->getId()]);
         }
 
         return new Response('Aucune image sélectionnée.', Response::HTTP_BAD_REQUEST);
     }
 
     #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Contest $contest, EntityManagerInterface $entityManager, FileUploader $fileUploader): Response
+    public function edit(Request $request, Contest $contest, EntityManagerInterface $entityManager, FileUploader $fileUploader, UserContestRepository $userContestRepository): Response
     {
         $user = $this->getUser();
 
-        $userContest = $entityManager->getRepository(UserContest::class)->findOneBy([
+        $userContest = $userContestRepository->findOneBy([
             'contest' => $contest,
             'user' => $user
         ]);
-        
+
         if (!$user) {
             return new Response('Utilisateur non authentifié.', Response::HTTP_FORBIDDEN);
         }
@@ -104,7 +111,7 @@ final class ContestController extends AbstractController
         /** @var UploadedFile $imageFile */
         $imageFile = $request->files->get('image');
 
-        if ($imageFile) {
+        if ($imageFile && $userContest) {
             $oldImagePath = $userContest->getAnswer();
             if ($oldImagePath && file_exists($fileUploader->getTargetDirectory() . $oldImagePath)) {
                 unlink($fileUploader->getTargetDirectory() . $oldImagePath);
@@ -112,11 +119,11 @@ final class ContestController extends AbstractController
 
             /** @var UploadedFile $imageFile */
             $fileName = $fileUploader->upload($imageFile);
-            $userContest->setAnswer($fileName); 
+            $userContest->setAnswer($fileName);
 
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_contest_single', ['id' => $contest->getId()]);
+            return $this->redirectToRoute('app_contest_show', ['id' => $contest->getId()]);
         }
 
         return new Response('Aucune image sélectionnée.', Response::HTTP_BAD_REQUEST);

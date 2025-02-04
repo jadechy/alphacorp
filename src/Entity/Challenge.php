@@ -30,11 +30,11 @@ class Challenge
     )]
     private string $title;
 
-    #[ORM\Column(length: 150, name: 'CHG_DESCRIPTION')]
+    #[ORM\Column(length: 250, name: 'CHG_DESCRIPTION')]
     #[Assert\NotBlank(message: "La description ne peut pas être vide.")]
     #[Assert\Length(
         min: 3,
-        max: 150,
+        max: 250,
         minMessage: "La description doit comporter au moins {{ limit }} caractères.",
         maxMessage: "La description ne peut pas dépasser {{ limit }} caractères."
     )]
