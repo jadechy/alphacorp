@@ -30,6 +30,8 @@ services:
             - "9000" 
         env_file:
             - .env
+        depends_on:
+            - database
 
     nginx:
         build:
@@ -40,14 +42,6 @@ services:
             - symfony_app_vendor:/var/www/symfony/vendor
         ports:
             - 8000:80
-        networks:
-            - symfony_app
-
-    mailhog:
-        image: mailhog/mailhog 
-        ports:
-            - "1025:1025"  # SMTP Server
-            - "8025:8025"  # Web UI
         networks:
             - symfony_app
             
