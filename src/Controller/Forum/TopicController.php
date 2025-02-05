@@ -95,6 +95,7 @@ class TopicController extends AbstractController
     }
 
     #[IsGranted('ROLE_ALPHA')]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
     public function newTopic(Request $request, EntityManagerInterface $entityManager): HttpResponse
     {
@@ -128,6 +129,7 @@ class TopicController extends AbstractController
     }
 
     #[IsGranted('ROLE_ALPHA')]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     #[Route('/edit/{id}', name: 'edit', methods: ['GET', 'POST'])]
     public function editTopic(string $id, Request $request, Topic $topic, EntityManagerInterface $entityManager, Security $security): HttpResponse
     {
@@ -147,6 +149,7 @@ class TopicController extends AbstractController
     }
 
     #[IsGranted('ROLE_ALPHA')]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     #[Route('/delete/{id}', name: 'delete', methods: ['POST'])]
     public function delete(Request $request, Topic $topic, EntityManagerInterface $entityManager): HttpResponse
     {

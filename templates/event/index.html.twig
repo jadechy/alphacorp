@@ -6,13 +6,13 @@
 {% import 'macro/event_card.html.twig' as macros %}
 
 {% block body %}
+	{% if is_granted('create', event)%}
+		<a href={{path("app_event_new")}} class="btn">Créer un nouvel évènement</a>
+		<a href={{path("app_event_author")}} class="btn">Vois tous mes évènements</a>
+	{% endif %}
 	<section class="flex flex-col gap-10 my-10">
 		{% for event in events %}
 			{{ macros.AfficheEventCard(event) }}
 		{% endfor %}
 	</section>
-
-	{% if not is_granted("ROLE_SUPERVISOR")%}
-		<a href={{path("app_event_new")}} class="btn">Créer un nouvel event</a>
-	{% endif %}
 {% endblock %}

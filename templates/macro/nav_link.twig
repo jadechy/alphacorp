@@ -1,11 +1,7 @@
 {% macro menu_item(pathName, parameters = {}, label, category, isActiveCondition = null) %}
-
 	<li>
 		<a href={{ path(pathName, parameters | default({} )) }} class="hover:text-fuchsia-300 {{ (isActiveCondition is not null ? isActiveCondition : app.request.attributes.get('_route') starts with category) ? 'text-fuchsia-500' : 'text-white' }}">
-
-
 			{{ label | raw }}
 		</a>
 	</li>
-
 {% endmacro %}

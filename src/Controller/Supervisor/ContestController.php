@@ -16,6 +16,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/supervisor/contest', name: "app_contest_supervisor_")]
 #[IsGranted('ROLE_SUPERVISOR')]
+#[IsGranted('IS_AUTHENTICATED_FULLY')]
 class ContestController extends AbstractController
 {
     #[Route('/', name: 'homepage')]

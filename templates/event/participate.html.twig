@@ -4,12 +4,10 @@
 {% endblock %}
 {% import 'macro/event_card.html.twig' as macros %}
 
-
 {% block body %}
 	<section class="flex flex-col gap-10 mt-10">
 		{% for event in events %}
 			{{ macros.AfficheEventCard(event) }}
 		{% endfor %}
 	</section>
-
 {% endblock %}

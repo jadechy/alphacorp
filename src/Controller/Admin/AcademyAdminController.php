@@ -15,6 +15,7 @@ use Knp\Component\Pager\PaginatorInterface;
 
 #[Route('/admin/academy', name: "admin_academy_")]
 #[IsGranted('ROLE_ADMIN')]
+#[IsGranted('IS_AUTHENTICATED_FULLY')]
 final class AcademyAdminController extends AbstractController
 {
     #[Route('/', name: 'index', methods: ['GET'])]
