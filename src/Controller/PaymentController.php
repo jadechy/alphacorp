@@ -10,8 +10,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/payment', name: "app_payment_")]
+#[IsGranted('ROLE_ALPHA')]
+#[IsGranted('IS_AUTHENTICATED_FULLY')]
 class PaymentController extends AbstractController
 {
     #[Route('/{id}', name: 'checkout')]

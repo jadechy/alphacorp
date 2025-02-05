@@ -19,8 +19,9 @@ use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[IsGranted('ROLE_ADMIN')]
 #[Route('/admin/event', name: "admin_event_")]
+#[IsGranted('ROLE_ADMIN')]
+#[IsGranted('IS_AUTHENTICATED_FULLY')]
 class EventAdminController extends AbstractController
 {
     #[Route('/', name: 'homepage')]

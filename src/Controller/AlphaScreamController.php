@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 use App\Entity\User;
 use App\Entity\AlphaScream;
@@ -17,6 +18,8 @@ use FFMpeg\FFMpeg;
 use FFMpeg\FFProbe;
 
 #[Route('/scream', name: "app_scream_")]
+#[IsGranted('ROLE_ALPHA')]
+#[IsGranted('IS_AUTHENTICATED_FULLY')]
 final class AlphaScreamController extends AbstractController
 {
 

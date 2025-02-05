@@ -6,10 +6,14 @@
 
 
 {% block body %}
+	<a href="{{path("app_event_new")}}" class="btn">Créer un nouvel event</a>
 	<section class="flex flex-col gap-10 mt-10">
-		{% for event in events %}
-			{{ macros.AfficheEventCard(event) }}
-		{% endfor %}
+		{% if events is not empty %}
+			{% for event in events %}
+				{{ macros.AfficheEventCard(event) }}
+			{% endfor %}
+		{% else %}
+			<p>Vous n'avez pas encore créé d'évènement</p>
+		{% endif %}
 	</section>
-
 {% endblock %}

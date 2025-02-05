@@ -17,6 +17,7 @@ use App\Repository\EventRepository;
 
 #[Route('/admin', name: "admin_")]
 #[IsGranted('ROLE_ADMIN')]
+#[IsGranted('IS_AUTHENTICATED_FULLY')]
 class AdminController extends AbstractController
 {
     #[Route(path: '/', name: 'homepage')]

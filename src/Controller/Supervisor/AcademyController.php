@@ -14,6 +14,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/supervisor/academy', name: "app_supervisor_academy_")]
 #[IsGranted('ROLE_SUPERVISOR')]
+#[IsGranted('IS_AUTHENTICATED_FULLY')]
 class AcademyController extends AbstractController
 {
     #[Route('/', name: 'index', methods: ['GET'])]

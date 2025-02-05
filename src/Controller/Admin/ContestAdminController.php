@@ -18,6 +18,7 @@ use App\Repository\ContestRepository;
 
 #[Route('/admin/contest', name: "admin_contest_")]
 #[IsGranted('ROLE_ADMIN')]
+#[IsGranted('IS_AUTHENTICATED_FULLY')]
 class ContestAdminController extends AbstractController
 {
     #[Route('/', name: 'homepage')]

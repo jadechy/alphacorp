@@ -38,6 +38,10 @@ services:
     App\Security\Voter\ContestVoter:
         tags:
             - { name: 'security.voter' }
+
+    App\Security\Voter\EventVoter:
+        tags:
+            - { name: 'security.voter' }
     
     App\Service\StripeService:
         arguments:
