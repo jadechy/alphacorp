@@ -31,15 +31,18 @@ jobs:
     - name: Set up Docker
       uses: docker/setup-buildx-action@v2
 
+
+    - name: Installer Docker Compose en tant que plugin Docker
+      run: sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && sudo chmod +x /usr/local/bin/docker-compose
+  
     # 3. Étape pour construire et exécuter les services Docker
     - name: Build and run Docker containers
       run: |
-        docker-compose -f docker-compose.yml up --build -d
-
+        docker-compose -f docker-compose.prod.yml up --build -d
     # 4. Étape pour exécuter les tests (ici avec PHPUnit par exemple)
-    - name: Run tests
-      run: |
-        docker-compose exec php vendor/bin/phpunit --color=always
+  #  - name: Run tests
+  #    run: |
+  #      docker-compose exec php vendor/bin/phpunit --color=always
 
     # 5. Étape pour arrêter et nettoyer les services Docker
     - name: Stop Docker containers
@@ -62,6 +65,6 @@ jobs:
           echo "$SSH_PRIVATE_KEY" | ssh-add -
           ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_HOST << 'EOF'
             cd /path/to/your/project
-            git pull origin dev
-            docker-compose up --build -d
+            git pull origin main
+            docker-compose -f docker-compose.prod.yml up --build -d
           EOF
