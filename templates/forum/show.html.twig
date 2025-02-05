@@ -48,8 +48,7 @@
 				</a>
 			</div>
 		{% endif %}
-		{% if topic.responses is not empty
-		%}
+		{% if topic.responses is not empty%}
 			<div class="mt-8 pt-4 border-t border-t-neutral-300">
 				<h2>Réponses :</h2>
 				{% for response in topic.responses %}
@@ -77,6 +76,5 @@
 			</div>
 			{{ form_end(form) }}
 		{% endif %}
-
 	</section>
 {% endblock %}

@@ -35,9 +35,7 @@
 			</div>
 		</div>
 
-
 		<p class="mt-4 w-full">{{response.content}}</p>
-
 
 		{% if response.author == app.user and response.status.value != 'deleted' %}
 			<form method="POST" action="{{ path('app_response_delete', { id: response.id }) }}">
@@ -47,6 +45,5 @@
 				</button>
 			</form>
 		{% endif %}
-
 	</li>
 {% endmacro %}

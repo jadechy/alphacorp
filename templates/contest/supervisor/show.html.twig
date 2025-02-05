@@ -24,7 +24,7 @@
 					<td>{{ contest.id }}</td>
 				</tr>
 				<tr>
-					<td>Title</td>
+					<td>Titre</td>
 					<td>{{ contest.title }}</td>
 				</tr>
 				<tr>
@@ -32,11 +32,11 @@
 					<td>{{ contest.description }}</td>
 				</tr>
 				<tr>
-					<td>StartOn</td>
+					<td>Date d'ouverture</td>
 					<td>{{ contest.startOn ? contest.startOn|date('Y-m-d H:i:s') : '' }}</td>
 				</tr>
 				<tr>
-					<td>EndOn</td>
+					<td>Date de fermeture</td>
 					<td>{{ contest.endOn ? contest.endOn|date('Y-m-d H:i:s') : '' }}</td>
 				</tr>
 				<tr>
@@ -46,7 +46,7 @@
 			</tbody>
 		</table>
 		<div class="flex items-center flex-col gap-5">
-			<a href="{{ path('app_contest_supervisor_edit', {'id': contest.id}) }}" class="btn">edit</a>
+			<a href="{{ path('app_contest_supervisor_edit', {'id': contest.id}) }}" class="btn">Modifier</a>
 			{{ include('contest/supervisor/_delete_form.html.twig') }}
 		</div>
 	</section>

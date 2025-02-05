@@ -55,6 +55,7 @@ class TopicController extends AbstractController
 
         ]);
     }
+    
     #[Route('/show/{id}', name: 'show')]
     public function topic(string $id, Request $request, Topic $topic, EntityManagerInterface $entityManager): HttpResponse
     {

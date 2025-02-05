@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Academy{% endblock %}
+{% block title %}Créer une nouvelle formation{% endblock %}
 
 {% block body %}
-    <h1>Create new Academy</h1>
+    <h1>Créer une nouvelle formation</h1>
 
     {{ include('academy/supervisor/_form.html.twig') }}
 
-    <a href="{{ path('app_supervisor_academy_index') }}">back to list</a>
+    <a href="{{ path('app_supervisor_academy_index') }}">Retour à la liste</a>
 {% endblock %}

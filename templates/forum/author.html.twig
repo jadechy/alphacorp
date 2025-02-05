@@ -3,6 +3,8 @@
 {% block title %}Vos topics
 {% endblock %}
 
+{% import 'macro/forum/topic_card.html.twig' as macros %}
+
 {% block body %}
 	<section>
 		<a class="w-full" href="{{ path('app_forum_new')}}">
@@ -17,7 +19,7 @@
 		{% else %}
 			<div class="grid grid-cols-2 gap-y-5 sm:grid-cols-4 gap-x-5 mt-9">
 				{% for topic in topics %}
-					{% include "macro/forum/topic_card.html.twig" with {"title": topic.title, "height": 50} %}
+					{{ macros.afficheTopic(topic) }}
 				{% endfor %}
 			</div>
 		{% endif %}

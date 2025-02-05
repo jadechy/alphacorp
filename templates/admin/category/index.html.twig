@@ -6,13 +6,11 @@
 
 {% block admin_content %}
 	<div class="wrapper-table">
-
-
 		<table class="mt-9">
 			<thead>
 				<tr>
 					<th scope="col">ID</th>
-					<th scope="col">Name</th>
+					<th scope="col">Nom</th>
 					<th scope="col">Label</th>
 					<th scope="col">Nombre de Topics</th>
 					<th scope="col"></th>
@@ -43,7 +41,6 @@
 		</table>
 	</div>
 	{{ knp_pagination_render(pagination) }}
-
 	<div class="flex">
 		<a href="{{ path('admin_category_new') }}" class="btn w-full">
 			Ajouter une catégorie

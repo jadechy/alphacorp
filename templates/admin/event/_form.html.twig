@@ -1,107 +1,93 @@
 {{ form_start(form) }}
-<table>
-	<thead>
-		<tr>
-			<th>Catégorie</th>
-			<th>Valeur</th>
-		</tr>
-	</thead>
-	<tbody>
-		{# <tr>
-																																																																											<td>Id</td>
-																																																																											<td>{{event.id}}</td>
-																																																																										</tr> #}
-		<tr>
-			<td>Title</td>
-			<td>
-				<div>{{ form_widget(form.title) }}{{form_errors(form.title)}}</div>
-			</td>
-		</tr>
-		<tr>
-			<td>Short description</td>
-			<td>
-				<div>{{ form_widget(form.shortDescription) }}{{form_errors(form.shortDescription)}}</div>
-			</td>
-		</tr>
-		<tr>
-			<td>Long description</td>
-			<td>
-				<div>{{ form_widget(form.longDescription) }}{{form_errors(form.longDescription)}}</div>
-			</td>
-		</tr>
-		<tr>
-			<td>Location</td>
-			<td>
-				<div>{{form_widget(form.location)}}{{form_errors(form.location)}}</div>
-			</td>
-
-		</tr>
-		<tr>
-			<td>Start</td>
-			<td>
-				<div>{{form_widget(form.startAt)}}{{form_errors(form.startAt)}}</div>
-			</td>
-
-		</tr>
-		<tr>
-			<td>End</td>
-			<td>
-				<div>{{form_widget(form.endAt)}}
-					{{form_errors(form.startAt)}}
-				</div>
-
-			</td>
-
-		</tr>
-		<tr>
-			<td>Image</td>
-			<td>
-				{% if event and event.image %}
-					<div class="border-r pr-2">
-						<p>Image actuelle :</p>
-						<img src={{ asset('img/uploads/' ~ event.image) }} alt="Event Image" class="w-80 h-40 object-cover">
-
+	<table>
+		<thead>
+			<tr>
+				<th>Catégorie</th>
+				<th>Valeur</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Titre</td>
+				<td>
+					<div>{{ form_widget(form.title) }}{{form_errors(form.title)}}</div>
+				</td>
+			</tr>
+			<tr>
+				<td>Courte description</td>
+				<td>
+					<div>{{ form_widget(form.shortDescription) }}{{form_errors(form.shortDescription)}}</div>
+				</td>
+			</tr>
+			<tr>
+				<td>Longue description</td>
+				<td>
+					<div>{{ form_widget(form.longDescription) }}{{form_errors(form.longDescription)}}</div>
+				</td>
+			</tr>
+			<tr>
+				<td>Lieu</td>
+				<td>
+					<div>{{form_widget(form.location)}}{{form_errors(form.location)}}</div>
+				</td>
+			</tr>
+			<tr>
+				<td>Début</td>
+				<td>
+					<div>{{form_widget(form.startAt)}}{{form_errors(form.startAt)}}</div>
+				</td>
+			</tr>
+			<tr>
+				<td>Fin</td>
+				<td>
+					<div>{{form_widget(form.endAt)}}
+						{{form_errors(form.startAt)}}
 					</div>
-					{{ form_row(form.imageFile, { 'label': 'Nouvelle image' },  ) }}
-				{% else %}
-					{{ form_widget(form.imageFile,{"attr":{class: "flex flex-col"}}) }}
+				</td>
+			</tr>
+			<tr>
+				<td>Image</td>
+				<td>
+					{% if event and event.image %}
+						<div class="border-r pr-2">
+							<p>Image actuelle :</p>
+							<img src={{ asset('img/uploads/' ~ event.image) }} alt="Event Image" class="w-80 h-40 object-cover">
 
-				{% endif %}
+						</div>
+						{{ form_row(form.imageFile, { 'label': 'Nouvelle image' },  ) }}
+					{% else %}
+						{{ form_widget(form.imageFile,{"attr":{class: "flex flex-col"}}) }}
 
+					{% endif %}
+				</td>
+			</tr>
+			<tr>
+				<td>Auteur</td>
+				<td>
+					<div>{{form_widget(form.author)}}{{form_errors(form.author)}}</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					Participants -
+					{{ event.participants|length }}
+				</td>
+				<td>
+					{% for participant in event.participants %}
+						<button type="button" class="text-red-500 hover:text-red-700 remove-participant" data-participant-id="{{ participant.id }}" data-event-id="{{ event.id }}">
+							{{participant.id}}
+							{{participant.username}}
+						</button>
+					{% endfor %}
+					{{form_widget(form.participants)}}
+				</td>
+			</tr>
+		</tbody>
+	</table>
 
-			</td>
-		</tr>
-		<tr>
-			<td>Author</td>
-			<td>
-				<div>{{form_widget(form.author)}}{{form_errors(form.author)}}</div>
-			</td>
-
-
-		</tr>
-
-
-		<tr>
-			<td>
-				Participants -
-				{{ event.participants|length }}
-			</td>
-			<td>
-				{% for participant in event.participants %}
-					<button type="button" class="text-red-500 hover:text-red-700 remove-participant" data-participant-id="{{ participant.id }}" data-event-id="{{ event.id }}">
-						{{participant.id}}
-						{{participant.username}}
-					</button>
-				{% endfor %}
-				{{form_widget(form.participants)}}
-			</td>
-		</tr>
-	</tbody>
-</table>
-
-<div class="flex justify-center mb-4">
-	<button type="submit" class="btn">
-		{{ button_label|default('Enregistrer') }}
-	</button>
-</div>
+	<div class="flex justify-center mb-4">
+		<button type="submit" class="btn">
+			{{ button_label|default('Enregistrer') }}
+		</button>
+	</div>
 {{ form_end(form) }}
