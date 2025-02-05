@@ -1,11 +1,8 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/base_admin.html.twig' %}
 
-{% block title %}New Academy{% endblock %}
+{% block title %}New Academy
+{% endblock %}
 
-{% block body %}
-    <h1>Create new Academy</h1>
-
-    {{ include('admin/academy/_form.html.twig') }}
-
-    <a href="{{ path('admin_academy_index') }}">back to list</a>
+{% block admin_content %}
+	{{ include('admin/academy/_form.html.twig') }}
 {% endblock %}

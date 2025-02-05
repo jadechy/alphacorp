@@ -30,7 +30,7 @@
 							{{ macros.menu_item('app_quiz_homepage', {}, 'Quiz', "app_quiz") }}
 							{{ macros.menu_item('app_contest_homepage', {}, 'Défi', "app_contest") }}
 							{{ macros.menu_item('app_user_alpha', {}, 'Alpha', "app_user_show",app.request.attributes.get('_route') starts with "app_user" and app.request.attributes.get("id")!= app.user.id ) }}
-							{{ macros.menu_item('app_academy_homepage', {}, 'Formations') }}
+							{{ macros.menu_item('app_academy_homepage', {}, 'Formations', "app_academy") }}
 						{% endif %}
 
 

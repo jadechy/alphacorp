@@ -1,5 +1,3 @@
-// import "./bootstrap.js";
-
 /*
  * Welcome to your app's main JavaScript file!
  *
@@ -14,3 +12,4 @@ import "./js/deleteParticipantEvent.js";
 import "./js/accordion.js";
 import "./js/header.js";
 import "./js/audioRecorder.js";
+import "./js/stripeButton.js";

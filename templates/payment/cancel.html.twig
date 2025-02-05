@@ -1,9 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Paiement annulé{% endblock %}
+{% block title %}Paiement annulé
+{% endblock %}
 
 {% block body %}
-    <h1>Paiement annulé</h1>
-    <p>Votre paiement pour la formation <strong>{{ academy.title }}</strong> a été annulé.</p>
-    <a href="{{ path('app_academy_single', {'id': academy.id}) }}">Retour à la formation</a>
+	<p class="mb-8">Votre paiement pour la formation
+		<strong>{{ academy.title }}</strong>
+		a été annulé.</p>
+	<a href="{{ path('app_academy_show', {'id': academy.id}) }}" class="btn">Retour à la formation</a>
 {% endblock %}

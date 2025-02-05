@@ -1,9 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Paiement réussi{% endblock %}
+{% block title %}Paiement réussi !
+{% endblock %}
 
 {% block body %}
-    <h1>Paiement réussi !</h1>
-    <p>Merci pour votre achat. Vous avez maintenant accès à la formation <strong>{{ academy.title }}</strong>.</p>
-    <a href="{{ path('app_academy_single', {'id': academy.id}) }}">Accéder à la formation</a>
+	<p class="mb-8">Merci pour votre achat. Vous avez maintenant accès à la formation
+		<strong>{{ academy.title }}</strong>.</p>
+	<a href="{{ path('app_academy_show', {'id': academy.id}) }}" class="btn">Accéder à la formation</a>
 {% endblock %}
