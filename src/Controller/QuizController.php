@@ -21,6 +21,7 @@ use App\Repository\AnswerRepository;
 use App\Repository\UserAnswerRepository;
 
 #[Route('/quiz', name: "app_quiz_")]
+#[IsGranted('ROLE_ALPHA')]
 class QuizController extends AbstractController
 {
     #[Route('/', name: 'homepage')]

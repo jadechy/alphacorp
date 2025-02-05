@@ -15,6 +15,7 @@ use App\Repository\EventRepository;
 use App\Form\EventType;
 use App\Service\FileUploader;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 #[IsGranted('ROLE_USER')]
 #[Route('/event', name: "app_event_")]
@@ -27,9 +28,12 @@ class EventController extends AbstractController
         $user = $this->getUser();
         $events =  $eventRepository->findAllExcludingUser($user);
 
+        $event = new Event();
+
         return $this->render('event/index.html.twig', [
             'events' => $events,
-            "user" => $user
+            'user' => $user,
+            'event' => $event
         ]);
     }
 
@@ -42,11 +46,15 @@ class EventController extends AbstractController
     }
 
     #[Route('/author', name: 'author')]
-    public function authorEvent(EventRepository $eventRepository): Response
+    public function authorEvent(EventRepository $eventRepository, AuthorizationCheckerInterface $authChecker): Response
     {
         $user = $this->getUser();
         if (!$user) {
             throw $this->createAccessDeniedException('Vous devez être connecté pour effectuer cette action.');
+        }
+
+        if (!$authChecker->isGranted('create', new Event())) {
+            throw $this->createAccessDeniedException('Accès interdit');
         }
 
         $events = $eventRepository->findBy(['author' => $user]);
