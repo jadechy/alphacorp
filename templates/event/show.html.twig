@@ -5,7 +5,6 @@
 {% endblock %}
 {% import 'macro/badge_status.html.twig' as macrosBadge %}
 
-
 {% block body %}
 	<section class="flex md:flex-row flex-col md:gap-10 gap-5 justify-start">
 		{% if event.image %}
@@ -13,12 +12,8 @@
 		{% else %}
 			{{ ux_icon('tabler:calendar-filled', {class: 'w-40 h-40 mx-auto mt-10'}) }}
 		{% endif %}
-
-
 		<div class="w-full flex flex-col md:gap-5 gap-2.5">
 			{{ macrosBadge.AfficheBadgeStatus(event) }}
-
-
 			<div class="text-neutral-400">
 				<p>{{event.location}}</p>
 				<p>
@@ -31,8 +26,7 @@
 				{{ event.participants|length }}
 				participants à cet évènement
 			</p>
-			{% if event.author != app.user and 'ROLE_ADMIN' not in app.user.roles and event.isInFuture() and not is_granted("ROLE_SUPERVISOR") %}
-
+			{% if event.author != app.user and event.isInFuture() and is_granted('participate',event) %}
 				{% if event.isUserParticipating(app.user) %}
 					<a href="{{ path('app_event_unparticipate', { id: event.id }) }}">
 						<button type="submit" class="btn-secondary">
@@ -60,7 +54,6 @@
 				Auteur :
 				{{event.author.username}}
 			</a>
-
 		</div>
 	</section>
 {% endblock %}

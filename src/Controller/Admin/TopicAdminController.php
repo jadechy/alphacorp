@@ -19,8 +19,9 @@ use App\Form\Admin\ResponseAdminType;
 use App\Form\Admin\TopicAdminType;
 use Knp\Component\Pager\PaginatorInterface;
 
-// #[IsGranted('ROLE_ADMIN')]
 #[Route('/admin/topic', name: "admin_topic_")]
+#[IsGranted('ROLE_ADMIN')]
+#[IsGranted('IS_AUTHENTICATED_FULLY')]
 class TopicAdminController extends AbstractController
 {
     #[Route('/', name: 'homepage')]

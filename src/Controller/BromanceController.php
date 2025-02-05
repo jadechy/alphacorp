@@ -12,8 +12,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/user/bromance', name: "app_bromance_")]
+#[IsGranted('ROLE_ALPHA')]
+#[IsGranted('IS_AUTHENTICATED_FULLY')]
 class BromanceController extends AbstractController
 {
     #[Route('/', name: 'homepage', methods: ['GET'])]
