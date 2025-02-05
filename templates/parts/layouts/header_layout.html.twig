@@ -30,7 +30,8 @@
 						{% if is_granted('ROLE_ALPHA') %}
 							{{ macros.menu_item('app_quiz_homepage', {}, 'Quiz', "app_quiz") }}
 							{{ macros.menu_item('app_contest_homepage', {}, 'Défi', "app_contest") }}
-							{{ macros.menu_item('app_user_alpha', {}, 'Alpha', "app_user_show",app.request.attributes.get('_route') starts with "app_user" and app.request.attributes.get("id")!= app.user.id ) }}
+							{{ macros.menu_item('app_user_alpha', {}, 'Alpha', "app_user_show", app.request.attributes.get('_route') starts with "app_user" and app.request.attributes.get("id")!= app.user.id and not (app.request.attributes.get('_route')  starts with "app_user_edit") ) }}
+
 							{{ macros.menu_item('app_academy_homepage', {}, 'Formations', "app_academy") }}
 						{% endif %}
 
@@ -47,7 +48,8 @@
 							{{ macros.menu_item('admin_homepage', {}, 'Admin', "admin") }}
 						{% endif %}
 						<div class="flex gap-5">
-							{{ macros.menu_item('app_user_show', {'id': app.user.id}, ux_icon('tabler:user-filled', {class: 'w-6 h-6'}) | raw, "app_user_show",app.request.attributes.get('_route') starts with "app_user_show" and app.request.attributes.get("id")== app.user.id ) }}
+							{{ macros.menu_item('app_user_show', {'id': app.user.id}, ux_icon('tabler:user-filled', {class: 'w-6 h-6'}) | raw, "app_user_show",(app.request.attributes.get('_route') starts with "app_user_show" and app.request.attributes.get("id")== app.user.id) or app.request.attributes.get('_route') starts with "app_user_edit") }}
+
 							{{ macros.menu_item('app_logout', {}, ux_icon('tabler:door-exit', {class: 'w-6 h-6'}) | raw) }}
 						</div>
 					{% else %}

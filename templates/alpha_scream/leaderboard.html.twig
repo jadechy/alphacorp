@@ -29,7 +29,7 @@
 						<td>{{ loop.index }}</td>
 						<td>
 							<a href={{path("app_user_show", {"id": scream.alpha.id} )}} class="w-fit items-center">
-								<img src="{{asset('img/uploads/' ~ scream.alpha.image ~ '.jpg')}}" class="size-10 rounded-full object-cover"/>
+								<img src="{{asset('img/uploads/' ~ scream.alpha.image)}}" class="size-10 rounded-full object-cover"/>
 
 
 								{{ scream.alpha.username }}

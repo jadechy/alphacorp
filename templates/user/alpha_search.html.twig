@@ -15,7 +15,7 @@
 			<div class="grid grid-cols-2 gap-y-5 sm:grid-cols-4 gap-x-5">
 				{% for user in users %}
 					<a href={{ path('app_user_show', {id: user.id} ) }}>
-						{% include "parts/components/card_col.html.twig" with {"title": user.username, "height": 40, "img": user.image ~ ".jpg"} %}
+						{% include "parts/components/card_col.html.twig" with {"title": user.username, "height": 40, "img": user.image} %}
 
 
 					</a>
