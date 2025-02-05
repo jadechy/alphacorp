@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% import 'macro/response.html.twig' as macros %}
+{% import 'macro/forum/response.html.twig' as macros %}
 
 {% block title %}
 	{{topic.title}}
@@ -54,7 +54,7 @@
 				<h2>Réponses :</h2>
 				{% for response in topic.responses %}
 					{% if response.status.value == "validated" %}
-						{% include './macro/response.html.twig' %}
+						{% include './macro/forum/response.html.twig' %}
 						{{ macros.afficheReponse(response, topic) }}
 					{% endif %}
 

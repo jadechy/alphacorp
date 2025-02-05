@@ -21,11 +21,11 @@ class Answer
     #[ORM\JoinColumn(name: 'QST_ID', referencedColumnName: 'QST_ID')]
     private ?Question $question = null;
 
-    #[ORM\Column(length: 50, name: 'ANS_ANSWER')]
+    #[ORM\Column(length: 150, name: 'ANS_ANSWER')]
     #[Assert\NotBlank(message: "La réponse ne peut pas être vide.")]
     #[Assert\Length(
         min: 3,
-        max: 50,
+        max: 150,
         minMessage: "La réponse doit comporter au moins {{ limit }} caractères.",
         maxMessage: "La réponse ne doit pas dépasser {{ limit }} caractères."
     )]

@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Academy{% endblock %}
+
+{% block body %}
+    <h1>Edit Academy</h1>
+
+    {{ include('admin/academy/_form.html.twig', {'button_label': 'Modifier'}) }}
+
+    <a href="{{ path('admin_academy_index') }}">Retour à la liste</a>
+
+    {{ include('admin/academy/_delete_form.html.twig') }}
+{% endblock %}

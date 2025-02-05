@@ -6,7 +6,7 @@
 		</h2>
 		<div class="grid grid-cols-1 gap-y-5 sm:grid-cols-4 gap-x-5 pt-8">
 			{% for topic in user.topics|slice(0, 5) %}
-				{% include "macro/topic_card.html.twig" with {"title": topic.title, "height": 50} %}
+				{% include "macro/forum/topic_card.html.twig" with {"title": topic.title, "height": 50} %}
 			{% endfor %}
 		</div>
 		{% if user.topics|length > 5 %}
