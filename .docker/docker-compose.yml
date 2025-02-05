@@ -39,7 +39,9 @@ services:
             - symfony_app_var:/var/www/symfony/var
             - symfony_app_vendor:/var/www/symfony/vendor
         ports:
-            - 8000:80
+            - 80:80
+        depends_on:
+            - php
         networks:
             - symfony_app
 
