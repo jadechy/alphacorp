@@ -13,11 +13,13 @@ use App\Entity\BanRequest;
 use App\Entity\Rank;
 use App\Form\BanRequestType;
 use App\Enum\StatusUserEnum;
+use App\Form\RegistrationType;
 use App\Form\UserEditType;
 use App\Repository\BromanceRepository;
 use App\Repository\RankRepository;
 use App\Repository\UserRepository;
 use App\Service\CategoryColorService;
+use App\Service\FileUploader;
 
 #[Route('/user', name: "app_user_")]
 class UserController extends AbstractController
@@ -65,7 +67,7 @@ class UserController extends AbstractController
         ]);
     }
     #[Route('/edit', name: 'edit')]
-    public function myProfilEdit(Request $request, EntityManagerInterface $entityManager): Response
+    public function myProfilEdit(Request $request, FileUploader $fileUploader, EntityManagerInterface $entityManager): Response
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -79,6 +81,12 @@ class UserController extends AbstractController
             } elseif ($gender === 'female') {
                 /** @var User $user */
                 $user->setRoles(['ROLE_SUPERVISOR']);
+            }
+            /** @var UploadedFile $imageFile */
+            $image = $form->get('image')->getData();
+            if ($image) {
+                $fileName = $fileUploader->upload($image);
+                $user->setImage($fileName);
             }
             $entityManager->flush();
             return $this->redirectToRoute('app_user_show', ["id" => $user->getId()], Response::HTTP_SEE_OTHER);

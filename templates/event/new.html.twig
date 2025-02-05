@@ -1,12 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Créer un évènemet
+{% block title %}Créer un évènement
 {% endblock %}
 
 {% block body %}
 	<section>
 		<a class="btn-secondary" href={{path("app_event_author")}}>
-			Voir mes évènements crée
+			Voir mes évènements créé
 		</a>
 
 		{{ include('event/_form.html.twig') }}

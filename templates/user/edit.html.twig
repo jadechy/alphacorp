@@ -9,19 +9,15 @@
 	<div>
 		<!-- Section Profil -->
 		<section class="flex gap-6 w-full">
-			<img src="{{ asset('img/1.png') }}" class="w-80 object-cover rounded-sm" alt="Profile Picture"/>
-			{{ form_start(form, {'attr': {'class': 'flex flex-col justify-between gap-8 w-full'}}) }}
-			{{ form_widget(form.username) }}
-			{{ form_widget(form.email) }}
-			{{ form_widget(form.gender) }}
-			<button type="submit" class="btn">
+			<img src={{ asset('img/uploads/' ~ user.image ) }} class="md:w-80 object-cover rounded-sm h-full w-full" alt="Profile Picture"/>
+
+			{{ form_start(form, {"attr":{"class":"w-full"}}) }}
+			{{ form_widget(form, {'attr': {'class': 'flex flex-col justify-between gap-3 w-full'}}) }}
+
+			<button type="submit" class="btn mt-3">
 				{{ button_label|default('Enregistrer') }}
 			</button>
 			{{ form_end(form) }}
-
-
 		</section>
-
-
 	</div>
 {% endblock %}

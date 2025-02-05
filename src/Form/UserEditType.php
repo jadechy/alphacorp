@@ -9,6 +9,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 class UserEditType extends AbstractType
 {
@@ -40,6 +41,11 @@ class UserEditType extends AbstractType
                 'attr' => [
                     'class' => 'dashboard-select',
                 ]
+            ])
+            ->add('image', FileType::class, [
+                'label' => 'Image',
+                'mapped' => false,
+                'required' => false,
             ]);
     }
 

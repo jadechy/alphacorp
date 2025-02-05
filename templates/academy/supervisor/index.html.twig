@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Formations
+{% endblock %}
+
+{% block body %}
+	<div class="wrapper-table">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Titre</th>
+					<th>Courte description</th>
+					<th>Gratuit</th>
+					<th>Prix</th>
+					<th>actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for academy in academies %}
+					<tr>
+						<td>{{ academy.title }}</td>
+						<td>{{ academy.shortDescription }}</td>
+						<td>{{ academy.free ? 'Yes' : 'No' }}</td>
+						<td>{{ academy.price }}</td>
+						<td>
+							<a href="{{ path('app_supervisor_academy_show', {'id': academy.id}) }}">show</a>
+							<a href="{{ path('app_supervisor_academy_edit', {'id': academy.id}) }}">edit</a>
+						</td>
+					</tr>
+				{% else %}
+					<tr>
+						<td colspan="8">Vous n'avez crée aucune formation.</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	<a href="{{ path('app_supervisor_academy_new') }}" class="btn">Créer une nouvelle formation</a>
+{% endblock %}

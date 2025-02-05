@@ -19,6 +19,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use App\Entity\User;
 use App\Form\RegistrationType;
 use App\Enum\StatusUserEnum;
+use App\Service\FileUploader;
 
 class AuthController extends AbstractController
 {
@@ -43,7 +44,7 @@ class AuthController extends AbstractController
     }
 
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): Response
+    public function register(Request $request, FileUploader $fileUploader, EntityManagerInterface $entityManager): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationType::class, $user);
@@ -62,7 +63,12 @@ class AuthController extends AbstractController
             } elseif ($gender === 'female') {
                 $user->setRoles(['ROLE_SUPERVISOR']);
             }
-
+            /** @var UploadedFile $imageFile */
+            $image = $form->get('image')->getData();
+            if ($image) {
+                $fileName = $fileUploader->upload($image);
+                $user->setImage($fileName);
+            }
             $user->setStatus(StatusUserEnum::ACTIVE);
 
             $entityManager->persist($user);

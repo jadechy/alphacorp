@@ -48,16 +48,17 @@
 				</a>
 			</div>
 		{% endif %}
-		{% if topic.responses is not empty
-		%}
+		{% if topic.responses is not empty%}
 			<div class="mt-8 pt-4 border-t border-t-neutral-300">
 				<h2>Réponses :</h2>
+				{% include './macro/forum/response.html.twig' %}
 				{% for response in topic.responses %}
 					{% if response.status.value == "validated" %}
-						{% include './macro/forum/response.html.twig' %}
 						{{ macros.afficheReponse(response, topic) }}
 					{% endif %}
-
+					{% if response.status.value == "waiting" and response.author == app.user %}
+						{{ macros.afficheReponse(response, topic) }}
+					{% endif %}
 				{% endfor %}
 			</div>
 		{% endif %}
@@ -77,6 +78,5 @@
 			</div>
 			{{ form_end(form) }}
 		{% endif %}
-
 	</section>
 {% endblock %}

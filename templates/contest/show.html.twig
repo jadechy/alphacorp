@@ -7,14 +7,11 @@
 {% import 'macro/badge_status.html.twig' as macrosBadge %}
 {% import 'macro/contest/contest_result.html.twig' as macrosContestResult %}
 
-
 {% block body %}
 	<div>
 		<div class="flex justify-between">
 			<p>{{contest.description}}</p>
 			{{ macrosBadge.AfficheBadgeStatus(contest) }}
-
-
 		</div>
 		<p class="text-neutral-400 italic">
 			Par

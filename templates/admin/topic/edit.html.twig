@@ -3,9 +3,9 @@
 {% block admin_title %}Modifier
 	{{topic.title}}
 {% endblock %}
+
 {% set return_path = 'admin_topic_show' %}
 {% set return_params = { id: topic.id } %}
-
 
 {% block admin_content %}
 	{{ include('admin/topic/_form.html.twig') }}

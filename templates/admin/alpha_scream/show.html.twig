@@ -1,0 +1,41 @@
+{% extends 'admin/base_admin.html.twig' %}
+
+{% block title %}AlphaScream
+{% endblock %}
+{% set return_path = 'admin_scream_homepage' %}
+
+{% block admin_content %}
+	<div class="wrapper-table">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Catégorie</th>
+					<th>Valeur</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				<tr>
+					<td>Id</td>
+					<td>{{ alpha_scream.id }}</td>
+				</tr>
+				<tr>
+					<td>Score</td>
+					<td>{{ alpha_scream.score }}</td>
+				</tr>
+				<tr>
+					<td>CreatedAt</td>
+					<td>{{ alpha_scream.createdAt ? alpha_scream.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+				</tr>
+				<tr>
+					<td>Level</td>
+					<td>{{ alpha_scream.level }}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="flex justify-center mb-4">
+		<a href="{{ path('admin_scream_edit', {'id': alpha_scream.id}) }}" class="btn">Modifier</a>
+	</div>
+	{{ include('admin/alpha_scream/_delete_form.html.twig') }}
+{% endblock %}

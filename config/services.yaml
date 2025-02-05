@@ -4,6 +4,8 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    stripe.public_key: '%env(STRIPE_PUBLIC_KEY)%'
+    stripe.secret_key: '%env(STRIPE_SECRET_KEY)%'
 
 services:
     # default configuration for services in *this* file
@@ -36,3 +38,17 @@ services:
     App\Security\Voter\ContestVoter:
         tags:
             - { name: 'security.voter' }
+
+    App\Security\Voter\EventVoter:
+        tags:
+            - { name: 'security.voter' }
+    
+    App\Service\StripeService:
+        arguments:
+            $secretKey: '%stripe.secret_key%'
+            $urlGenerator: '@router'
+    
+    App\Controller\AcademyController:
+        arguments:
+            $stripePublicKey: '%stripe.public_key%'
+            

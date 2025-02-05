@@ -14,6 +14,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/admin/quiz/question', name: "admin_question_")]
 #[IsGranted('ROLE_ADMIN')]
+#[IsGranted('IS_AUTHENTICATED_FULLY')]
 final class QuestionAdminController extends AbstractController
 {
     #[Route('/{id}', name: 'show', methods: ['GET'])]

@@ -9,8 +9,6 @@
 
 {% block admin_content %}
 	<div class="wrapper-table">
-
-
 		<table>
 			<thead>
 				<tr>
@@ -24,19 +22,19 @@
 					<td>{{topic.id}}</td>
 				</tr>
 				<tr>
-					<td>Created</td>
+					<td>Créer le</td>
 					<td>{{topic.createdAt|format_datetime('short', 'none', locale: 'fr')}}</td>
 				</tr>
 				<tr>
-					<td>Title</td>
+					<td>Titre</td>
 					<td>{{topic.title}}</td>
 				</tr>
 				<tr>
-					<td>Short description</td>
+					<td>Courte description</td>
 					<td>{{topic.shortDescription}}</td>
 				</tr>
 				<tr>
-					<td>Description</td>
+					<td>Longue description</td>
 					<td>{{topic.longDescription}}</td>
 				</tr>
 				<tr>
@@ -71,7 +69,6 @@
 								{{ ux_icon('tabler:arrow-bar-right', {class: 'w-6 h-6'}) }}
 							</a>
 						{% endfor %}
-
 					</td>
 				</tr>
 			</tbody>

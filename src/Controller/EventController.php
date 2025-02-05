@@ -15,6 +15,7 @@ use App\Repository\EventRepository;
 use App\Form\EventType;
 use App\Service\FileUploader;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 #[IsGranted('ROLE_USER')]
 #[Route('/event', name: "app_event_")]
@@ -27,9 +28,12 @@ class EventController extends AbstractController
         $user = $this->getUser();
         $events =  $eventRepository->findAllExcludingUser($user);
 
+        $event = new Event();
+
         return $this->render('event/index.html.twig', [
             'events' => $events,
-            "user" => $user
+            'user' => $user,
+            'event' => $event
         ]);
     }
 
@@ -42,11 +46,15 @@ class EventController extends AbstractController
     }
 
     #[Route('/author', name: 'author')]
-    public function authorEvent(EventRepository $eventRepository): Response
+    public function authorEvent(EventRepository $eventRepository, AuthorizationCheckerInterface $authChecker): Response
     {
         $user = $this->getUser();
         if (!$user) {
             throw $this->createAccessDeniedException('Vous devez être connecté pour effectuer cette action.');
+        }
+
+        if (!$authChecker->isGranted('create', new Event())) {
+            throw $this->createAccessDeniedException('Accès interdit');
         }
 
         $events = $eventRepository->findBy(['author' => $user]);
@@ -57,25 +65,36 @@ class EventController extends AbstractController
     }
 
     #[Route('/user_participate', name: 'user_participate')]
-    public function userParticipateEvent(EventRepository $eventRepository): Response
+    public function userParticipateEvent(EventRepository $eventRepository, AuthorizationCheckerInterface $authChecker): Response
     {
         $user = $this->getUser();
         if (!$user) {
             throw $this->createAccessDeniedException('Vous devez être connecté pour effectuer cette action.');
         }
 
+        $event = new Event();
+
+        if (!$authChecker->isGranted('participate', $event)) {
+            throw $this->createAccessDeniedException('Accès interdit');
+        }
+
         /** @var User $user */
         $events = $eventRepository->findEventsByParticipant($user);
 
-        return $this->render('event/author.html.twig', [
+        return $this->render('event/participate.html.twig', [
             'events' => $events,
         ]);
     }
 
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, FileUploader $fileUploader): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, FileUploader $fileUploader, AuthorizationCheckerInterface $authChecker): Response
     {
         $event = new Event();
+
+        if (!$authChecker->isGranted('create', $event)) {
+            throw $this->createAccessDeniedException('Accès interdit');
+        }
+
         $form = $this->createForm(EventType::class, $event);
         $form->handleRequest($request);
 
@@ -108,8 +127,12 @@ class EventController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Event $event, EntityManagerInterface $entityManager, FileUploader $fileUploader): Response
+    public function edit(Request $request, Event $event, EntityManagerInterface $entityManager, FileUploader $fileUploader, AuthorizationCheckerInterface $authChecker): Response
     {
+        if (!$authChecker->isGranted('edit', $event)) {
+            throw $this->createAccessDeniedException('Accès interdit');
+        }
+
         $form = $this->createForm(EventType::class, $event);
         $form->handleRequest($request);
 
@@ -139,8 +162,12 @@ class EventController extends AbstractController
     }
 
     #[Route('/{id}', name: 'delete', methods: ['POST'])]
-    public function delete(Request $request, Event $event, EntityManagerInterface $entityManager, FileUploader $fileUploader): Response
+    public function delete(Request $request, Event $event, EntityManagerInterface $entityManager, FileUploader $fileUploader, AuthorizationCheckerInterface $authChecker): Response
     {
+        if (!$authChecker->isGranted('edit', $event)) {
+            throw $this->createAccessDeniedException('Accès interdit');
+        }
+        
         if ($this->isCsrfTokenValid('delete' . $event->getId(), $request->getPayload()->getString('_token'))) {
             if ($event->getImage()) {
                 $imagePath = $fileUploader->getTargetDirectory() . $event->getImage();
@@ -156,11 +183,15 @@ class EventController extends AbstractController
     }
 
     #[Route('/participate/{id}', name: 'participate')]
-    public function participateEvent(Event $event, EntityManagerInterface $entityManager): Response
+    public function participateEvent(Event $event, EntityManagerInterface $entityManager, AuthorizationCheckerInterface $authChecker): Response
     {
         $user = $this->getUser();
         if (!$user) {
             throw $this->createAccessDeniedException('Vous devez être connecté pour répondre.');
+        }
+
+        if (!$authChecker->isGranted('participate', $event)) {
+            throw $this->createAccessDeniedException('Vous n\'avez pas le role permettant de participer à un évènement.');
         }
 
         /** @var User $user */
@@ -174,11 +205,15 @@ class EventController extends AbstractController
     }
 
     #[Route('/unparticipate/{id}', name: 'unparticipate')]
-    public function unparticipateEvent(Event $event, EntityManagerInterface $entityManager): Response
+    public function unparticipateEvent(Event $event, EntityManagerInterface $entityManager, AuthorizationCheckerInterface $authChecker): Response
     {
         $user = $this->getUser();
         if (!$user) {
             throw $this->createAccessDeniedException('Vous devez être connecté pour effectuer cette action.');
+        }
+
+        if (!$authChecker->isGranted('participate', $event)) {
+            throw $this->createAccessDeniedException('Accès interdit');
         }
 
         /** @var User $user */

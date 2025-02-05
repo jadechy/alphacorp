@@ -1,51 +1,51 @@
 {{ form_start(form, {"attr":{"class": "flex flex-col gap-5 mt-8"}}) }}
-<div>
-	{{ form_widget(form.title) }}
-	{{ form_errors(form.title) }}
-</div>
-
-<div>
-	{{ form_widget(form.shortDescription) }}
-	{{ form_errors(form.shortDescription) }}
-
-</div>
-<div>
-	{{ form_widget(form.longDescription) }}
-	{{ form_errors(form.longDescription) }}
-
-</div>
-
-<div>
-	{{ form_widget(form.location) }}
-	{{ form_errors(form.location) }}
-
-</div>
-
-<div>
-	{{ form_label(form.startAt) }}
-	{{ form_widget(form.startAt) }}
-	{{ form_errors(form.startAt) }}
-
-</div>
-
-<div>
-	{{ form_label(form.endAt) }}
-	{{ form_widget(form.endAt) }}
-	{{ form_errors(form.endAt) }}
-
-</div>
-
-{% if event and event.image %}
 	<div>
-		<p>Image actuelle :</p>
-		<img src="{{ asset(event.image) }}" alt="Event Image" style="max-width: 200px;">
+		{{ form_widget(form.title) }}
+		{{ form_errors(form.title) }}
 	</div>
-	{{ form_row(form.imageFile, { 'label': 'Nouvelle image' }) }}
-{% else %}
-	{{ form_widget(form.imageFile) }}
-{% endif %}
 
-<button type="submit" class="btn mx-auto">
-	{{ button_label|default('Enregistrer') }}
-</button>
+	<div>
+		{{ form_widget(form.shortDescription) }}
+		{{ form_errors(form.shortDescription) }}
+
+	</div>
+	<div>
+		{{ form_widget(form.longDescription) }}
+		{{ form_errors(form.longDescription) }}
+
+	</div>
+
+	<div>
+		{{ form_widget(form.location) }}
+		{{ form_errors(form.location) }}
+
+	</div>
+
+	<div>
+		{{ form_label(form.startAt) }}
+		{{ form_widget(form.startAt) }}
+		{{ form_errors(form.startAt) }}
+
+	</div>
+
+	<div>
+		{{ form_label(form.endAt) }}
+		{{ form_widget(form.endAt) }}
+		{{ form_errors(form.endAt) }}
+
+	</div>
+
+	{% if event and event.image %}
+		<div>
+			<p>Image actuelle :</p>
+			<img src="{{ asset(event.image) }}" alt="Event Image" style="max-width: 200px;">
+		</div>
+		{{ form_row(form.imageFile, { 'label': 'Nouvelle image' }) }}
+	{% else %}
+		{{ form_widget(form.imageFile) }}
+	{% endif %}
+
+	<button type="submit" class="btn mx-auto">
+		{{ button_label|default('Enregistrer') }}
+	</button>
 {{ form_end(form) }}

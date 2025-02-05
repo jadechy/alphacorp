@@ -117,7 +117,7 @@ class QuizData
                             "Vous ignorez complètement la critique",
                             "Vous vous excusez immédiatement même si vous n’êtes pas en tort"
                         ],
-                        "correct" => 1
+                        "correct" => 0
                     ],
                     [
                         "question" => "Comment gérez-vous une prise de parole en public ?",
@@ -147,7 +147,7 @@ class QuizData
                             "Vous contre-attaquez immédiatement avec agressivité",
                             "Vous essayez de plaire à la personne pour éviter le conflit"
                         ],
-                        "correct" => 1
+                        "correct" => 2
                     ],
                     [
                         "question" => "Que faites-vous lorsqu'un défi se présente à vous ?",
@@ -180,10 +180,10 @@ class QuizData
                         "answers" => [
                             "Vous évitez le conflit à tout prix",
                             "Vous écoutez, argumentez avec logique et assertivité",
-                            "Vous imposez votre point de vue sans écouter",
+                            "Vous imposez votre point de vue car vous avez raison",
                             "Vous acceptez le point de vue des autres sans discussion"
                         ],
-                        "correct" => 1
+                        "correct" => 2
                     ],
                     [
                         "question" => "Comment réagissez-vous lorsque vous devez prendre une décision importante ?",
@@ -223,14 +223,13 @@ class QuizData
                             "Vous coupez la parole et imposez votre avis",
                             "Vous évitez les discussions par peur du jugement"
                         ],
-                        "correct" => 1
+                        "correct" => 2
                     ],
                     [
                         "question" => "Comment gérez-vous une situation où quelqu'un tente de vous manipuler ?",
                         "answers" => [
                             "Vous suivez ses ordres sans poser de questions",
                             "Vous identifiez la manipulation et répondez avec fermeté",
-                            "Vous essayez de manipuler en retour",
                             "Vous acceptez la situation pour éviter les problèmes"
                         ],
                         "correct" => 1
@@ -243,7 +242,7 @@ class QuizData
                             "Vous leur imposez votre manière de faire",
                             "Vous laissez les autres gérer seuls"
                         ],
-                        "correct" => 1
+                        "correct" => 0
                     ]
                 ]
             ],
@@ -255,8 +254,8 @@ class QuizData
                         "question" => "Comment faites-vous une première impression forte ?",
                         "answers" => [
                             "En restant discret et évitant d'attirer l’attention",
-                            "En parlant fort et en imposant votre présence",
-                            "En utilisant un langage corporel confiant et en engageant la conversation",
+                            "En engageant la conversation",
+                            "En utilisant un langage corporel confiant et en parlant fort",
                             "En attendant que quelqu’un vienne vous voir"
                         ],
                         "correct" => 2
@@ -279,7 +278,7 @@ class QuizData
                             "Éviter le contact visuel pour ne pas intimider",
                             "Interrompre les autres pour dominer la conversation"
                         ],
-                        "correct" => 1
+                        "correct" => 3
                     ],
                     [
                         "question" => "Comment réagissez-vous face à un désaccord public ?",
@@ -289,7 +288,7 @@ class QuizData
                             "Vous évitez de répondre pour ne pas créer de tensions",
                             "Vous changez de sujet pour esquiver le conflit"
                         ],
-                        "correct" => 1
+                        "correct" => 0
                     ],
                     [
                         "question" => "Quelle est votre posture lorsque vous entrez dans une pièce remplie de personnes ?",
@@ -309,7 +308,7 @@ class QuizData
                             "En évitant les discussions pour ne pas faire d’erreurs",
                             "En dominant la conversation quel que soit l’interlocuteur"
                         ],
-                        "correct" => 0
+                        "correct" => 3
                     ],
                     [
                         "question" => "Comment inspirez-vous confiance aux autres ?",

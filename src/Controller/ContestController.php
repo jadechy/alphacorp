@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 use App\Entity\Contest;
 use App\Entity\UserContest;
@@ -17,6 +18,8 @@ use App\Repository\UserContestRepository;
 use App\Service\FileUploader;
 
 #[Route('/contest', name: "app_contest_")]
+#[IsGranted('ROLE_ALPHA')]
+#[IsGranted('IS_AUTHENTICATED_FULLY')]
 final class ContestController extends AbstractController
 {
     #[Route('/', name: 'homepage')]
