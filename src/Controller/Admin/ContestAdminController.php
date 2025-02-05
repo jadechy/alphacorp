@@ -11,6 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 
 use App\Entity\UserContest;
+use App\Entity\User;
 use App\Entity\Contest;
 use App\Form\ContestType;
 use App\Repository\ContestRepository;

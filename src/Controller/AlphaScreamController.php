@@ -19,11 +19,6 @@ use FFMpeg\FFProbe;
 #[Route('/scream', name: "app_scream_")]
 final class AlphaScreamController extends AbstractController
 {
-    #[Route('/record', name: 'record')]
-    public function record()
-    {
-        return $this->render('alpha_scream/record.html.twig');
-    }
 
     #[Route('/analyze-audio', name: 'analyze_audio', methods: ['POST'])]
     public function analyzeAudio(Request $request, EntityManagerInterface $entityManager): JsonResponse
@@ -35,7 +30,7 @@ final class AlphaScreamController extends AbstractController
         }
 
         $uploadsDirectory = $this->getParameter('kernel.project_dir') . '/public/sound';
-        
+
         if (!file_exists($uploadsDirectory)) {
             mkdir($uploadsDirectory, 0777, true);
         }
@@ -57,7 +52,7 @@ final class AlphaScreamController extends AbstractController
         $scream->setScore(round($score));
         $scream->setLevel();
         $scream->setCreatedAt(new \DateTimeImmutable());
-        
+
         /** @var User $user */
         $user = $this->getUser();
         $scream->setAlpha($user);
@@ -74,7 +69,7 @@ final class AlphaScreamController extends AbstractController
         return new JsonResponse(['score' => round($score), 'level' => $level]);
     }
 
-    
+
 
     #[Route('/leaderboard', name: 'leaderboard')]
     public function leaderboard(AlphaScreamRepository $alphaScreamRepository)

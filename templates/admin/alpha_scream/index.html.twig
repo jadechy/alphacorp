@@ -1,0 +1,46 @@
+{% extends 'admin/base_admin.html.twig' %}
+
+{% block title %}AlphaScream
+{% endblock %}
+{% set return_path = 'admin_homepage' %}
+
+{% block admin_content %}
+	<div class="wrapper-table">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Id</th>
+					<th>Score</th>
+					<th>CreatedAt</th>
+					<th>Level</th>
+					<th>actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for alpha_scream in alpha_screams %}
+					<tr>
+						<td>{{ alpha_scream.id }}</td>
+						<td>{{ alpha_scream.score }}</td>
+						<td>{{ alpha_scream.createdAt ? alpha_scream.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+						<td>{{ alpha_scream.level }}</td>
+						<td>
+							<a href="{{ path('admin_scream_show', {'id': alpha_scream.id}) }}">
+								{{ ux_icon('tabler:eye', {class: 'w-6 h-6'}) }}
+
+							</a>
+							<a href="{{ path('admin_scream_edit', {'id': alpha_scream.id}) }}">
+								{{ ux_icon('tabler:edit', {class: 'w-6 h-6'}) }}
+
+							</a>
+						</td>
+					</tr>
+				{% else %}
+					<tr>
+						<td colspan="5">no records found</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	<a href="{{ path('admin_scream_new') }}" class="btn">Créer un nouveau cri</a>
+{% endblock %}

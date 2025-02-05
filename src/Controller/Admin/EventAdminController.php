@@ -101,11 +101,13 @@ class EventAdminController extends AbstractController
     #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
     public function edit(string $id, Request $request, Event $event, EntityManagerInterface $entityManager, FileUploader $fileUploader, UserRepository $userRepository): Response
     {
-        $users = $userRepository->findAllAlpha();
+        /** @var User $user */
+        $user = $this->getUser();
+        $users = $userRepository->findAllAlpha($user->getId());
         $form = $this->createForm(
             EventType::class,
             $event,
-            ['is_admin' => true, 'participants' => $userRepository->findAllAlpha()]
+            ['is_admin' => true, 'participants' => $userRepository->findAllAlpha($user->getId())]
         );
         $form->handleRequest($request);
 
