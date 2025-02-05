@@ -30,6 +30,6 @@ class ResponseController extends AbstractController
 
         /** @var Topic $topic */
         $topic = $response->getTopic();
-        return $this->redirectToRoute('app_topic', ['id' => $topic->getId()], HttpResponse::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_forum_show', ['id' => $topic->getId()], HttpResponse::HTTP_SEE_OTHER);
     }
 }

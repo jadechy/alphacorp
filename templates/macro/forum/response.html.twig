@@ -10,27 +10,20 @@
 				</div>
 
 				{% if response.author == app.user %}
-					<div class="flex gap-4 items-center ml-2">
 
-						{% if response.status.value == 'validated' %}
-							<span class="py-1.5 px-2.5 bg-green-500/30 rounded-full flex w-auto justify-center items-center gap-1">
-								<p class="font-medium text-xs text-green-600">Validé</p>
-							</span>
-						{% elseif response.status.value == 'rejected' %}
-							<span class="py-1.5 px-2.5 bg-red-500/30 rounded-full flex w-auto justify-center items-center gap-1">
-								<p class="font-medium text-xs text-red-600">Rejeté</p>
-							</span>
-						{% elseif response.status.value == 'deleted' %}
-							<span class="py-1.5 px-2.5 bg-red-500/30 rounded-full flex w-auto justify-center items-center gap-1">
-								<p class="font-medium text-xs text-red-600">Supprimé</p>
-							</span>
-						{% elseif response.status.value == 'waiting' %}
-							<span class="py-1.5 px-2.5 bg-orange-500/30 rounded-full flex w-auto justify-center items-center gap-1">
-								<p class="font-medium text-xs text-orange-600">En attente</p>
-							</span>
-						{% endif %}
+					{% if response.status.value == 'validated' %}
+						<p class="py-1.5 px-2.5  rounded-full text-xs text-nowrap ml-2 bg-green-500/30 ">Validé</p>
 
-					</div>
+
+						{# </div> #}
+					{% elseif response.status.value == 'rejected' %}
+						<p class="py-1.5 px-2.5  rounded-full text-xs text-nowrap ml-2">Rejeté</p>
+					{% elseif response.status.value == 'deleted' %}
+						<p class="py-1.5 px-2.5  rounded-full text-xs text-nowrap ml-2">Supprimé</p>
+					{% elseif response.status.value == 'waiting' %}
+						<p class=" py-1.5 px-2.5  rounded-full text-xs text-nowrap ml-2 bg-orange-500/30">En attente</p>
+					{% endif %}
+
 				{% endif %}
 			</div>
 		</div>
