@@ -1,10 +1,32 @@
+# Configuration HTTP
 server {
     listen 80;
     server_name alphacorp.site www.alphacorp.site;
 
+    # Redirige toutes les requêtes HTTP vers HTTPS
+    return 301 https://$host$request_uri;
+}
+
+# Configuration HTTPS
+server {
+    listen 443 ssl;
+    server_name alphacorp.site www.alphacorp.site;
+
+    # Chemins vers les certificats SSL générés par Certbot
+    ssl_certificate /etc/letsencrypt/live/alphacorp.site/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/alphacorp.site/privkey.pem;
+    ssl_trusted_certificate /etc/letsencrypt/live/alphacorp.site/chain.pem;
+
+    # Paramètres de sécurité SSL recommandés
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers 'ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256';
+    ssl_prefer_server_ciphers on;
+
+    # Root et index pour ton projet Symfony
     root /var/www/symfony/public;
     index index.php index.html;
 
+    # Configurer la gestion des fichiers statiques et des requêtes PHP
     location / {
         try_files $uri /index.php$is_args$args;
     }
@@ -18,6 +40,7 @@ server {
         internal;
     }
 
+    # Si un fichier PHP est demandé directement, retourne 404 pour éviter les failles de sécurité
     location ~ \.php$ {
         return 404;
     }
@@ -27,6 +50,7 @@ server {
     add_header X-Content-Type-Options nosniff;
     add_header X-XSS-Protection "1; mode=block";
 
+    # Logs d'accès et d'erreurs
     error_log /var/log/nginx/error.log;
     access_log /var/log/nginx/access.log;
 }

@@ -38,8 +38,10 @@ services:
             - ../:/var/www/symfony:cached
             - symfony_app_var:/var/www/symfony/var
             - symfony_app_vendor:/var/www/symfony/vendor
+            - /etc/letsencrypt:/etc/letsencrypt:ro
         ports:
             - 80:80
+            - 443:443
         depends_on:
             - php
         networks:
@@ -64,13 +66,6 @@ services:
             - "8025:8025"  # Web UI
         networks:
             - symfony_app
-    certbot:
-        image: certbot/certbot
-        volumes:
-        - ./certbot/www:/var/www/certbot
-        - ./certbot/conf:/etc/letsencrypt
-        networks:
-        - symfony_app
                 
 volumes:
     symfony_app_var:
