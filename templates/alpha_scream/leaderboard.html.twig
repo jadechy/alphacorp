@@ -1,27 +1,47 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Classement Alpha{% endblock %}
+{% block title %}
+	<div class="flex justify-center gap-5">
+		{{ ux_icon('tabler:trophy-filled', {class: 'w-7 h-7'}) }}
+		Classement des plus grands cris Alpha
+		{{ ux_icon('tabler:trophy-filled', {class: 'w-7 h-7'}) }}
+	</div>
+
+{% endblock %}
+
 
 {% block body %}
-    <h1>🏆 Classement des plus grands cris Alpha 🏆</h1>
-    <table>
-        <tr>
-            <th>#</th>
-            <th>Utilisateur</th>
-            <th>Score</th>
-            <th>Date</th>
-            <th>Niveau</th>
-        </tr>
-        {% for scream in screams %}
-            <tr>
-                <td>{{ loop.index }}</td>
-                <td>{{ scream.alpha.username }}</td>
-                <td>{{ scream.score }}</td>
-                <td>{{ scream.createdAt|date('d/m/Y H:i') }}</td>
-                <td>{{ scream.level }}</td>
-            </tr>
-        {% endfor %}
-    </table>
+	<div class="wrapper-table">
+		<table>
+			<thead>
+				<tr>
 
-    <a href="{{ path('app_scream_record') }}">Faire un nouvel essai</a>
+					<th>#</th>
+					<th>Utilisateur</th>
+					<th>Score</th>
+					<th>Date</th>
+					<th>Niveau</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for scream in screams %}
+					<tr>
+						<td>{{ loop.index }}</td>
+						<td>
+							<a href={{path("app_user_show", {"id": scream.alpha.id} )}} class="w-fit items-center">
+								<img src="{{asset('img/uploads/' ~ scream.alpha.image ~ '.jpg')}}" class="size-10 rounded-full object-cover"/>
+
+
+								{{ scream.alpha.username }}
+							</a>
+						</td>
+						<td>{{ scream.score }}</td>
+						<td>{{ scream.createdAt|date('d/m/Y H:i') }}</td>
+						<td>{{ scream.level }}</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	<a href="{{ path('app_scream_record') }}" class="btn">Faire un nouvel essai</a>
 {% endblock %}
