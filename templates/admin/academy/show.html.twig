@@ -1,0 +1,50 @@
+{% extends 'admin/base_admin.html.twig' %}
+
+{% block title %}Academy -
+	{{ academy.title }}
+
+{% endblock %}
+
+{% block admin_content %}
+	<div class="wrapper-table">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Catégorie</th>
+					<th>Valeur</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				<tr>
+					<td>Id</td>
+					<td>{{ academy.id }}</td>
+				</tr>
+				<tr>
+					<td>Title</td>
+					<td>{{ academy.title }}</td>
+				</tr>
+				<tr>
+					<td>ShortDescription</td>
+					<td>{{ academy.shortDescription }}</td>
+				</tr>
+				<tr>
+					<td>Free</td>
+					<td>{{ academy.free ? 'Oui' : 'Non' }}</td>
+				</tr>
+				<tr>
+					<td>Price</td>
+					<td>{{ academy.price }}</td>
+				</tr>
+				<tr>
+					<td>CreatedAt</td>
+					<td>{{ academy.createdAt ? academy.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="flex justify-center mb-4">
+		<a href="{{ path('admin_academy_edit', {'id': academy.id}) }}" class="btn">Modifier</a>
+	</div>
+	{{ include('admin/academy/_delete_form.html.twig') }}
+{% endblock %}

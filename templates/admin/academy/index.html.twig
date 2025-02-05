@@ -1,0 +1,48 @@
+{% extends 'admin/base_admin.html.twig' %}
+
+{% block title %}Academy
+{% endblock %}
+
+{% block admin_content %}
+
+	<div class="wrapper-table">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Id</th>
+					<th>Titre</th>
+					<th>Courte description</th>
+					<th>Gratuit</th>
+					<th>Prix</th>
+					<th>Date de création</th>
+					<th>Auteur</th>
+					<th>actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for academy in pagination.items %}
+					<tr>
+						<td>{{ academy.id }}</td>
+						<td>{{ academy.title }}</td>
+						<td>{{ academy.shortDescription }}</td>
+						<td>{{ academy.free ? 'Yes' : 'No' }}</td>
+						<td>{{ academy.price }}</td>
+						<td>{{ academy.createdAt ? academy.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+						<td>{{ academy.author.username }}</td>
+						<td>
+							<a href="{{ path('admin_academy_show', {'id': academy.id}) }}">show</a>
+							<a href="{{ path('admin_academy_edit', {'id': academy.id}) }}">edit</a>
+						</td>
+					</tr>
+				{% else %}
+					<tr>
+						<td colspan="8">Aucune formations trouvées.</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	{{ knp_pagination_render(pagination) }}
+
+	<a href="{{ path('admin_academy_new') }}" class="btn">Créer une nouvelle formation</a>
+{% endblock %}

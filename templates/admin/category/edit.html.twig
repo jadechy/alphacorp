@@ -3,13 +3,12 @@
 {% block admin_title %}Modifier
 	{{category.name}}
 {% endblock %}
+
 {% set return_path = 'admin_category_show' %}
 {% set return_params = { id: category.id } %}
 
-
 {% block admin_content %}
 	{{ form_start(form) }}
-
 	<table>
 		<thead>
 			<tr>
@@ -23,14 +22,16 @@
 				<td>{{category.id}}</td>
 			</tr>
 			<tr>
-				<td>Name</td>
+				<td>Nom</td>
 				<td>
-					{{ form_widget(form.name) }}</td>
+					{{ form_widget(form.name) }}
+				</td>
 			</tr>
 			<tr>
 				<td>Label</td>
 				<td>
-					{{ form_widget(form.label) }}</td>
+					{{ form_widget(form.label) }}
+				</td>
 			</tr>
 			<tr>
 				<td>Topics</td>
@@ -41,7 +42,6 @@
 							{{topic.title}}
 						</div>
 					{% endfor %}
-
 				</td>
 			</tr>
 		</tbody>
@@ -53,5 +53,4 @@
 	</div>
 	{{ form_end(form) }}
 	{{ include('admin/category/_delete_form.html.twig') }}
-
 {% endblock %}

@@ -1,12 +1,12 @@
 {{ form_start(form) }}
-<div class="flex flex-col gap-5">
-	{{ form_row(form.name) }}
+	<div class="flex flex-col gap-5">
+		{{ form_row(form.name) }}
 
-	{{ form_row(form.code) }}
-</div>
-<div class="flex items-center justify-center  mt-4 gap-5 ">
-	<button type="submit" class="btn">
-		{{ button_label|default('Enregistrer') }}
-	</button>
-</div>
+		{{ form_row(form.code) }}
+	</div>
+	<div class="flex items-center justify-center  mt-4 gap-5 ">
+		<button type="submit" class="btn">
+			{{ button_label|default('Enregistrer') }}
+		</button>
+	</div>
 {{ form_end(form) }}

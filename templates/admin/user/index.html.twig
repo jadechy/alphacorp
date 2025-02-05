@@ -3,17 +3,16 @@
 {% block admin_title %}Utilisateurs
 {% endblock %}
 {% set return_path = 'admin_homepage' %}
+
 {% block admin_content %}
 	<div class="wrapper-table">
-
-
 		<table>
 			<thead>
 				<tr>
 					<th scope="col">
 						ID</th>
 					<th scope="col">
-						Username</th>
+						Utilisateur</th>
 					<th scope="col">
 						Email</th>
 					<th scope="col">
@@ -68,7 +67,6 @@
 							<a href="{{ path('admin_user_edit', {'id': user.id}) }}">
 								{{ ux_icon('tabler:edit', {class: 'w-6 h-6'}) }}
 							</a>
-
 						</td>
 					</tr>
 				{% else %}
@@ -81,6 +79,6 @@
 	</div>
 	{{ knp_pagination_render(pagination) }}
 	<a href="{{ path('admin_user_new') }}" class="btn">
-		>Créer un nouvel utilisateur
+		Créer un nouvel utilisateur
 	</a>
 {% endblock %}

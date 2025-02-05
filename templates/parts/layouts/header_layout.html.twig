@@ -1,6 +1,7 @@
 {% import 'macro/nav_link.twig' as macros %}
-<header>
-	<nav class="bg-neutral-950 flex justify-between items-center py-3 px-8 w-full">
+<header class="">
+	<nav class="md:fixed md:left-0 md:top-0 bg-neutral-900 flex justify-between items-center py-3 px-8 w-full z-10">
+
 
 		<a href="{{ path('app_home') }}">
 			<img src="{{ asset('/img/logo/typographique.svg') }}" class="h-10"/>
@@ -24,23 +25,30 @@
 				{% if app.user %}
 					{% if not is_granted('ROLE_BANNED') %}
 						{{ macros.menu_item('app_event_homepage', {}, 'Event', "app_event") }}
+						{{ macros.menu_item('app_forum_homepage', {}, 'Forum', "app_forum") }}
+
 						{% if is_granted('ROLE_ALPHA') %}
 							{{ macros.menu_item('app_quiz_homepage', {}, 'Quiz', "app_quiz") }}
 							{{ macros.menu_item('app_contest_homepage', {}, 'Défi', "app_contest") }}
-							{{ macros.menu_item('app_user_alpha', {}, 'Alpha', "app_user_show",app.request.attributes.get('_route') starts with "app_user" and app.request.attributes.get("id")!= app.user.id ) }}
+							{{ macros.menu_item('app_user_alpha', {}, 'Alpha', "app_user_show", app.request.attributes.get('_route') starts with "app_user" and app.request.attributes.get("id")!= app.user.id and not (app.request.attributes.get('_route')  starts with "app_user_edit") ) }}
 
+							{{ macros.menu_item('app_academy_homepage', {}, 'Formations', "app_academy") }}
 						{% endif %}
-						{{ macros.menu_item('app_forum_homepage', {}, 'Forum', "app_forum") }}
-						{% if is_granted('ROLE_SUPERVISOR') %}
+
+
+						{%  if is_granted('ROLE_SUPERVISOR') %}
 							{{ macros.menu_item('app_quiz_supervisor_homepage', {}, 'Quiz', "app_quiz") }}
 							{{ macros.menu_item('app_contest_supervisor_homepage', {}, 'Défi', "app_contest") }}
+							{{ macros.menu_item('app_supervisor_academy_homepage', {}, 'Formations', "app_supervisor_academy_") }}
+
+
 						{% endif %}
+
 						{% if is_granted('ROLE_ADMIN') %}
 							{{ macros.menu_item('admin_homepage', {}, 'Admin', "admin") }}
 						{% endif %}
 						<div class="flex gap-5">
-							{{ macros.menu_item('app_user_show', {'id': app.user.id}, ux_icon('tabler:user-filled', {class: 'w-6 h-6'}) | raw, "app_user_show",app.request.attributes.get('_route') starts with "app_user_show" and app.request.attributes.get("id")== app.user.id ) }}
-
+							{{ macros.menu_item('app_user_show', {'id': app.user.id}, ux_icon('tabler:user-filled', {class: 'w-6 h-6'}) | raw, "app_user_show",(app.request.attributes.get('_route') starts with "app_user_show" and app.request.attributes.get("id")== app.user.id) or app.request.attributes.get('_route') starts with "app_user_edit") }}
 
 							{{ macros.menu_item('app_logout', {}, ux_icon('tabler:door-exit', {class: 'w-6 h-6'}) | raw) }}
 						</div>

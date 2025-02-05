@@ -1,0 +1,17 @@
+{% macro AfficheAcademyCard(academy) %}
+
+	<a href={{path("app_academy_show", {"id": academy.id} )}} class="shadow shadow-neutral-900 p-5 flex flex-col justify-between h-45 hover:scale-110 transition rounded-md">
+		<div>
+			<h2 class="text-2xl text-fuchsia-300 font-bold">{{academy.title}}
+			</h2>
+
+			<p class="italic">
+				Par
+				{{academy.author.username}}
+			</p>
+		</div>
+		<p>{{academy.shortDescription}}</p>
+		<p class="text-xs text-neutral-500 text-end">{{ button_label|default('En lire +') }}</p>
+
+	</a>
+{% endmacro %}

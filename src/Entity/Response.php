@@ -37,7 +37,6 @@ class Response
 
     #[ORM\ManyToOne(inversedBy: 'responses')]
     #[ORM\JoinColumn(name: 'USR_ID', referencedColumnName: 'USR_ID')]
-    #[Assert\NotNull(message: "L'auteur ne peut pas être vide.")]
     private ?User $author = null;
 
     public function getId(): int

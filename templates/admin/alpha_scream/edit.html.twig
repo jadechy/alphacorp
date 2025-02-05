@@ -1,0 +1,13 @@
+{% extends 'admin/base_admin.html.twig' %}
+
+{% block title %}Edit AlphaScream
+{% endblock %}
+{% set return_path = 'admin_scream_show' %}
+{% set return_params = { id: alpha_scream.id } %}
+
+
+{% block admin_content %}
+	{{ include('admin/alpha_scream/_form.html.twig') }}
+
+	{{ include('admin/alpha_scream/_delete_form.html.twig') }}
+{% endblock %}

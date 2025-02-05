@@ -1,12 +1,12 @@
 {% extends 'admin/base_admin.html.twig' %}
 
-{% block title %}Edit Rank
+{% block title %}Modifier Rank
 {% endblock %}
+
 {% set return_path = 'admin_rank_show' %}
 {% set return_params = { id: rank.id } %}
 
 {% block admin_content %}
-
 	{{ include('admin/rank/_form.html.twig') }}
 
 	<div class="mt-4 mx-auto w-fit">

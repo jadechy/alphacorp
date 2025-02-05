@@ -15,6 +15,7 @@ use App\Repository\RankRepository;
 
 #[Route('/admin/rank', name: "admin_rank_")]
 #[IsGranted('ROLE_ADMIN')]
+#[IsGranted('IS_AUTHENTICATED_FULLY')]
 class RankAdminController extends AbstractController
 {
     #[Route(name: 'homepage', methods: ['GET'])]

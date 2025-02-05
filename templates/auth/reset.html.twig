@@ -6,10 +6,7 @@
 {% endblock %}
 
 {% block body %}
-
-
 	<section class="w-xl mx-auto">
-
 		<p>Choisissez votre nouveau mot de passe</p>
 
 		<p class="text-sm text-neutral-300 italic">
@@ -18,11 +15,7 @@
 
 		<form
 			method="POST" action="{{ path('app_reset', {'token': token}) }}" class="mt-10 w-xl">
-			{# <div>
-			                                <input name="email" disabled id="username" type="text" value="{{ email }}" placeholder="Adresse Email"/>
-			                            </div> #}
 			<input name="password" id="password" type="password" placeholder="Nouveau mot de passe" class="input"/>
-
 
 			<input name="repeat_password" id="repeat-password" type="password" placeholder="Resaisissez votre nouveau mot de passe" class="inputmy-6"/>
 
@@ -38,6 +31,5 @@
 				</a>
 			</div>
 		</form>
-
 	</section>
 {% endblock %}

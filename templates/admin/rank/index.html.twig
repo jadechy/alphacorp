@@ -1,10 +1,8 @@
 {% extends 'admin/base_admin.html.twig' %}
 
-
 {% block title %}Rank
 {% endblock %}
 {% set return_path = 'admin_homepage' %}
-
 
 {% block admin_content %}
 	<div class="wrapper-table">
@@ -12,10 +10,10 @@
 			<thead>
 				<tr>
 					<th>Id</th>
-					<th>Title</th>
+					<th>Titre</th>
 					<th>Minimum</th>
 					<th>Description</th>
-					<th>actions</th>
+					<th>Actions</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -28,11 +26,9 @@
 						<td>
 							<a href="{{ path('admin_rank_show', {'id': rank.id}) }}">
 								{{ ux_icon('tabler:eye', {class: 'w-6 h-6'}) }}
-
 							</a>
 							<a href="{{ path('admin_rank_edit', {'id': rank.id}) }}">
 								{{ ux_icon('tabler:edit', {class: 'w-6 h-6'}) }}
-
 							</a>
 						</td>
 					</tr>

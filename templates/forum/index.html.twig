@@ -2,6 +2,9 @@
 
 {% block title %}Rechercher un topic
 {% endblock %}
+
+{% import 'macro/forum/topic_card.html.twig' as macros %}
+
 {% block body %}
 	<section>
 		<form method="get" action="{{ path('app_forum_homepage') }}" class="flex md:flex-row flex-col items-center gap-5 mb-6 mt-4">
@@ -10,7 +13,6 @@
 				<option value="all">Filtrer par catégorie</option>
 				{% for category in categories %}
 					<option value="{{ category.label }}" {% if category == category_selected %} selected {% endif %}>{{ category.name }}</option>
-
 				{% endfor %}
 			</select>
 			<button type="submit" class="btn">
@@ -19,19 +21,16 @@
 		</form>
 		{% if topics is not empty %}
 			<div class="grid grid-cols-1 gap-y-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-5">
-
-
 				{% for topic in topics %}
 					{% if topic.status.value == 'open' or topic.status.value == 'close' %}
-						{% include 'macro/forum/topic_card.html.twig' %}
+						{{ macros.afficheTopic(topic) }}
 					{% endif %}
 				{% endfor %}
 			</div>
 		{% else %}
 			<p class="text-gray-500">Aucun topic trouvé pour "{{ keyword }}"
 				{% if category_selected != null %}
-					dans la catégorie
-					{{category_selected.label}}
+					dans la catégorie {{category_selected.label}}
 				{% endif %}.</p>
 		{% endif %}
 		{% if is_granted('ROLE_ALPHA') %}

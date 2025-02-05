@@ -22,6 +22,7 @@ use App\Entity\Topic;
 use App\Entity\UserAnswer;
 use App\Entity\UserContest;
 use App\Entity\AlphaScream;
+use App\Entity\Academy;
 use App\Enum\StatusUserEnum;
 use App\Enum\BromanceStatusEnum;
 use App\Enum\BromanceRequestStatusEnum;
@@ -46,6 +47,8 @@ class AppFixtures extends Fixture
 
     public const MAX_SCREAM = 12;
 
+    public const MAX_ACADEMY = 25;
+
     protected $faker;
 
     public function __construct(protected UserPasswordHasherInterface $passwordHasher)
@@ -64,6 +67,7 @@ class AppFixtures extends Fixture
         $challenges = [];
         $questions = [];
         $screams = [];
+        $academies = [];
 
         $this->createActiveUsers($manager, $users);
         $this->createUser($manager, $users);
@@ -86,6 +90,8 @@ class AppFixtures extends Fixture
 
         $this->createAlphaScreams($manager, $users, $screams);
 
+        $this->createAcademy($manager, $users, $academies);
+
         $manager->flush();
     }
 
@@ -106,7 +112,7 @@ class AppFixtures extends Fixture
             $user->setPlainPassword('coucou');
 
             $user->setRoles(['ROLE_SUPERVISOR']);
-            $user->setImage("supervisor-$i");
+            $user->setImage("supervisor-$i.jpg");
 
             $user->setStatus(StatusUserEnum::ACTIVE);
             $users[] = $user;
@@ -121,7 +127,7 @@ class AppFixtures extends Fixture
             $user->setPlainPassword('coucou');
 
             $user->setRoles(['ROLE_ALPHA']);
-            $user->setImage("alpha-$i");
+            $user->setImage("alpha-$i.jpg");
 
             $user->setStatus(StatusUserEnum::ACTIVE);
             $users[] = $user;
@@ -140,7 +146,7 @@ class AppFixtures extends Fixture
     {
 
         $roles = ['ROLE_SUPERVISOR', 'ROLE_ALPHA'];
-        $images = ["supervisor-0", "alpha-0"];
+        $images = ["supervisor-0.jpg", "alpha-0.jpg"];
         $roleCount = count($roles);
 
         for ($i = 0; $i < 2; $i++) {
@@ -172,7 +178,7 @@ class AppFixtures extends Fixture
         $user = new User();
         $user->setEmail("admin_0@example.com");
         $user->setUsername($this->faker->userName());
-        $user->setImage("admin-0");
+        $user->setImage("admin-0.jpg");
 
         $user->setPlainPassword('admin');
 
@@ -201,7 +207,7 @@ class AppFixtures extends Fixture
             $user->setPlainPassword('admin');
 
             $user->setRoles(['ROLE_ADMIN']);
-            $user->setImage("admin-$i");
+            $user->setImage("admin-$i.jpg");
 
             $user->setStatus(StatusUserEnum::ACTIVE);
 
@@ -230,7 +236,7 @@ class AppFixtures extends Fixture
 
             $randomRole = $roles[array_rand($roles)];
             $user->setRoles([$randomRole]);
-            $user->setImage("alpha-$i");
+            $user->setImage("alpha-$i.jpg");
 
             $user->setStatus(StatusUserEnum::BANNED);
 
@@ -653,6 +659,61 @@ class AppFixtures extends Fixture
 
             $manager->persist(object: $alphascream);
             $screams[] = $alphascream;
+        }
+    }
+
+    /**
+     * Crée des formations.
+     *
+     * @param ObjectManager $manager
+     * @param User[] $users Tableau d'objets User.
+     * @param Academy[] $academies Tableau d'objets Academy.
+     */
+    protected function createAcademy(ObjectManager $manager, array $users, array &$academies): void
+    {
+        for ($j = 0; $j < self::MAX_ACADEMY; $j++) {
+            $academy = new Academy();
+
+            $supervisorUsers = array_filter($users, function ($user) {
+                return in_array('ROLE_SUPERVISOR', $user->getRoles(), true);
+            });
+
+            $supervisorUsers = array_values($supervisorUsers);
+            $supervisor = $supervisorUsers[array_rand($supervisorUsers)];
+            $academy->setAuthor($supervisor);
+
+            $academy->setTitle(title: "Titre la formation $j");
+            $academy->setShortDescription(shortDescription: "Courte description de la formation $j");
+            $academy->setContent(content: "Contenu de la formation $j");
+
+            $academy->setFree(random_int(0, 1) === 1);
+            if ($academy->isFree() === false) {
+                $randomPrice = random_int(100, 1000);
+                $academy->setPrice($randomPrice);
+            }
+            $academy->setCreatedAt(createdAt: new \DateTimeImmutable());
+
+            $alphaUsers = array_filter($users, function ($user) {
+                return in_array('ROLE_ALPHA', $user->getRoles(), true);
+            });
+
+            $alphaUsers = array_values($alphaUsers);
+
+            if (count($alphaUsers) > 0) {
+                $randomKeys = array_rand($alphaUsers, min(5, count($alphaUsers)));
+
+                if (!is_array($randomKeys)) {
+                    $randomKeys = [$randomKeys];
+                }
+
+                foreach ($randomKeys as $key) {
+                    $user = $alphaUsers[$key];
+                    $user->addAcademy($academy);
+                }
+            }
+
+            $manager->persist(object: $academy);
+            $academies[] = $academy;
         }
     }
 }

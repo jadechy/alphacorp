@@ -84,12 +84,13 @@ class AlphaScream
 
     private function getLevelFromScore(float $score): ScreamLevelEnum
     {
-        if ($score < 20) {
-            return ScreamLevelEnum::DOG;
-        } elseif ($score < 40) {
-            return ScreamLevelEnum::WOLF;
-        } elseif ($score < 60) {
-            return ScreamLevelEnum::ALPHA;
+ 
+        if ($score < 100) {
+            return ScreamLevelEnum::DOG; 
+        } elseif ($score < 200) {
+            return ScreamLevelEnum::WOLF; 
+        } elseif ($score < 400) {
+             return ScreamLevelEnum::ALPHA;
         } else {
             return ScreamLevelEnum::SUPREME;
         }

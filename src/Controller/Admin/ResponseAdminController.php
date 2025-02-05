@@ -20,6 +20,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/admin/response', name: "admin_response_")]
 #[IsGranted('ROLE_ADMIN')]
+#[IsGranted('IS_AUTHENTICATED_FULLY')]
 final class ResponseAdminController extends AbstractController
 {
     #[Route('/', name: 'homepage')]
