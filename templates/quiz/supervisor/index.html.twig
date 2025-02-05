@@ -4,36 +4,36 @@
 {% endblock %}
 
 {% block body %}
-
-	<table class="table">
-		<thead>
-			<tr>
-				<th>Id</th>
-				<th>Title</th>
-				<th>Description</th>
-				<th>actions</th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for quiz in quizzes %}
+	<div class="wrapper-table">
+		<table class="table">
+			<thead>
 				<tr>
-					<td>{{ quiz.id }}</td>
-					<td>{{ quiz.title }}</td>
-					<td>{{ quiz.description }}</td>
-					<td>
-						<a href="{{ path('app_quiz_supervisor_show', {'id': quiz.id}) }}">
-							{{ ux_icon('tabler:eye', {class: 'w-6 h-6'}) }}</a>
-						<a href="{{ path('app_quiz_supervisor_edit', {'id': quiz.id}) }}">
-							{{ ux_icon('tabler:edit', {class: 'w-6 h-6'}) }}</a>
-					</td>
+					<th>Id</th>
+					<th>Title</th>
+					<th>Description</th>
+					<th>actions</th>
 				</tr>
-			{% else %}
-				<tr>
-					<td colspan="4">Pas de quiz créé</td>
-				</tr>
-			{% endfor %}
-		</tbody>
-	</table>
-
+			</thead>
+			<tbody>
+				{% for quiz in quizzes %}
+					<tr>
+						<td>{{ quiz.id }}</td>
+						<td>{{ quiz.title }}</td>
+						<td>{{ quiz.description }}</td>
+						<td>
+							<a href="{{ path('app_quiz_supervisor_show', {'id': quiz.id}) }}">
+								{{ ux_icon('tabler:eye', {class: 'w-6 h-6'}) }}</a>
+							<a href="{{ path('app_quiz_supervisor_edit', {'id': quiz.id}) }}">
+								{{ ux_icon('tabler:edit', {class: 'w-6 h-6'}) }}</a>
+						</td>
+					</tr>
+				{% else %}
+					<tr>
+						<td colspan="4">Pas de quiz créé</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
 	<a href={{ path('app_quiz_supervisor_new') }} class="btn">Créer un nouveau quiz</a>
 {% endblock %}
