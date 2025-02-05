@@ -13,6 +13,9 @@ use App\Entity\User;
 use App\Entity\AlphaScream;
 use App\Repository\AlphaScreamRepository;
 
+use FFMpeg\FFMpeg;
+use FFMpeg\FFProbe;
+
 #[Route('/scream', name: "app_scream_")]
 final class AlphaScreamController extends AbstractController
 {
@@ -40,16 +43,21 @@ final class AlphaScreamController extends AbstractController
         $filePath = $uploadsDirectory . '/' . uniqid() . '.wav';
         $audioFile->move(dirname($filePath), basename($filePath));
 
+        $ffprobe = FFProbe::create();
+
         $command = "ffmpeg -i $filePath -af 'volumedetect' -f null - 2>&1 | grep 'mean_volume'";
         $output = shell_exec($command);
+
         preg_match('/mean_volume: ([\-0-9\.]+) dB/', $output, $matches);
         $meanVolume = isset($matches[1]) ? (float) $matches[1] : -50;
 
-        $score = max(0, 100 + $meanVolume * 2); 
+        $score = max(0, 100 + $meanVolume * 2);
 
         $scream = new AlphaScream();
         $scream->setScore(round($score));
+        $scream->setLevel();
         $scream->setCreatedAt(new \DateTimeImmutable());
+        
         /** @var User $user */
         $user = $this->getUser();
         $scream->setAlpha($user);
@@ -57,8 +65,16 @@ final class AlphaScreamController extends AbstractController
         $entityManager->persist($scream);
         $entityManager->flush();
 
-        return new JsonResponse(['score' => round($score)]);
+        if (file_exists($filePath)) {
+            unlink($filePath);
+        }
+
+        $level = $scream->getLevel();
+
+        return new JsonResponse(['score' => round($score), 'level' => $level]);
     }
+
+    
 
     #[Route('/leaderboard', name: 'leaderboard')]
     public function leaderboard(AlphaScreamRepository $alphaScreamRepository)
