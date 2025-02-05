@@ -1,42 +1,41 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Academy{% endblock %}
+{% block title %}Academy -
+	{{ academy.title }}
+{% endblock %}
+
 
 {% block body %}
-    <h1>Academy</h1>
-
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ academy.id }}</td>
-            </tr>
-            <tr>
-                <th>Title</th>
-                <td>{{ academy.title }}</td>
-            </tr>
-            <tr>
-                <th>ShortDescription</th>
-                <td>{{ academy.shortDescription }}</td>
-            </tr>
-            <tr>
-                <th>Free</th>
-                <td>{{ academy.free ? 'Oui' : 'Non' }}</td>
-            </tr>
-            <tr>
-                <th>Price</th>
-                <td>{{ academy.price }}</td>
-            </tr>
-            <tr>
-                <th>CreatedAt</th>
-                <td>{{ academy.createdAt ? academy.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_supervisor_academy_index') }}">Retour à la liste</a>
-
-    <a href="{{ path('app_supervisor_academy_edit', {'id': academy.id}) }}">Modifier</a>
-
-    {{ include('academy/supervisor/_delete_form.html.twig') }}
+	<div class="wrapper-table">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Catégorie</th>
+					<th>Valeur</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Title</td>
+					<td>{{ academy.title }}</td>
+				</tr>
+				<tr>
+					<td>ShortDescription</td>
+					<td>{{ academy.shortDescription }}</td>
+				</tr>
+				<tr>
+					<td>Free</td>
+					<td>{{ academy.free ? 'Oui' : 'Non' }}</td>
+				</tr>
+				<tr>
+					<td>Price</td>
+					<td>{{ academy.price }}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="flex justify-center mb-4">
+		<a href="{{ path('app_supervisor_academy_edit', {'id': academy.id}) }}" class="btn">Modifier</a>
+	</div>
+	{{ include('academy/supervisor/_delete_form.html.twig') }}
 {% endblock %}

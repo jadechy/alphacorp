@@ -1,7 +1,7 @@
 {% set title = block('title') %}
 
 <!DOCTYPE html>
-<html class="dark">
+<html class="dark h-full">
 	<head>
 		<meta charset="UTF-8">
 		<title>{{title|raw}}</title>
@@ -17,7 +17,7 @@
 			{{ encore_entry_script_tags('app') }}
 		{% endblock %}
 	</head>
-	<body class="dark:bg-neutral-800 dark:text-white relative min-h-full">
+	<body class="dark:bg-neutral-800 dark:text-white relative min-h-full w-full">
 		{% for label, messages in app.flashes %}
 			<div class="alert alert-{{ label }}">
 				{% for message in messages %}
@@ -28,12 +28,12 @@
 		{% include('parts/layouts/header_layout.html.twig' ) %}
 		{% block admin_nav %}{% endblock %}
 
-		<main class=" md:px-20 md:py-20 mt-5 mx-6 mb-10 ">
+		<main class=" md:px-20 mt-30 mx-6 mb-80 ">
 			<h1 class="font-bold text-fuchsia-300 text-center text-2xl mb-8">{{title|raw}}</h1>
 
 			{% block body %}{% endblock %}
 		</main>
-		<footer class="bg-neutral-950">
+		<footer class="bg-neutral-900 absolute w-full bottom-0 left-0 h-60">
 			<img src="{{asset("/img/logo/all.svg")}}" class=" mx-auto h-50"/>
 		</footer>
 

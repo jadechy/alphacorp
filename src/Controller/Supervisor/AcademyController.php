@@ -2,6 +2,7 @@
 
 namespace App\Controller\Supervisor;
 
+use App\Entity\User;
 use App\Entity\Academy;
 use App\Form\AcademyType;
 use App\Repository\AcademyRepository;
@@ -17,7 +18,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('IS_AUTHENTICATED_FULLY')]
 class AcademyController extends AbstractController
 {
-    #[Route('/', name: 'index', methods: ['GET'])]
+    #[Route('/', name: 'homepage', methods: ['GET'])]
     public function index(AcademyRepository $academyRepository): Response
     {
         /** @var User $user */
@@ -47,7 +48,7 @@ class AcademyController extends AbstractController
             $entityManager->persist($academy);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_supervisor_academy_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_supervisor_academy_homepage', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('academy/supervisor/new.html.twig', [
@@ -73,7 +74,7 @@ class AcademyController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_supervisor_academy_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_supervisor_academy_show', ["id" => $academy->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('academy/supervisor/edit.html.twig', [
@@ -85,11 +86,11 @@ class AcademyController extends AbstractController
     #[Route('/{id}', name: 'delete', methods: ['POST'])]
     public function delete(Request $request, Academy $academy, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$academy->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $academy->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($academy);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_supervisor_academy_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_supervisor_academy_homepage', [], Response::HTTP_SEE_OTHER);
     }
 }

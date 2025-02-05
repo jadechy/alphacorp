@@ -1,4 +1,6 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_row(form, {"attr":{class:"flex flex-col gap-5 mb-8"}}) }}
+<div class="flex justify-center mb-4">
+	<button class="btn">{{ button_label|default('Enregistrer') }}</button>
+</div>
 {{ form_end(form) }}

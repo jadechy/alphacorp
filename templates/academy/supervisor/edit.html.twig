@@ -1,13 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Academy{% endblock %}
+{% block title %}Edit
+	{{academy.title}}
+{% endblock %}
 
 {% block body %}
-    <h1>Edit Academy</h1>
 
-    {{ include('academy/supervisor/_form.html.twig', {'button_label': 'Update'}) }}
-
-    <a href="{{ path('app_supervisor_academy_index') }}">back to list</a>
-
-    {{ include('academy/supervisor/_delete_form.html.twig') }}
+	{{ include('academy/supervisor/_form.html.twig', {'button_label': 'Modifier'}) }}
+	{{ include('academy/supervisor/_delete_form.html.twig') }}
 {% endblock %}

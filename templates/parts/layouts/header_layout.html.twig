@@ -38,6 +38,9 @@
 						{%  if is_granted('ROLE_SUPERVISOR') %}
 							{{ macros.menu_item('app_quiz_supervisor_homepage', {}, 'Quiz', "app_quiz") }}
 							{{ macros.menu_item('app_contest_supervisor_homepage', {}, 'Défi', "app_contest") }}
+							{{ macros.menu_item('app_supervisor_academy_homepage', {}, 'Formations', "app_supervisor_academy_") }}
+
+
 						{% endif %}
 
 						{% if is_granted('ROLE_ADMIN') %}

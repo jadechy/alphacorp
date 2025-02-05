@@ -6,6 +6,7 @@ use App\Entity\Academy;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -31,10 +32,11 @@ class AcademyType extends AbstractType
                     "class" => "input"
                 ]
             ])
-            ->add('free')
+            ->add('free', CheckboxType::class)
             ->add('price', NumberType::class, [
+                'required' => false,
                 "attr" => [
-                    "class" => "input"
+                    "class" => "input inputPriceAcademy",
                 ]
             ]);
         if ($options['is_admin']) {
@@ -43,7 +45,7 @@ class AcademyType extends AbstractType
                 'choice_label' => 'username',
                 'placeholder' => 'Sélectionnez un utilisateur',
                 'attr' => [
-                    'class' => 'dashboard-select',
+                    'class' => 'dashboard-select ',
                 ]
             ]);
         }
