@@ -1,54 +1,53 @@
 {{ form_start(form) }}
-<table>
-	<thead>
-		<tr>
-			<th>Catégorie</th>
-			<th>Valeur</th>
-		</tr>
-	</thead>
+	<table>
+		<thead>
+			<tr>
+				<th>Catégorie</th>
+				<th>Valeur</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Content</td>
+				<td>
+					<div>
+						{{ form_widget(form.content) }}
+						{{ form_errors(form.content) }}
 
-	<tbody>
-		<tr>
-			<td>Content</td>
-			<td>
-				<div>
-					{{ form_widget(form.content) }}
-					{{ form_errors(form.content) }}
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>XP</td>
+				<td>
+					<div>
+						{{ form_widget(form.xp) }}
+						{{ form_errors(form.xp) }}
 
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<div id="groupe-reponse" class="border-t pt-4">
+		<div class="flex justify-between mb-3">
+			<h2 class="text-xl mb-4">Les réponses</h2>
+			<button type="button" id="add-answer" class="btn-secondary flex">
+				{{ ux_icon('tabler:plus', {class: 'w-6 h-6'}) }}
+				Ajouter une réponse
+			</button>
+		</div>
+		<section id="answers" data-prototype="{{ form_row(form.answers.vars.prototype)|e('html') }}">
+			{% for answer in form.answers %}
+				<div class=" shadow shadow-neutral-900 my-4 p-4 answer-item">
+					{{ form_widget(answer,{ "attr": {class:"flex justify-between items-center" }}) }}
+					<button type="button" class="remove-answer btn-delete mt-2">Supprimer</button>
 				</div>
-			</td>
-		</tr>
-		<tr>
-			<td>XP</td>
-			<td>
-				<div>
-					{{ form_widget(form.xp) }}
-					{{ form_errors(form.xp) }}
-
-				</div>
-			</td>
-		</tr>
-	</tbody>
-</table>
-<div id="groupe-reponse" class="border-t pt-4">
-	<div class="flex justify-between mb-3">
-		<h2 class="text-xl mb-4">Les réponses</h2>
-		<button type="button" id="add-answer" class="btn-secondary flex">
-			{{ ux_icon('tabler:plus', {class: 'w-6 h-6'}) }}
-			Ajouter une réponse
-		</button>
+			{% endfor %}
+		</section>
 	</div>
-	<section id="answers" data-prototype="{{ form_row(form.answers.vars.prototype)|e('html') }}">
-		{% for answer in form.answers %}
-			<div class=" shadow shadow-neutral-900 my-4 p-4 answer-item">
-				{{ form_widget(answer,{ "attr": {class:"flex justify-between items-center" }}) }}
-				<button type="button" class="remove-answer btn-delete mt-2">Supprimer</button>
-			</div>
-		{% endfor %}
-	</section>
-</div>
-<div class="flex items-center justify-center mt-12">
-	<button type="submit" id="save-question-btn" class="btn">
-		{{ button_label|default('Enregistrer') }}</button>
-</div>
+	<div class="flex items-center justify-center mt-12">
+		<button type="submit" id="save-question-btn" class="btn">
+			{{ button_label|default('Enregistrer') }}</button>
+	</div>
 {{ form_end(form) }}

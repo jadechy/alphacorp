@@ -6,9 +6,7 @@
 {% endblock %}
 
 {% block body %}
-
 	<div class="max-w-2xl mx-auto">
-
 		{{ form_start(registrationForm, {"attr":{'class': "flex flex-col gap-8"}}) }}
 
 		<div>
@@ -32,7 +30,6 @@
 		</div>
 
 		<div>
-
 			{{ form_label(registrationForm.gender) }}
 			<div class="flex gap-6">
 				{% for gender in registrationForm.gender %}
@@ -45,9 +42,8 @@
 				{% endfor %}
 				{{ form_errors(registrationForm.gender) }}
 			</div>
-
-
 		</div>
+
 		<div class="flex justify-end">
 			<button type="submit" class=" text-fuchsia-300 rounded-full border border-fuchsia-300 px-4 py-2   hover:bg-fuchsia-400 hover:text-white transition">
 				{{ button_label|default('Créer le compte') }}
@@ -55,5 +51,4 @@
 		</div>
 		{{ form_end(registrationForm) }}
 	</div>
-
 {% endblock %}

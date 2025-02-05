@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Academy{% endblock %}
+{% block title %}Formation{% endblock %}
 
 {% block body %}
-    <h1>Academy</h1>
+    <h1>Fomration</h1>
 
     <table class="table">
         <tbody>
@@ -12,23 +12,23 @@
                 <td>{{ academy.id }}</td>
             </tr>
             <tr>
-                <th>Title</th>
+                <th>Titre</th>
                 <td>{{ academy.title }}</td>
             </tr>
             <tr>
-                <th>ShortDescription</th>
+                <th>Courte description</th>
                 <td>{{ academy.shortDescription }}</td>
             </tr>
             <tr>
-                <th>Free</th>
+                <th>Gratuit</th>
                 <td>{{ academy.free ? 'Oui' : 'Non' }}</td>
             </tr>
             <tr>
-                <th>Price</th>
+                <th>Prix</th>
                 <td>{{ academy.price }}</td>
             </tr>
             <tr>
-                <th>CreatedAt</th>
+                <th>Créer le</th>
                 <td>{{ academy.createdAt ? academy.createdAt|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
         </tbody>

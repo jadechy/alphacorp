@@ -1,18 +1,19 @@
-<a href={{ path('app_forum_show', { id : topic.id } ) }}>
-	<article class="p-4 rounded-lg shadow-lg shadow-neutral-900 hover:scale-110 transition">
-		<div class="flex justify-between items-center">
+{% macro afficheTopic(topic) %}
+	<a href={{ path('app_forum_show', { id : topic.id } ) }}>
+		<article class="p-4 rounded-lg shadow-lg shadow-neutral-900 hover:scale-110 transition">
+			<div class="flex justify-between items-center">
 
-			<p class="text-xs text-neutral-500">{{topic.language.name}}</p>
-			<span class="py-1.5 px-2 {{ colorsCategories[topic.category.id] | default('bg-gray-500') }} rounded-full flex w-fit justify-center items-center gap-1">
+				<p class="text-xs text-neutral-500">{{topic.language.name}}</p>
+				<span class="py-1.5 px-2 {{ colorsCategories[topic.category.id] | default('bg-gray-500') }} rounded-full flex w-fit justify-center items-center gap-1">
 
-				<p class="font-medium text-xs">{{topic.category.name}}</p>
-			</span>
+					<p class="font-medium text-xs">{{topic.category.name}}</p>
+				</span>
 
-		</div>
-		<h3 class="text-md font-bold my-4">{{topic.title}}</h3>
-		<p class="mb-3">{{topic.shortDescription}}</p>
+			</div>
+			<h3 class="text-md font-bold my-4">{{topic.title}}</h3>
+			<p class="mb-3">{{topic.shortDescription}}</p>
 
-		<p class="text-xs text-neutral-500 text-end">{{ button_label|default('En lire +') }}</p>
-
-	</article>
-</a>
+			<p class="text-xs text-neutral-500 text-end">{{ button_label|default('En lire +') }}</p>
+		</article>
+	</a>
+{% endmacro %}

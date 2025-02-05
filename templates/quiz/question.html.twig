@@ -11,10 +11,8 @@
 	{% endif %}
 {% endfor %}
 
-
 {% block body %}
 	<section class="flex flex-col text-center gap-3">
-
 		<p class=" text-neutral-300">{{quiz.description}}</p>
 		<p class="bg-fuchsia-300/70 rounded-xs w-fit p-3 mx-auto">{{index}}/{{question.quiz.questions|length}}</p>
 
@@ -24,8 +22,6 @@
 			{% for reponse in reponses %}
 				<div class="flex items-center justify-center gap-2 mb-3">
 					<input type="radio" id="reponse_{{ reponse.id }}" name="reponse" value={{ reponse.id }} class="appearance-none border border-neutral-400 w-5 h-5 rounded-full checked:bg-fuchsia-500 focus:outline-none hover:bg-fuchsia-200/80">
-
-
 					<label for="reponse_" {{ reponse.id }}>{{ reponse.content }}</label>
 				</div>
 			{% endfor %}
