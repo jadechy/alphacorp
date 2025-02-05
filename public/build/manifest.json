@@ -3,6 +3,5 @@
   "build/app.js": "/build/app.js",
   "build/runtime.js": "/build/runtime.js",
   "build/vendors-node_modules_core-js_modules_es_array_concat_js-node_modules_core-js_modules_es_array-1cce4b.js": "/build/vendors-node_modules_core-js_modules_es_array_concat_js-node_modules_core-js_modules_es_array-1cce4b.js",
-  "build/fonts/Enixe.ttf": "/build/fonts/Enixe.a6bd44a1.ttf",
-  "build/vendors-node_modules_core-js_modules_es_array_concat_js-node_modules_core-js_modules_es_array-4f1a94.js": "/build/vendors-node_modules_core-js_modules_es_array_concat_js-node_modules_core-js_modules_es_array-4f1a94.js"
+  "build/fonts/Enixe.ttf": "/build/fonts/Enixe.a6bd44a1.ttf"
 }

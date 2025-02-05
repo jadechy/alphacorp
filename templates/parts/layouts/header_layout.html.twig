@@ -1,6 +1,7 @@
 {% import 'macro/nav_link.twig' as macros %}
-<header>
-	<nav class="bg-neutral-950 flex justify-between items-center py-3 px-8 w-full">
+<header class="">
+	<nav class="md:fixed md:left-0 md:top-0 bg-neutral-900 flex justify-between items-center py-3 px-8 w-full z-10">
+
 
 		<a href="{{ path('app_home') }}">
 			<img src="{{ asset('/img/logo/typographique.svg') }}" class="h-10"/>

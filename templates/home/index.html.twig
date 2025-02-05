@@ -7,17 +7,18 @@
 		<img src="{{asset("/img/logo/all.svg")}}" class="h-60"/>
 		<div class="flex flex-col items-center gap-2">
 			<p>Devenez un homme alpha, un vrai</p>
-			{% if  is_granted("ROLE_USER")%}
+			{% if  is_granted("ROLE_ALPHA")%}
 				<div>
 					<div class="flex justify-center gap-5 mt-4">
 						<a href={{path("app_forum_homepage")}} class="btn-secondary">En apprendre +</a>
 						<a href={{path("app_quiz_homepage")}} class="btn">Gagner de l'XP</a>
 					</div>
-					{% include "/parts/layouts/alpha_scream.twig" %}
-				</div>
-			{% else %}
-				<a href={{path("app_register")}} class="btn">S'inscrire</a>
-			{% endif %}
+					<div>
+						{% include "/parts/layouts/alpha_scream.html.twig" %}
+					</div>
+				{% else %}
+					<a href={{path("app_register")}} class="btn">S'inscrire</a>
+				{% endif %}
+			</div>
 		</div>
-	</div>
-{% endblock %}
+	{% endblock %}

@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
@@ -14,7 +13,7 @@ use App\Entity\User;
 use App\Entity\AlphaScream;
 use App\Repository\AlphaScreamRepository;
 
-use FFMpeg\FFMpeg;
+// use FFMpeg\FFMpeg;
 use FFMpeg\FFProbe;
 
 #[Route('/scream', name: "app_scream_")]
@@ -41,7 +40,7 @@ final class AlphaScreamController extends AbstractController
         $filePath = $uploadsDirectory . '/' . uniqid() . '.wav';
         $audioFile->move(dirname($filePath), basename($filePath));
 
-        $ffprobe = FFProbe::create();
+        // $ffprobe = FFProbe::create();
 
         $command = "ffmpeg -i $filePath -af 'volumedetect' -f null - 2>&1 | grep 'mean_volume'";
         $output = shell_exec($command);
