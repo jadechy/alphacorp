@@ -13,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 class RegistrationType extends AbstractType
 {
@@ -31,11 +32,6 @@ class RegistrationType extends AbstractType
                     'class' => 'input',
                     'placeholder' => 'Email'
                 ],
-                // 'constraints' => [
-                //     new Assert\NotBlank(['message' => "L'email ne peut pas être vide."]),
-                //     new Assert\Email(['message' => "L'email '{{ value }}' n'est pas valide."]),
-                //     new Assert\Unique(['message' => "L'email existe déjà."]),
-                // ]
             ])
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
@@ -76,7 +72,12 @@ class RegistrationType extends AbstractType
                 'multiple' => false,
                 'mapped' => false,
 
-            ]);;
+            ])
+            ->add('image', FileType::class, [
+                'label' => 'Image',
+                'mapped' => false,
+                'required' => false,
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

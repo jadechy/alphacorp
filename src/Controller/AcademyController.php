@@ -7,7 +7,6 @@ use App\Entity\Academy;
 use App\Repository\AcademyRepository;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -17,9 +16,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('IS_AUTHENTICATED_FULLY')]
 class AcademyController extends AbstractController
 {
-    public function __construct(private string $stripePublicKey)
-    {
-    }
+    public function __construct(private string $stripePublicKey) {}
 
     #[Route('/', name: 'homepage')]
     public function allAcademy(AcademyRepository $academyRepository): Response
@@ -31,7 +28,7 @@ class AcademyController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'single')]
+    #[Route('/{id}', name: 'show')]
     public function singleAcademy(Academy $academy, AcademyRepository $academyRepository): Response
     {
         /** @var User $user */
@@ -39,7 +36,7 @@ class AcademyController extends AbstractController
 
         $hasAccess = $user && $user->getAcademies()->contains($academy);
 
-        return $this->render('academy/single.html.twig', [
+        return $this->render('academy/show.twig', [
             'academy' => $academy,
             'hasAccess' => $hasAccess,
             'stripe_public_key' => $this->stripePublicKey,

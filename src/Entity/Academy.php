@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: AcademyRepository::class)]
 #[ORM\Table(name: 'ALP_ACADEMY')]
@@ -17,13 +18,35 @@ class Academy
     #[ORM\Column(name: 'ACA_ID')]
     private int $id;
 
-    #[ORM\Column(length: 255, name: 'ACA_TITLE')]
+    #[ORM\Column(length: 75, name: 'ACA_TITLE')]
+    #[Assert\NotBlank(message: "Le titre ne peut pas être vide.")]
+    #[Assert\Length(
+        min: 3,
+        max: 75,
+        minMessage: "Le titre doit comporter au moins {{ limit }} caractères.",
+        maxMessage: "Le titre ne peut pas dépasser {{ limit }} caractères."
+    )]
+    #[Assert\Type('string')]
     private string $title;
 
     #[ORM\Column(length: 100, name: 'ACA_SHORT_DESCRIPTION')]
+    #[Assert\NotBlank(message: "La description ne peut pas être vide.")]
+    #[Assert\Length(
+        min: 3,
+        max: 255,
+        minMessage: "La description doit comporter au moins {{ limit }} caractères.",
+        maxMessage: "La description ne peut pas dépasser {{ limit }} caractères."
+    )]
+    #[Assert\Type('string')]
     private string $shortDescription;
 
     #[ORM\Column(type: Types::TEXT, name: 'ACA_CONTENT')]
+    #[Assert\NotBlank(message: "Le contenu ne peut pas être vide.")]
+    #[Assert\Type('string')]
+    #[Assert\Length(
+        min: 75,
+        minMessage: "Le contenu doit comporter au moins {{ limit }} caractères.",
+    )]
     private string $content;
 
     #[ORM\Column(name: 'ACA_FREE', nullable: true)]

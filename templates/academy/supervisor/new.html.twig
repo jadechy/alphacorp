@@ -1,11 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Créer une nouvelle formation{% endblock %}
+{% block title %}Créer une nouvelle formation
+{% endblock %}
 
 {% block body %}
-    <h1>Créer une nouvelle formation</h1>
-
-    {{ include('academy/supervisor/_form.html.twig') }}
-
-    <a href="{{ path('app_supervisor_academy_index') }}">Retour à la liste</a>
+	{{ include('academy/supervisor/_form.html.twig') }}
 {% endblock %}

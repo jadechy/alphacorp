@@ -1,0 +1,10 @@
+{% extends 'admin/base_admin.html.twig' %}
+
+{% block title %}New AlphaScream
+{% endblock %}
+{% set return_path = 'admin_scream_homepage' %}
+
+{% block admin_content %}
+
+	{{ include('admin/alpha_scream/_form.html.twig') }}
+{% endblock %}
