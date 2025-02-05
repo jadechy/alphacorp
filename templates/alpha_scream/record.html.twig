@@ -8,6 +8,7 @@
     <button id="stopRecording" disabled>🛑 Arrêter</button>
     <audio id="audioPlayer" controls></audio>
     <p id="scoreResult"></p>
+    <p id="levelResult"></p>
 
-    <script src="{{ asset('js/audioRecorder.js') }}"></script>
+    <a href="{{ path('app_scream_leaderboard') }}">Voir les meilleures résultats</a>
 {% endblock %}
