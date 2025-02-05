@@ -12,20 +12,20 @@ class AlphaScream
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(name:'ALS_ID')]
+    #[ORM\Column(name: 'ALS_ID')]
     private int $id;
 
-    #[ORM\Column(name:'ALS_SCORE')]
+    #[ORM\Column(name: 'ALS_SCORE')]
     private float $score;
 
-    #[ORM\Column(name:'ALS_CREATED_AT')]
+    #[ORM\Column(name: 'ALS_CREATED_AT')]
     private \DateTimeImmutable $createdAt;
 
     #[ORM\ManyToOne(inversedBy: 'alphaScreams')]
     #[ORM\JoinColumn(name: 'USR_ID', referencedColumnName: 'USR_ID')]
     private ?User $alpha = null;
 
-    #[ORM\Column(length: 255, name:'ALS_LEVEL')]
+    #[ORM\Column(length: 255, name: 'ALS_LEVEL')]
     private string $level;
 
     public function getId(): ?int
@@ -84,14 +84,15 @@ class AlphaScream
 
     private function getLevelFromScore(float $score): ScreamLevelEnum
     {
+ 
         if ($score < 100) {
             return ScreamLevelEnum::DOG; 
         } elseif ($score < 200) {
             return ScreamLevelEnum::WOLF; 
         } elseif ($score < 400) {
-            return ScreamLevelEnum::ALPHA;
+             return ScreamLevelEnum::ALPHA;
         } else {
-            return ScreamLevelEnum::SUPREME; 
+            return ScreamLevelEnum::SUPREME;
         }
     }
 }
