@@ -122,15 +122,22 @@ class ContestController extends AbstractController
             return $this->redirectToRoute('app_contest_supervisor_show', ['id' => $userContest->getContest()->getId()]);
         }
 
+        $previousSuccess = $userContest->isSuccess();
+
         $userContest->setSuccess($success);
 
-        if ($success === 1) {
-            $contest = $userContest->getContest();
-            $xp = $contest->getXp();
-            $user = $userContest->getUser();
+        $xp = $userContest->getContest()->getXp();
+        $user = $userContest->getUser();
 
-            if ($xp) {
+        if ($xp) {
+            if($previousSuccess === null && $success === 1){
                 $user->setXp($user->getXp() + $xp);
+            }else{
+                if ($previousSuccess === true && $success === 0) {
+                    $user->setXp(max(0, $user->getXp() - $xp));
+                } elseif ($previousSuccess === false && $success === 1) {
+                    $user->setXp($user->getXp() + $xp);
+                }
             }
         }
 
