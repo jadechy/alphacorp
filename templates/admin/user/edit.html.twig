@@ -3,13 +3,13 @@
 {% block admin_title %}Modifier
 	{{user.username}}
 {% endblock %}
+
 {% set return_path = 'admin_user_show' %}
 {% set return_params = { id: user.id } %}
 
 {% block admin_content %}
 	<section>
 		{{ form_start(form) }}
-
 		<table>
 			<thead>
 				<tr>
@@ -22,10 +22,6 @@
 					<td>Id</td>
 					<td>{{user.id}}</td>
 				</tr>
-				{# <tr>
-																								                <td>Created</td>
-																								                <td>{{user.createdAt|format_datetime('short', 'none', locale: 'fr')}}</td>
-																								            </tr> #}
 				<tr>
 					<td>Username</td>
 					<td>
@@ -77,7 +73,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td>Topic author</td>
+					<td>Topic auteur</td>
 					<td>
 						{% for topic in user.topics %}
 							<div>
@@ -87,7 +83,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td>Response topic author</td>
+					<td>Réponse topic auteur</td>
 					<td>
 						{% for response in user.responses %}
 							<div>
@@ -97,7 +93,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td>Events</td>
+					<td>Évènements</td>
 					<td>
 						{% for event in user.events %}
 							<div>
@@ -145,7 +141,5 @@
 			{{ form_end(form) }}
 			{{ include('admin/user/_delete_form.html.twig') }}
 		</div>
-
-
 	</section>
 {% endblock %}

@@ -1,20 +1,18 @@
 {% extends 'admin/base_admin.html.twig' %}
 
-
 {% block title %}Quiz
 {% endblock %}
 
 {% block admin_content %}
 	<div class="wrapper-table">
-
 		<table class="table">
 			<thead>
 				<tr>
 					<th>Id</th>
-					<th>Title</th>
+					<th>Titre</th>
 					<th>Description</th>
 					<th>Auteur</th>
-					<th>actions</th>
+					<th>Actions</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -27,11 +25,9 @@
 						<td>
 							<a href="{{ path('admin_quiz_show', {'id': quiz.id}) }}">
 								{{ ux_icon('tabler:eye', {class: 'w-6 h-6'}) }}
-
 							</a>
 							<a href="{{ path('admin_quiz_edit', {'id': quiz.id}) }}">
 								{{ ux_icon('tabler:edit', {class: 'w-6 h-6'}) }}
-
 							</a>
 						</td>
 					</tr>
@@ -44,7 +40,6 @@
 		</table>
 	</div>
 	<div class="w-fit mx-auto">
-
 		<a href="{{ path('admin_quiz_new') }}" class=" btn">Créer un nouveau quiz</a>
 	</div>
 {% endblock %}

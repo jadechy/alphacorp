@@ -22,18 +22,8 @@
 		<input type="email" value="{{ last_username }}" name="_username" id="username" class="input" autocomplete="email" required autofocus placeholder="Email">
 		<input type="password" name="_password" id="password" class="input mt-4" autocomplete="current-password" required placeholder="Mot de passe">
 		<a href="{{ path("app_forgot") }}" class=" hover:underline hover:decoration-solid text-end text-sm text-gray-400 w-full mt-3 ">Mot de passe oublié</a>
-		<input
-		type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+		<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-		{#
-				            Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-				            See https://symfony.com/doc/current/security/remember_me.html
-				
-				            <div class="checkbox mb-3">
-				                <input type="checkbox" name="_remember_me" id="_remember_me">
-				                <label for="_remember_me">Remember me</label>
-				            </div>
-				        #}
 		<div class="flex justify-end mt-8">
 
 			<button class="btn" type="submit">

@@ -16,8 +16,6 @@
 				{% for user in users %}
 					<a href={{ path('app_user_show', {id: user.id} ) }}>
 						{% include "parts/components/card_col.html.twig" with {"title": user.username, "height": 40, "img": user.image} %}
-
-
 					</a>
 				{% endfor %}
 			</div>

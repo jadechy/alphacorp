@@ -35,10 +35,8 @@
 					</div>
 				{% endif %}
 			</div>
-
 		</section>
 		{% if user.xp and is_granted('ROLE_ALPHA') %}
-
 			<section class="my-20">
 				<div class="flex justify-between mb-4">
 					<p>{{currentRank.title}}</p>
@@ -58,7 +56,6 @@
 			</section>
 		{% endif %}
 		{% if is_granted('ROLE_ALPHA') and app.user == user %}
-
 			{% include 'parts/layouts/user/bromance_layout.html.twig' with {"path_bromance": "app_bromance_homepage"}  %}
 		{% endif %}
 		{% if bromance_user %}
@@ -70,8 +67,6 @@
 					<p class="text-3xl text-fuchsia-500 mb-8 mt-4">{{bromance_user.status.value}}</p>
 				{% else %}
 					<p class="text-3xl text-fuchsia-500 mb-8 mt-4">Demande en cours...</p>
-
-
 				{% endif %}
 				<form method="POST" action={{ path('app_bromance_delete', {id:user.id} ) }}>
 					<button type="submit" class="hover:underline">Supprimer la bromance</button>
@@ -83,14 +78,11 @@
 			<!-- Section Events Author -->
 			{% include 'parts/layouts/user/event_author_layout.html.twig' with {"path_event_author": "app_event_author"}  %}
 
-
 			<!-- Section Events Participation -->
 			{% include 'parts/layouts/user/event_participate_layout.html.twig' with {"path_event_participate": "app_event_user_participate"}  %}
 
 			<!-- Section Forum -->
 			{% include 'parts/layouts/user/forum_author_layout.html.twig' with {"path_forum_author": "app_forum_author"}  %}
 		{% endif %}
-
-
 	</div>
 {% endblock %}

@@ -11,12 +11,9 @@
 		Retour à la liste
 	</a>
 
-
-	<p class="bg-fuchsia-300/80 p-2 rounded w-fit mx-auto mb-3">Question
-		{{questionNumber}}</p>
+	<p class="bg-fuchsia-300/80 p-2 rounded w-fit mx-auto mb-3">Question{{questionNumber}}</p>
 
 	{{ include('quiz/supervisor/question/_form.html.twig') }}
-
 
 {% endblock %}
 {% block javascripts %}

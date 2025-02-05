@@ -5,11 +5,9 @@
 {% endblock %}
 {% set return_path = 'admin_event_homepage' %}
 
-
 {% block admin_content %}
 	<section>
 		<div class="wrapper-table">
-
 			<table>
 				<thead>
 					<tr>
@@ -23,15 +21,15 @@
 						<td>{{event.id}}</td>
 					</tr>
 					<tr>
-						<td>Title</td>
+						<td>Titre</td>
 						<td>{{event.title}}</td>
 					</tr>
 					<tr>
-						<td>Short description</td>
+						<td>Courte description</td>
 						<td>{{event.shortDescription}}</td>
 					</tr>
 					<tr>
-						<td>Long description</td>
+						<td>Longue description</td>
 						<td>{{event.longDescription}}</td>
 					</tr>
 					<tr>
@@ -39,23 +37,21 @@
 						<td>{{event.location}}</td>
 					</tr>
 					<tr>
-						<td>Start</td>
+						<td>Début</td>
 						<td>{{event.startAt|format_datetime('short', 'none', locale: 'fr')}}</td>
 					</tr>
 					<tr>
-						<td>End</td>
+						<td>Fin</td>
 						<td>{{event.endAt|format_datetime('short', 'none', locale: 'fr')}}</td>
 					</tr>
 					<tr>
 						<td>Image</td>
 						<td>
 							<img src={{ asset('img/uploads/' ~ event.image) }} alt={{event.image}} class="w-80 h-40 object-cover"/>
-
-
 						</td>
 					</tr>
 					<tr>
-						<td>Author</td>
+						<td>Auteur</td>
 						<td>
 							<a href={{path("admin_user_show", {id: event.author.id} )}}>{{event.author.id}}
 								-
@@ -88,6 +84,5 @@
 			</a>
 			{{ include('admin/event/_delete_form.html.twig') }}
 		</div>
-
 	</section>
 {% endblock %}
