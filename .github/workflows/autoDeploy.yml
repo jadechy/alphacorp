@@ -19,6 +19,9 @@ jobs:
           mkdir -p ~/.ssh
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
+
+      - name: Add VPS to known hosts
+        run: |
           ssh-keyscan -H $VPS_HOST >> ~/.ssh/known_hosts
 
       - name: Start SSH agent and add key
@@ -38,4 +41,5 @@ jobs:
           VPS_HOST: ${{ secrets.VPS_HOST }}
           VPS_USER: ${{ secrets.VPS_USER }}
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+
 
