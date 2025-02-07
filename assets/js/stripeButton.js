@@ -6,7 +6,6 @@ document.addEventListener("DOMContentLoaded", function () {
   if (checkoutButton) {
     checkoutButton.addEventListener("click", async function () {
       try {
-        // Vérifier si les attributs de données sont bien présents
         if (
           !checkoutButton.dataset.academyId ||
           !checkoutButton.dataset.stripeKey
@@ -15,13 +14,11 @@ document.addEventListener("DOMContentLoaded", function () {
           return;
         }
 
-        // Récupération de la session Stripe
         const response = await fetch(
           `/payment/${checkoutButton.dataset.academyId}`
         );
         const session = await response.json();
 
-        // Charger Stripe (await nécessaire car loadStripe retourne une Promise)
         const stripe = await loadStripe(checkoutButton.dataset.stripeKey);
 
         if (!stripe) {
@@ -29,7 +26,6 @@ document.addEventListener("DOMContentLoaded", function () {
           return;
         }
 
-        // Redirection vers le checkout Stripe
         const { error } = await stripe.redirectToCheckout({
           sessionId: session.id,
         });

@@ -174,7 +174,7 @@
         border-radius: var(--radius-lg);
         top: 0;
         left: 50%;
-        transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%); 
         border-bottom: 3px solid var(--color-green-300);
 
     }
