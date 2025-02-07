@@ -7,7 +7,8 @@
 	{{admin_title}}
 {% endblock %}
 {% block admin_nav %}
-	<nav class=" bg-neutral-950 p-6 flex gap-5 rounded justify-center flex-wrap">
+	<nav class=" bg-neutral-900 p-6 flex gap-5 rounded justify-center flex-wrap pt-24 ">
+
 		{% for item in data %}
 			<a href="{{ path(item.path) }}" class="hover:text-fuchsia-500 text-center flex flex-col items-center">
 				{{ ux_icon('tabler:' ~ item.icon, {class: 'w-6 h-6'}) }}
@@ -88,24 +89,26 @@
 
 
 {% block body %}
-	{% if return_path is defined and return_params is defined %}
-		<a href="{{ path(return_path, return_params) }}" class="flex hover:outline outline-neutral-300 w-fit rounded-3xl px-3 py-2">
-			{{ ux_icon('tabler:chevron-left', {class: 'w-6 h-6'}) }}
-			<p>
-				Retour
-			</p>
-		</a>
-	{% elseif return_path is defined %}
-		<a href="{{ path(return_path) }}" class="flex hover:outline outline-neutral-300 w-fit rounded-3xl px-3 py-2">
-			{{ ux_icon('tabler:chevron-left', {class: 'w-6 h-6'}) }}
-			<p>
-				Retour à la liste
-			</p>
-		</a>
-	{% endif %}
+	<div>
+		{% if return_path is defined and return_params is defined %}
+			<a href="{{ path(return_path, return_params) }}" class="flex hover:outline outline-neutral-300 w-fit rounded-3xl px-3 py-2">
+				{{ ux_icon('tabler:chevron-left', {class: 'w-6 h-6'}) }}
+				<p>
+					Retour
+				</p>
+			</a>
+		{% elseif return_path is defined %}
+			<a href="{{ path(return_path) }}" class="flex hover:outline outline-neutral-300 w-fit rounded-3xl px-3 py-2">
+				{{ ux_icon('tabler:chevron-left', {class: 'w-6 h-6'}) }}
+				<p>
+					Retour à la liste
+				</p>
+			</a>
+		{% endif %}
 
-	<!-- Contenu principal -->
-	<section class="mt-8">
-		{% block admin_content %}{% endblock %}
-	</section>
+		<!-- Contenu principal -->
+		<section class="mt-8">
+			{% block admin_content %}{% endblock %}
+		</section>
+	</div>
 {% endblock %}

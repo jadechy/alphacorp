@@ -6,7 +6,7 @@
 	<div class="flex flex-col justify-center items-center h-full">
 		<img src="{{asset("/img/logo/all.svg")}}" class="h-60"/>
 		<div class="flex flex-col items-center gap-2">
-			<p>Devenez un homme alpha, un vrai</p>
+			<p>Devenez un male alpha, un vrai</p>
 			{% if  is_granted("ROLE_ALPHA")%}
 				<div>
 					<div class="flex justify-center gap-5 mt-4">
@@ -16,9 +16,11 @@
 					<div>
 						{% include "/parts/layouts/alpha_scream.html.twig" %}
 					</div>
-				{% else %}
-					<a href={{path("app_register")}} class="btn">S'inscrire</a>
-				{% endif %}
-			</div>
+				</div>
+
+			{% elseif not app.user %}
+				<a href={{path("app_register")}} class="btn">S'inscrire</a>
+			{% endif %}
+
 		</div>
 	{% endblock %}
