@@ -13,7 +13,7 @@
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
- 
+/.docker/.env
 
 ###< dossier d'upload ###
 /assets/uploads
